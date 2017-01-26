@@ -15,7 +15,7 @@
 	</definition>
    <!-- 3단 일반 -->
 	<definition name=".mainLayout" template="/WEB-INF/view/layout/layout1.jsp">
-	    <put-attribute name="title" value="spring" />
+	    <put-attribute name="title" value="hello there" />
 	  	<put-attribute name="header" value="/WEB-INF/view/layout/header.jsp" />
 		<put-attribute name="body" value="/WEB-INF/view/main/main.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/view/layout/footer.jsp" />
