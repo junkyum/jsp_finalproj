@@ -19,7 +19,7 @@ public class MemberController {
 	@Autowired
 	private MemberService service;
 	
-	// 로그인 및 로그아웃 -----------------------
+	/*// 로그인 및 로그아웃 -----------------------
 	@RequestMapping(value="/member/login", method=RequestMethod.GET)
 	public String loginForm(Model model) throws Exception {
 		return ".member.login";
@@ -40,7 +40,7 @@ public class MemberController {
 			
 			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
 			
-			return "redirect:/";
+			return "/";
 		}
 		
 		// 로그인 날짜 변경
@@ -52,7 +52,7 @@ public class MemberController {
 		info.setUserName(dto.getUserName());
 		session.setAttribute("member", info);
 		
-		return "redirect:/";
+		return "/";
 	}	
 
 	@RequestMapping(value="/member/logout")
@@ -61,8 +61,8 @@ public class MemberController {
 		session.removeAttribute("member");
 		session.invalidate();
 		
-		return "redirect:/";
-	}
+		return "/";
+	}*/
 	
 	// 회원가입 및 회원정보 수정 -----------------------
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
@@ -113,7 +113,7 @@ public class MemberController {
 		Member dto=service.readMember(info.getUserId());
 			
 		System.out.println(info.getUserId()+"a------");
-		model.addAttribute("dto", dto);			
+		model.addAttribute("dto", dto);
 		return ".member.info";
 	}
 	
