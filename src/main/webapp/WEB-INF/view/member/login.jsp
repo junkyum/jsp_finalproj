@@ -6,42 +6,8 @@
    String cp = request.getContextPath();
 %>
 
-<style type="text/css">
-.form-signin {
-  max-width: 400px;
-  padding: 15px;
-  margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-  .form-signin {
-    padding-top: 70px;
-  }
-}
-
-.form-signin-heading {
-  text-align: center;
-  font-weight:bold;  
-  font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", sans-serif;
-  margin-bottom: 30px;
-}
-
-.lbl {
-   position:absolute; 
-   margin-left:15px; margin-top: 13px;
-   color: #999999;
-   font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
-}
-
-.loginTF {
-  max-width: 370px; height:45px;
-  padding: 5px;
-  padding-left: 15px;
-  margin-top:5px; margin-bottom:15px;
-}
-</style>
-
 <script type="text/javascript">
+
 function bgLabel(ob, id) {
        if(!ob.value) {
           document.getElementById(id).style.display="";
@@ -51,7 +17,7 @@ function bgLabel(ob, id) {
 }
 
 function sendLogin() {
-       var f = document.loginForm;
+        var f = document.loginForm;
 
        var str = f.userId.value;
         if(!str) {
@@ -65,32 +31,131 @@ function sendLogin() {
             return false;
         }
 
-    
+        f.action = "<%=cp%>/member/login";
         f.submit();
 }
 </script>
-<div class="bodyFrame">
+    <head>
 
-    <form class="form-signin" name="loginForm" method="post"  action = "<%=cp%>/member/login_check">
-        <h2 class="form-signin-heading">Log In</h2>
-        <label for="userId" id="lblUserId" class="lbl">아이디</label>
-        <input type="text" id="userId" name="userId" class="form-control loginTF" autofocus="autofocus"
-                  onfocus="document.getElementById('lblUserId').style.display='none';"
-                 onblur="bgLabel(this, 'lblUserId');">
-        <label for="userPw" id="lblUserPwd" class="lbl">패스워드</label>
-        <input type="password" id="userPW" name="userPW" class="form-control loginTF"
-                  onfocus="document.getElementById('lblUserPwd').style.display='none';"
-                 onblur="bgLabel(this, 'lblUserPwd');">
-        		
-        <div style="margin-top:10px; text-align: center;">
-	        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="sendLogin();">로그인 <span class="glyphicon glyphicon-ok"></span></button>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap Login Form Template</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+      <link rel="stylesheet" href="assets/css/form-elements.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+
+        <!-- Top content -->
+        <div class="top-content">
+           
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text"  style="text-align: center">
+                            <h1><strong >Schedule 바뀜? </strong></h1>
+                            <div class="description">
+                               <p>
+                                                                        스케쥴 홈페이지야 ㅎㅎ  언제바꾸ㅕ ㅎㅎ;
+                                   
+                               </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                           <div class="form-top">
+                              <div class="form-top-left">
+                                 <h3>Login to our site</h3>
+                                  <p>Enter your ID and Password to log on:</p>
+                              </div>
+                              <div class="form-top-right">
+                                 <i class="fa fa-lock"></i>
+                              </div>
+                            </div>
+                            <div class="form-bottom">
+                              <form class="form-signin" name="loginForm" method="post">
+                             <div class="form-group">
+                              <label for="userId" id="lblUserId" class="sr-only">아이디</label>
+                            <input type="text" id="userId" name="userId" placeholder="ID..."class="form-control loginTF" autofocus="autofocus"
+                                    onfocus="document.getElementById('lblUserId').style.display='none';"
+                                   onblur="bgLabel(this, 'lblUserId');">
+                              </div>
+                                 <div class="form-group">
+                                    <input type="password" id="userPW" name="userPW" placeholder="Password..." class="form-control loginTF"
+                                             onfocus="document.getElementById('lblUserPW').style.display='none';"
+                                            onblur="bgLabel(this, 'lblUserPW');">
+                              </div>
+                            <button class="btn" type="button" onclick="sendLogin();">로그인 <span class="glyphicon glyphicon-ok"></span></button>
+                          
+                            
+                          </form>
+                          </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px; text-align: center;">
             <button type="button" class="btn btn-link" onclick="location.href='<%=cp%>/member/member';">회원가입</button>
-            <button type="button" class="btn btn-link">아이디찾기 </button>
+            <button type="button" class="btn btn-link">아이디찾기</button>
             <button type="button" class="btn btn-link">패스워드찾기</button>
+          
+        <div class="form-group" style="margin-top:10px; text-align: center;">${message}</div>
+     
         </div>
-        
-        <div style="margin-top:10px; text-align: center;">${message}</div>
-        
-    </form>
+                    
+                    
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 social-login">
+                           <h3>...or login with:</h3>
+                           <div class="social-login-buttons" style="text-align: center">
+                              <a class="btn btn-link-2" href="#">
+                                 <i class="fa fa-facebook"></i> Facebook
+                              </a>
+                              <a class="btn btn-link-2" href="#">
+                                 <i class="fa fa-twitter"></i> Twitter
+                              </a>
+                              <a class="btn btn-link-2" href="#">
+                                 <i class="fa fa-google-plus"></i> Google Plus
+                              </a>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
 
-</div>
+
+        <!-- Javascript -->
+        <script src="assets/js/jquery-1.11.1.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/jquery.backstretch.min.js"></script>
+        <script src="assets/js/scripts.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+
+    </body>
+
+</html>

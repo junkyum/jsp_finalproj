@@ -77,18 +77,18 @@ function check() {
       return false;
    }
    
-   str = f.userPwd.value;
+   str = f.userPW.value;
    if(!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(str)) { 
-      f.userPwd.focus();
+      f.userPW.focus();
       return false;
    }
    
-   if(f.userPwdCheck.value != str) {
-      $("#userPwdCheck + .help-block").html("패스워드가 일치하지 않습니다.");
-      f.userPwdCheck.focus();
+   if(f.userPWCheck.value != str) {
+      $("#userPWCheck + .help-block").html("패스워드가 일치하지 않습니다.");
+      f.userPWCheck.focus();
       return false;
    } else {
-      $("#userPwdCheck + .help-block").html("패스워드를 한번 더 입력해주세요.");
+      $("#userPWCheck + .help-block").html("패스워드를 한번 더 입력해주세요.");
    }
    
     str = f.userName.value;
@@ -109,7 +109,7 @@ function check() {
     if(!isValidEmail) {
         f.email.focus();
         return false;
-    }
+    }	
     
     str = f.tel1.value;
     if(!str) {
@@ -142,12 +142,12 @@ function check() {
 
 <div class="jumbotron" style="text-align: center">
     <h1><span class="glyphicon glyphicon-user"></span> ${mode=="created"?"회원 가입":"회원 정보 수정"}</h1>
-    <p>SPRING의 회원이 되시면 회원님만의 유익한 정보를 만날수 있습니다.11111</p>
+    <p>안녕</p>
 </div>
 
 <div class="member-form">
  
- <form class="form-horizontal" name="memberForm" method="post" onsubmit="return check();"  >
+ <form class="form-horizontal" name="memberForm" method="post" onsubmit="return check();"  style="margin-left: 40px; margin-top:10px;margin-right:auto; width: 600px" >
     <div class="form-group" >
         <label class="col-sm-2 control-label" for="userId">아이디</label>
         <div class="col-sm-7">
@@ -160,17 +160,17 @@ function check() {
     </div>
  
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="userPwd">패스워드</label>
+        <label class="col-sm-2 control-label" for="userPW">패스워드</label>
         <div class="col-sm-7">
-            <input class="form-control" id="userPwd" name="userPwd" type="password" placeholder="비밀번호">
+            <input class="form-control" id="userPW" name="userPW" type="password" placeholder="비밀번호">
             <p class="help-block">패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</p>
         </div>
     </div>
     
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="userPwdCheck">패스워드 확인</label>
+        <label class="col-sm-2 control-label" for="userPWCheck">패스워드 확인</label>
         <div class="col-sm-7">
-            <input class="form-control" id="userPwdCheck" name="userPwdCheck" type="password" placeholder="비밀번호 확인">
+            <input class="form-control" id="userPWCheck" name="userPWCheck" type="password" placeholder="비밀번호 확인">
             <p class="help-block">패스워드를 한번 더 입력해주세요.</p>
         </div>
     </div>
@@ -189,6 +189,16 @@ function check() {
             <input class="form-control" id="birth" name="birth" type="text" placeholder="생년월일" value="${dto.birth}">
             <p class="help-block">생년월일은 2000-01-01 형식으로 입력 합니다.</p>
         </div>
+    </div>
+    
+    
+ <div class="form-group">
+        <label class="col-sm-2 control-label" for="gender">성별</label>
+       
+            <label style="padding-left: 10px;padding-top: 5px;padding-right: 10px">
+                 <input type="radio" name="gender" id="gender" value="남자">남자&nbsp;
+                 <input type="radio" name="gender" id="gender" value="여자">여자&nbsp;
+            </label>
     </div>
 
     <div class="form-group">
@@ -229,7 +239,36 @@ function check() {
              </div>
         </div>
     </div>
-
+  <!--           (userId, userName, userPW, email, tel, birth, gender, keyword, area)  VALUES 
+ --> 
+    
+  <div class="form-group">
+        
+        <label class="col-sm-2 control-label" for="keyword" >관심 사항</label>
+   
+            <label style="padding-left: 10px;padding-top: 5px;padding-right: 10px">
+              
+                 <input type="checkbox" name="keyword" id="keyword" value="여행">여행&nbsp;
+                 <input type="checkbox" name="keyword" id="keyword" value="스터디">스터디&nbsp;
+                 <input type="checkbox" name="keyword" id="keyword" value="운동">운동&nbsp;
+                 <input type="checkbox" name="keyword" id="keyword" value="만남">만남&nbsp;
+                 <input type="checkbox" name="keyword" id="keyword" value="식사">식사&nbsp;
+                 <input type="checkbox" name="keyword" id="keyword" value="영화">영화&nbsp;    
+                 <input type="checkbox" name="keyword" id="keyword" value="노래">노래&nbsp;
+  
+              </label>
+   
+    </div>
+    
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="area">지역</label>
+        <div class="col-sm-7">
+            <input class="form-control" id="area" name="area" type="text" placeholder="지역">
+        </div>
+    </div>
+    
+    
+    
 <c:if test="${mode=='created'}">
     <div class="form-group">
         <label class="col-sm-2 control-label" for="agree">약관 동의</label>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tnotice">
+<!--  1-13  만들 세가지 -->
+
+<!-- tnotice  테이블의  num 컬럼의 최대값 -->
+<select id="maxNum" resultType="Integer" >
+	select NVL(max(num), 0) from tnotice
+</select>
+
+<!-- 게시글 생성 -->
+<insert id="insertTNotice" parameterType="com.sp.tnotice.TNotice">
+	insert into tnotice (num, userId, notice, subject, content)  
+         values ( #{num}, #{userId}, #{notice}, #{subject}, #{content})
+</insert>
+
+
+<insert id="insertTNoticeFile">
+	insert into tnoticeFile(fileNum, num, userId, saveFilename, originalFilename, fileSize)
+		 values ( tnoticeFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize})
+
+</insert>
+
+<sql id="where-list">
+	<if test="searchKey=='subject'">
+		DBMS_LOB.INSTR(subject, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='content'">
+		DBMS_LOB.INSTR(content, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='created'">
+		to_char(created, 'YYYY-MM-DD') = #{searchValue}
+	</if>
+</sql>
+
+<select id="dataCount" parameterType="map" resultType="Integer">
+	SELECT NVL(COUNT(num), 0) FROM tnotice
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+</select>
+
+<select id="listTNoticeTop" parameterType="map" resultType="com.sp.tnotice.TNotice">
+	
+	select num, n.userId, m.userName, subject, notice, hitCount, 
+	   to_char(created, 'YYYY-MM-DD') created
+	  from tnotice n
+	  join member m on n.userId = m.userId
+	  where notice=1
+	 ORDER BY num ASC
+	
+        
+
+</select>
+
+<select id="listTNotice" parameterType="map" resultType="com.sp.tnotice.TNotice">
+SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+ 				select num, n.userId, m.userName, subject, notice, hitCount, created
+  					from tnotice n
+  					join member m on n.userId = m.userId
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+				ORDER BY num DESC
+	<![CDATA[                
+            ) tb WHERE ROWNUM <= #{end}
+        ) WHERE rnum >= #{start}
+	]]>
+</select>
+
+<update id="updateHitCount" parameterType="Integer">
+		update tnotice set hitCount=hitCount+1
+		where num = #{num}
+</update>
+	
+<select id="readTNotice" resultType="com.sp.tnotice.TNotice" parameterType="Integer">
+	select num, n.userId, userName, notice, subject, content, hitCount, created
+  		from tnotice n
+  		join member m on n.userId = m.userId
+  		where num =#{num}
+</select>
+
+<select id="preReadTNotice" resultType="com.sp.tnotice.TNotice" parameterType="map">
+		select tb.* from (
+		  select num, subject from tnotice
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num > #{num})
+		  	]]>
+		  </where>
+		  order by num ASC
+		) tb where ROWNUM=1
+	</select>
+	
+	<select id="nextReadTNotice" resultType="com.sp.tnotice.TNotice" parameterType="map">
+		select tb.* from (
+		  select num, subject from tnotice
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num < #{num})
+		  	]]>
+		  </where>
+		  order by num DESC
+		) tb where ROWNUM=1
+	</select>
+
+<select id="listFile" resultType="com.sp.tnotice.TNotice" parameterType="Integer">
+	select num, fileNum, userId, saveFilename, originalFilename, fileSize
+	 from tnoticeFile
+	  where num =#{num}
+</select>
+
+
+
+
+
+
+<select id="readFile" parameterType="Integer" resultType="com.sp.tnotice.TNotice">
+	SELECT  fileNum, num, saveFilename, 
+	 originalFilename, fileSize
+	  FROM tnoticeFile WHERE fileNum=#{fileNum}      
+</select>
+	
+<update id="updateTNotice" parameterType="com.sp.tnotice.TNotice">
+	UPDATE tnotice SET subject=#{subject},
+	  content=#{content}, notice=#{notice}
+	   WHERE num=#{num}
+</update>
+    
+<delete id="deleteTNotice" parameterType="Integer">
+	DELETE FROM tnotice WHERE num=#{num}
+</delete>
+	
+<delete id="deleteFile" parameterType="map">
+	DELETE FROM tnoticeFile WHERE ${field} = #{num}
+</delete>
+
+
+
+
+</mapper>

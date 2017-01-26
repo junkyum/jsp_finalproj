@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tboard">
+<!--  1-13  만들 세가지 -->
+
+<!-- tboard  테이블의  num 컬럼의 최대값 -->
+<select id="maxNum" resultType="Integer" >
+	select NVL(max(num), 0) from tboard
+</select>
+
+<!-- 게시글 생성 -->
+<insert id="insertTBoard" parameterType="com.sp.tboard.TBoard">
+	insert into tboard (num, userId, subject, content)  
+         values ( #{num}, #{userId}, #{subject}, #{content})
+</insert>
+
+
+<insert id="insertTBoardFile">
+	insert into tboardFile(fileNum, num, userId, saveFilename, originalFilename, fileSize)
+		 values ( tboardFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize})
+
+</insert>
+
+<sql id="where-list">
+	<if test="searchKey=='subject'">
+		DBMS_LOB.INSTR(subject, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='content'">
+		DBMS_LOB.INSTR(content, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='created'">
+		to_char(created, 'YYYY-MM-DD') = #{searchValue}
+	</if>
+</sql>
+
+<select id="dataCount" parameterType="map" resultType="Integer">
+	SELECT NVL(COUNT(num), 0) FROM tboard
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+</select>
+
+
+<select id="listTBoard" parameterType="map" resultType="com.sp.tboard.TBoard">
+SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+ 				select num, b.userId, m.userName, subject, hitCount, created
+  					from tboard b
+  					join member m on b.userId = m.userId
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+				ORDER BY num DESC
+	<![CDATA[                
+            ) tb WHERE ROWNUM <= #{end}
+        ) WHERE rnum >= #{start}
+	]]>
+</select>
+
+<update id="updateHitCount" parameterType="Integer">
+		update tboard set hitCount=hitCount+1
+		where num = #{num}
+</update>
+	
+<select id="readTBoard" resultType="com.sp.tboard.TBoard" parameterType="Integer">
+	select num, b.userId, userName, subject, content, hitCount, created
+  		from tboard b
+  		join member m on b.userId = m.userId
+  		where num =#{num}
+</select>
+
+<select id="preReadTBoard" resultType="com.sp.tboard.TBoard" parameterType="map">
+		select tb.* from (
+		  select num, subject from tboard
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num > #{num})
+		  	]]>
+		  </where>
+		  order by num ASC
+		) tb where ROWNUM=1
+	</select>
+	
+	<select id="nextReadTBoard" resultType="com.sp.tboard.TBoard" parameterType="map">
+		select tb.* from (
+		  select num, subject from tboard
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num < #{num})
+		  	]]>
+		  </where>
+		  order by num DESC
+		) tb where ROWNUM=1
+	</select>
+
+
+
+
+
+<select id="listFile" resultType="com.sp.tboard.TBoard" parameterType="Integer">
+	select num, fileNum, userId, saveFilename, originalFilename, fileSize
+	 from tboardFile
+	  where num =#{num}
+</select>
+
+<select id="readFile" parameterType="Integer" resultType="com.sp.tboard.TBoard">
+	SELECT  fileNum, num, saveFilename, 
+	 originalFilename, fileSize
+	  FROM tboardFile WHERE fileNum=#{fileNum}      
+</select>
+	
+	
+	
+	
+<update id="updateTBoard" parameterType="com.sp.tboard.TBoard">
+	UPDATE tboard SET subject=#{subject},
+	  content=#{content}
+	   WHERE num=#{num}
+</update>
+    
+<delete id="deleteTBoard" parameterType="Integer">
+	DELETE FROM tboard WHERE num=#{num}
+</delete>
+	
+<delete id="deleteFile" parameterType="map">
+	DELETE FROM tboardFile WHERE ${field} = #{num}
+</delete>
+
+
+<insert id="insertReple" parameterType="com.sp.tboard.TBoard">
+	insert into tboardReple ( repleNum, num, userId, content, answer)  
+         values ( #{repleNum} #{num}, #{userId}, #{content}, #{answer})
+
+</insert>
+
+
+
+</mapper>

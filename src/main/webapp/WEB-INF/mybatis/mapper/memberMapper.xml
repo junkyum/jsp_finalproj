@@ -11,8 +11,10 @@
     <insert id="insertMember" parameterType="com.sp.member.Member">
        INSERT INTO member
             (userId, userName, userPW, email, tel, birth, gender, keyword, area)  VALUES 
-            (#{userId}, #{userName}, #{userPW}, #{email}, #{tel}, #{birth},#{gender},#{keyword},#{area})
+            ( #{userId}, #{userName}, #{userPW}, #{email}, #{tel}, #{birth}, #{gender}, #{keyword}, #{area})
     </insert>
+    
+    
 
 
 
@@ -70,9 +72,9 @@
 	</update>
 	 -->
     <update id="updateMember" parameterType="com.sp.member.Member">
-        UPDATE member SET userPwd=#{userPwd}, enabled=#{enabled}, 
+        UPDATE member SET userPW=#{userPW}, enabled=#{enabled}, 
                email=#{email}, tel=#{tel}, birth=#{birth},
-               gender=#{gender}, keyword=#{keyword}, area=#{area}
+               gender=#{gender}, keyword=#{keyword}, area=#{area},
                
                infoSetDate=SYSDATE 
                WHERE userId=#{userId}

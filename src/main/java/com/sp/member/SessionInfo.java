@@ -1,17 +1,16 @@
 package com.sp.member;
 
 public class SessionInfo {
-	private int num;
+	private int memberIdx;
 	private String userId;
 	private String userName;
 	private int memberLevel;
 	
-	
-	public int getNum() {
-		return num;
+	public int getMemberIdx() {
+		return memberIdx;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public void setMemberIdx(int memberIdx) {
+		this.memberIdx = memberIdx;
 	}
 	public String getUserId() {
 		return userId;

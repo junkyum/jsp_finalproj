@@ -8,10 +8,11 @@ public class Member {
 	private String birth;
 	private int enabled;
 	private String gender;
-	private String keyword, area, infoSetDate, groupList, menuBar, lastLogin;
 
-	private int num;
+	//---
+	private String keyword, area, infoSetDate, groupList, menuBar, lastLogin;
 	
+	private int num;
 	private String authority;
 	
 	

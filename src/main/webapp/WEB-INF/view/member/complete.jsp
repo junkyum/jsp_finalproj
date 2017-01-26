@@ -4,10 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
    String cp = request.getContextPath();
+
 %>
 
-<div class="jumbotron">
-    <h1>${title}</h1>
+<div class="jumbotron" style="text-align: center">
+    <h2>${title}</h2>
 </div>
 
 <div class="bodyFrame">

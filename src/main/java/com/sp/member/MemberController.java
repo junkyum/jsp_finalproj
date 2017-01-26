@@ -8,38 +8,39 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@Controller("member.memberController")
 public class MemberController {
 	@Autowired
 	private MemberService service;
 	
 	// 로그인 및 로그아웃 -----------------------
 	@RequestMapping(value="/member/login", method=RequestMethod.GET)
-	public ModelAndView loginForm() throws Exception {
-		return new ModelAndView(".member.login");
+	public String loginForm(Model model) throws Exception {
+		return ".member.login";
 	}
 	
 	@RequestMapping(value="/member/login", method=RequestMethod.POST)
-	public ModelAndView loginSubmit(
+	public String loginSubmit(
 			HttpSession session,
 			@RequestParam("userId") String userId,
-			@RequestParam("userPW") String userPW
+			@RequestParam("userPW") String userPW,
+			Model model
 			) throws Exception {
 		
 		Member dto = service.readMember(userId);
 		
-	
-
-		if(dto==null || (!dto.getUserPW().equals(userPW))) {
-			ModelAndView mav=new ModelAndView(".member.login");
-			mav.addObject("message", "아이디 또는 패스워드가 일치하지 않습니다.");
-			return mav;
+		
+		if(dto==null || (! dto.getUserPW().equals(userPW))) {
+			
+			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
+			
+			return "redirect:/";
 		}
 		
 		// 로그인 날짜 변경
@@ -47,12 +48,11 @@ public class MemberController {
 
 		// 로그인 정보를 세션에 저장
 		SessionInfo info = new SessionInfo();
-		//info.setMemberIdx(dto.getMemberIdx());
 		info.setUserId(dto.getUserId());
 		info.setUserName(dto.getUserName());
 		session.setAttribute("member", info);
 		
-		return new ModelAndView("redirect:/");
+		return "redirect:/";
 	}	
 
 	@RequestMapping(value="/member/logout")
@@ -66,131 +66,160 @@ public class MemberController {
 	
 	// 회원가입 및 회원정보 수정 -----------------------
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
-	public ModelAndView memberForm() {
-		ModelAndView mav=new ModelAndView(".member.member");
-		mav.addObject("mode", "created");
-		return mav;
+	public String memberForm(Model model) {
+		model.addAttribute("mode", "created");
+		
+		return ".member.member";
 	}
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.POST)
-	public ModelAndView memberSubmit(Member dto) {
+	public String memberSubmit(Member dto , Model model) {
+		
+		
 		
 		int result=service.insertMember(dto);
 		
-		ModelAndView mav=new ModelAndView();
 		
 		if(result==1) {
 			StringBuffer sb=new StringBuffer();
 			sb.append(dto.getUserName()+ "님의 회원 가입이 정상적으로 처리되었습니다.<br>");
 			sb.append("메인화면으로 이동하여 로그인 하시기 바랍니다.<br>");
 			
-			mav.setViewName(".member.complete");
-			mav.addObject("message", sb.toString());
-			mav.addObject("title", "회원 가입");
+		model.addAttribute("title", "회원 가입")	;
+		model.addAttribute("message", sb.toString());
+			return ".member.complete";
+		
 		} else {
-			mav.setViewName(".member.member");
-			mav.addObject("mode", "created");
-			mav.addObject("message", "아이디 중복으로 회원가입이 실패했습니다.");
+			
+			model.addAttribute("message", "아이디 중복으로 회원가입이 실패했습니다.");
+			model.addAttribute("mode", "created");
+		
+
+			return ".member.member";
 		}
-		return mav;
 	}
-	
-	@RequestMapping(value="/member/pwd", method=RequestMethod.GET)
-	public ModelAndView pwdForm(
-			HttpServletRequest req,
-			HttpSession session) {
+
+	@RequestMapping(value="/member/info")
+	public String info(
+			HttpSession session,
+			Model model
+			) {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
-			return new ModelAndView("redirect:/member/login");
+			return "redirect:/member/login";
+		}
+
+		
+		Member dto=service.readMember(info.getUserId());
+			
+		System.out.println(info.getUserId()+"a------");
+		model.addAttribute("dto", dto);			
+		return ".member.info";
+	}
+	
+	
+	
+	@RequestMapping(value="/member/pwd", method=RequestMethod.GET)
+	public String pwdForm(
+			HttpServletRequest req,
+			HttpSession session,
+			Model model) {
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		if(info==null) {
+			return"redirect:/member/login";
 		}
 		
 		String dropout=req.getParameter("dropout");
 		
-		ModelAndView mav=new ModelAndView(".member.pwd");
 		if(dropout==null) {
-			mav.addObject("mode", "update");
+			model.addAttribute("mode", "update");
+		
 		} else {
-			mav.addObject("mode", "dropout");
+			model.addAttribute("mode", "dropout");
 		}
-		return mav;
+		return ".member.pwd";
 	}
 	
 	@RequestMapping(value="/member/pwd", method=RequestMethod.POST)
-	public ModelAndView pwdSubmit(HttpSession session,
+	public String pwdSubmit(HttpSession session,
 			@RequestParam(value="userPW") String userPW
 			,@RequestParam(value="mode") String mode
-	     ) throws Exception {
+			,Model model
+	     ) {
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
-			return new ModelAndView("redirect:/member/login");
+			return "redirect:/member/login";
 		}
 		
 		Member dto=service.readMember(info.getUserId());
 		if(dto==null) {
 			session.invalidate();
-			return new ModelAndView("redirect:/");
+			return "redirect:/";
 		}
 		
 		if(! dto.getUserPW().equals(userPW)) {
-			ModelAndView mav=new ModelAndView(".member.pwd");
 			if(mode.equals("update")) {
-				mav.addObject("mode", "update");
+				model.addAttribute("mode", "update");
+			
 			} else {
-				mav.addObject("mode", "dropout");
+				model.addAttribute("mode", "dropout");
 			}
-			mav.addObject("message", "패스워드가 일치하지 않습니다.");
-			return mav;
+			model.addAttribute("message", "패스워드가 일치하지 않습니다.");
+			return ".member.pwd";
 		}
 		
 		if(mode.equals("dropout")){
-			// 회원탈퇴 처리
+			// 회원탈퇴 
 			
 			
 			session.removeAttribute("member");
-			session.invalidate();
-
-			ModelAndView mav=new ModelAndView(".member.complete");
 			
+			session.invalidate();
+			
+			service.deleteMember(dto);
+
+		
 			StringBuffer sb=new StringBuffer();
 			sb.append(dto.getUserName()+ "님의 회원 탈퇴 처리가 정상적으로 처리되었습니다.<br>");
 			sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
 			
-			mav.addObject("title", "회원 탈퇴");
-			mav.addObject("message", sb.toString());
+			model.addAttribute("title", "회원 탈퇴");
+			model.addAttribute("message", sb.toString());
 			
-			return mav;
+			return ".member.complete";
 		}
 
 		// 회원정보수정폼
-		ModelAndView mav=new ModelAndView(".member.member");
-		mav.addObject("dto", dto);
-		mav.addObject("mode", "update");
-		return mav;
+		//ModelAndView mav=new ModelAndView(".member.member");
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("mode", "update");
+		return ".member.member";
 	}
 
-	@RequestMapping(value="/member/update",
-			method=RequestMethod.POST)
-	public ModelAndView updateSubmit(
+	@RequestMapping(value="/member/update",	method=RequestMethod.POST)
+	public String updateSubmit(
 			HttpSession session,
-			Member dto) {
+			Member dto,
+			Model model) {
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
-			return new ModelAndView("redirect:/member/login");
+			return "redirect:/member/login";
 		}
 
+		System.out.println(dto.getUserId()+"아이디"+"비밀번호!.."+dto.getUserPW());
 		service.updateMember(dto);
 		
-		ModelAndView mav=new ModelAndView(".member.complete");
-		
+	
 		StringBuffer sb=new StringBuffer();
 		sb.append(dto.getUserName()+ "님의 회원정보가 정상적으로 변경되었습니다.<br>");
 		sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
 		
-		mav.addObject("title", "회원 정보 수정");
-		mav.addObject("message", sb.toString());
-		return mav;
+		model.addAttribute("title", "회원 정보 수정");
+		model.addAttribute("message", sb.toString());
+		return ".member.complete";
 	}
 	
 	@RequestMapping(value="/member/userIdCheck")

@@ -16,23 +16,25 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override
-	public Member readMember(String userId){
-		Member result=null;
+	public Member readMember(String userId) {
+		Member dto=null;
 		try {
-			result=dao.getReadData("member.readMember",userId);
-			if(result!=null) {
-				if(result.getTel()!=null) {
-					String [] s=result.getTel().split("-");
-					result.setTel1(s[0]);
-					result.setTel2(s[1]);
-					result.setTel3(s[2]);
+			dto=dao.getReadData("member.readMember", userId);
+			
+			if(dto!=null) {
+				if(dto.getTel()!=null) {
+					String [] s=dto.getTel().split("-");
+					dto.setTel1(s[0]);
+					dto.setTel2(s[1]);
+					dto.setTel3(s[2]);
 				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		return result;
+		return dto;
 	}
+
 	@Override
 	public int insertMember(Member dto) {
 		int result=0;
@@ -42,17 +44,20 @@ public class MemberServiceImpl implements MemberService {
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
 							dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
+/*
+			   String[] ss=  dto.getKeyword("keyword"); 
+			      String keyword=" ";
 
-			//int seq=dao.getIntValue("member.memberSeq");
-			//dto.setMemberIdx(seq);
+			      if(ss !=null ){
+			         for (int i = 0; i < ss.length; i++) {
+			        	 keyword+=ss[i]+",";
+			         }
+			      }
+
+			dto.setKeyword(keyword);*/
 			
-			// 회원정보 저장
-			//dao.insertData("member.insertMember1", seq);
 			dao.insertData("member.insertMember", dto);
 			
-			// 권한저장
-			dto.setAuthority("ROLE_USER");
-			dao.insertData("member.insertAuthority", dto);
 			
 			result=1;
 		} catch (Exception e) {
@@ -88,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int deleteMember(Map<String, Object> map) {
+	public int deleteMember(Member dto) {
 		int result=0;
 		try {
 			
@@ -98,12 +103,13 @@ public class MemberServiceImpl implements MemberService {
 			*/
 			// member2 테이블 삭제
 			
-			String userId=(String)map.get("userId");
-			result=dao.deleteData("member.deleteMember", userId);
+			result=dao.deleteData("member.deleteMember", dto);
 		} catch (Exception e) {
 		}
 		return result;
 	}
+	
+
 
 	@Override
 	public int dataCount(Map<String, Object> map) {

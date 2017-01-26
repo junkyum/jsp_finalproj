@@ -1,11 +1,12 @@
 package com.sp.main;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.sp.member.SessionInfo;
 
 @Controller("mainController")
 public class MainController {
@@ -13,24 +14,14 @@ public class MainController {
 	
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String main(Model model) throws Exception {
+	public String main(HttpSession session) throws Exception {
 		
-		// 사용자 로그인 확인
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = null;
-		boolean isAnonymous = true;
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-			isAnonymous = false;
-		} else {
-			username = principal.toString(); // anonymousUser
-			isAnonymous = true;
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		if(info==null){
+			return "/member/login";
 		}
-		
-		model.addAttribute("username", username);
-		model.addAttribute("isAnonymous", isAnonymous);
-		return ".mainLayout";
-		
+		else
+			return ".mainLayout";
 	}
 	
 }
