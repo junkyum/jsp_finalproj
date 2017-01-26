@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+<!--  1-13  만들 세가지 -->
+
+<!-- board  테이블의  num 컬럼의 최대값 -->
+<select id="maxNum" resultType="Integer" >
+	select NVL(max(num), 0) from board
+</select>
+
+<!-- 게시글 생성 -->
+<insert id="insertBoard" parameterType="com.sp.board.Board">
+	insert into board (num, userId, subject, content)  
+         values ( #{num}, #{userId}, #{subject}, #{content})
+</insert>
+
+
+<insert id="insertBoardFile">
+	insert into boardFile(fileNum, num, userId, saveFilename, originalFilename, fileSize)
+		 values ( boardFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize})
+
+</insert>
+
+<sql id="where-list">
+	<if test="searchKey=='subject'">
+		DBMS_LOB.INSTR(subject, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='content'">
+		DBMS_LOB.INSTR(content, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='created'">
+		to_char(created, 'YYYY-MM-DD') = #{searchValue}
+	</if>
+</sql>
+
+<select id="dataCount" parameterType="map" resultType="Integer">
+	SELECT NVL(COUNT(num), 0) FROM board
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+</select>
+
+
+<select id="listBoard" parameterType="map" resultType="com.sp.board.Board">
+SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+ 				select num, b.userId, m.userName, subject, hitCount, created
+  					from board b
+  					join member m on b.userId = m.userId
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+				ORDER BY num DESC
+	<![CDATA[                
+            ) tb WHERE ROWNUM <= #{end}
+        ) WHERE rnum >= #{start}
+	]]>
+</select>
+
+<update id="updateHitCount" parameterType="Integer">
+		update board set hitCount=hitCount+1
+		where num = #{num}
+</update>
+	
+<select id="readBoard" resultType="com.sp.board.Board" parameterType="Integer">
+	select num, b.userId, userName, subject, content, hitCount, created
+  		from board b
+  		join member m on b.userId = m.userId
+  		where num =#{num}
+</select>
+
+<select id="preReadBoard" resultType="com.sp.board.Board" parameterType="map">
+		select tb.* from (
+		  select num, subject from board
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num > #{num})
+		  	]]>
+		  </where>
+		  order by num ASC
+		) tb where ROWNUM=1
+	</select>
+	
+	<select id="nextReadBoard" resultType="com.sp.board.Board" parameterType="map">
+		select tb.* from (
+		  select num, subject from board
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (num < #{num})
+		  	]]>
+		  </where>
+		  order by num DESC
+		) tb where ROWNUM=1
+	</select>
+
+
+
+
+
+<select id="listFile" resultType="com.sp.board.Board" parameterType="Integer">
+	select num, fileNum, userId, saveFilename, originalFilename, fileSize
+	 from boardFile
+	  where num =#{num}
+</select>
+
+<select id="readFile" parameterType="Integer" resultType="com.sp.board.Board">
+	SELECT  fileNum, num, saveFilename, 
+	 originalFilename, fileSize
+	  FROM boardFile WHERE fileNum=#{fileNum}      
+</select>
+	
+	
+	
+	
+<update id="updateBoard" parameterType="com.sp.board.Board">
+	UPDATE board SET subject=#{subject},
+	  content=#{content}
+	   WHERE num=#{num}
+</update>
+    
+<delete id="deleteBoard" parameterType="Integer">
+	DELETE FROM board WHERE num=#{num}
+</delete>
+	
+<delete id="deleteFile" parameterType="map">
+	DELETE FROM boardFile WHERE ${field} = #{num}
+</delete>
+
+
+
+
+</mapper>

@@ -1,0 +1,93 @@
+@CHARSET "UTF-8";
+
+.board {
+	margin:30px auto;
+	width:600px;
+	text-align:left;
+}
+
+.board .board-title {
+	margin-bottom:10px;
+	padding-left:0px;
+	width:600px;
+	height:30px;
+	line-height:30px;
+	text-align:left;
+	font-weight: bold;
+	font-size:17px;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+}
+
+.board .board-form {
+	width:600px;
+	overflow: visible;
+	border-top:3px solid #507CD1;
+	border-bottom:1px solid #507CD1;
+	text-align:left;
+}
+
+.board .form-bottomLine {
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #ccc;
+	clear:both;
+	text-align:left;
+}
+.board .form-noLine {
+	height:40px;
+	line-height:40px;
+	clear:both;
+	text-align:left;
+}
+
+.board .form-content {
+	height:170px;
+	line-height:170px;
+	border-bottom:1px solid #ccc;
+	clear:both;
+	text-align:left;
+}
+
+.board .board-form dt {
+	padding-left:20px;
+	float:left;
+	width:80px;
+	height:40px;
+	line-height:40px;
+	text-align:left;
+	background-color:#EEEEEE;
+}
+.board .board-form dd {
+	padding-left:10px;
+	float:left;
+	width:490px;
+	height:40px;
+	line-height:40px;
+	text-align:left;
+}
+
+.board .form-content dt {
+	padding-left:20px;
+	float:left;
+	width:80px;
+	height:170px;
+	text-align:left;
+	background-color:#EEEEEE;
+}
+.board .form-content dd {
+	padding-left:10px;
+	margin:5px 0px;
+	float:left;
+	width:190px;
+	height:160px;
+	line-height:160px;
+	text-align:left;
+}
+
+.board .form-footer {
+	clear:both;
+	padding:10px 0px;
+	margin-bottom:20px;
+	width:600px;
+	text-align:center;
+}

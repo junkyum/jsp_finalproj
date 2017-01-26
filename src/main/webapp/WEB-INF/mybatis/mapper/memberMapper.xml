@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+    <!-- 회원정보 추가  -->    
+   <!--  <insert id="insertMember1" parameterType="Integer">
+       INSERT INTO member1(memberIdx) VALUES (#{memberIdx}) 
+    </insert>
+ -->
+    <insert id="insertMember" parameterType="com.sp.member.Member">
+       INSERT INTO member
+            (userId, userName, userPW, email, tel, birth, gender, keyword, area)  VALUES 
+            (#{userId}, #{userName}, #{userPW}, #{email}, #{tel}, #{birth},#{gender},#{keyword},#{area})
+    </insert>
+
+
+
+    <!-- 회원 정보 가져오기 -->
+    <!-- <select id="readMember1" resultType="com.sp.member.Member" parameterType="Integer">
+        SELECT m1.memberIdx, isMember, userId, userName, userPwd, 
+               created_date, modify_date, last_login,
+               NVL(enabled, 0) enabled, email, tel, 
+               TO_CHAR(birth, 'YYYY-MM-DD') birth
+            FROM member1 m1 
+            LEFT OUTHER JOIN member2 m2 ON m1.memberIdx = m2.memberIdx
+            WHERE memberIdx = #{memberIdx}
+    </select> -->
+
+    <select id="readMember" resultType="com.sp.member.Member" parameterType="String">
+        SELECT userId, userName, userPW,gender, keyword, area ,
+               infoSetDate, lastLogin, enabled, email, tel, 
+               TO_CHAR(birth, 'YYYY-MM-DD') birth , groupList ,menuBar
+            FROM member
+            WHERE userId = #{userId} 
+    </select>
+    
+      
+    <select id="dataCount" parameterType="map"
+            resultType="Integer">
+            
+       SELECT COUNT(*) FROM member 
+       
+       </select>
+    
+	<select id="listMember" parameterType="map"
+	            resultType="com.sp.member.Member">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+			     SELECT 
+			           userId, userName, userPwd, gender, keyword, area ,
+                       infoSetDate, last_login,
+                       NVL(enabled, 0) enabled, email, tel, 
+                       TO_CHAR(birth, 'YYYY-MM-DD') birth
+                 FROM member  
+                 <if test="searchValue != null and searchValue != ''">
+                     WHERE ${searchKey} LIKE #{searchValue} || '%'
+                 </if>                    
+                 ORDER BY infoSetDate DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+	    ) WHERE rnum >= #{start}
+	]]>
+	</select>
+
+    <!-- 회원정보 수정  -->    
+	<!-- <update id="updateMember1" parameterType="Integer">
+	    UPDATE member1 SET isMember=0
+	           WHERE memberIdx=#{memberIdx}
+	</update>
+	 -->
+    <update id="updateMember" parameterType="com.sp.member.Member">
+        UPDATE member SET userPwd=#{userPwd}, enabled=#{enabled}, 
+               email=#{email}, tel=#{tel}, birth=#{birth},
+               gender=#{gender}, keyword=#{keyword}, area=#{area}
+               
+               infoSetDate=SYSDATE 
+               WHERE userId=#{userId}
+    </update>
+    
+    <update id="updateLastLogin" parameterType="String">
+        UPDATE member SET lastLogin=SYSDATE 
+                    WHERE userId=#{userId}
+    </update>
+    
+    <!-- 회원 정보 삭제  -->    
+    <delete id="deleteMember" parameterType="String">
+    	DELETE FROM member WHERE userId=#{userId}
+    </delete>
+    
+    <!-- 어쏘러티(권한) 테이블 -->    
+	<insert id="insertAuthority" parameterType="com.sp.member.Member">
+	    INSERT INTO memberAuthority(num, userId, authority)
+	        VALUES (memberAuthority_seq.NEXTVAL, #{userId}, #{authority})
+	</insert>
+     
+	<select id="readAuthority" parameterType="Integer" resultType="com.sp.member.Member">
+	    SELECT num, userId, authority
+	        FROM memberAuthority WHERE num=#{num}
+	</select>
+	
+	<select id="listAuthority" parameterType="String" resultType="com.sp.member.Member">
+	    SELECT num, userId, authority
+	        FROM memberAuthority WHERE userId=#{userId}
+	</select>
+	
+	<update id="updateAuthority" parameterType="com.sp.member.Member">
+	     UPDATE memberAuthority SET userId=#{userId}, authority=#{authority}
+	         WHERE num=#{num}
+	</update>
+	
+	<delete id="deleteAuthority" parameterType="map">
+	    DELETE FROM memberAuthority WHERE ${field}=#{value}
+	</delete>
+    
+</mapper>

@@ -1,0 +1,93 @@
+@CHARSET "UTF-8";
+
+.board {
+	margin:30px auto;
+	width:600px;
+	text-align:left;
+}
+
+.board .board-title {
+	margin-bottom:10px;
+	padding-left:0px;
+	width:600px;
+	height:30px;
+	line-height:30px;
+	text-align:left;
+	font-weight: bold;
+	font-size:17px;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+}
+
+
+.board .board-article {
+	width:600px;
+	overflow: visible;
+	border-top:3px solid #507CD1;
+	border-bottom:1px solid #507CD1;
+	text-align:left;
+}
+
+.board .article-header {
+	height:35px;
+	line-height:35px;
+	border-bottom:1px solid #507CD1;
+	text-align:center;
+}
+
+.board .board-article dt {
+	float:left;
+	width:80px;
+	height:35px;
+	line-height:35px;
+	text-align:center;
+	background-color:#EEEEEE;
+}
+
+.board .board-article dd {
+	padding-left:10px;
+	float:left;
+	width:210px;
+	height:35px;
+	line-height:35px;
+	text-align:left;
+}
+
+.board .article-bottomLine {
+	height:35px;
+	line-height:35px;
+	border-bottom:1px solid #ccc;
+	clear:both;
+	text-align:left;
+}
+.board .article-noLine {
+	height:35px;
+	line-height:35px;
+	clear:both;
+	text-align:left;
+}
+
+.board .article-content {
+    padding: 20px 30px 20px 30px;
+    min-height:150px;
+	overflow: visible;
+	border-bottom:1px solid #507CD1;
+	text-align:left;
+    word-break:break-all;
+}
+
+.board .article-footer {
+	clear:both;
+	padding:10px 0px;
+	margin-bottom:20px;
+}
+
+.board .article-footer .left-footer{
+	float:left;
+	width:300px;
+	text-align:left;
+}
+.board .article-footer .right-footer{
+	float:right;
+	width:300px;
+	text-align:right;
+}

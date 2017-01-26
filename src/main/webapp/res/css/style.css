@@ -1,0 +1,97 @@
+@CHARSET "UTF-8";
+
+* {
+	margin:0px;
+	padding:0px;
+}
+
+body {
+	font-size: 9pt;
+	font-family:돋움;
+}
+
+a {
+	cursor: pointer;
+	color: #000000;
+	text-decoration: none;
+	font-size: 9pt;
+	line-height: 150%;
+}
+
+a:hover, a:active {
+	font-size: 9pt;
+	color: #F28011;
+	text-decoration: underline;
+}
+
+ul {
+	list-style: none;
+}
+
+.btn {
+	 font-size: 12px;
+	 color:#333;
+ 	 font-weight:500;
+	 font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+	 border:1px solid #ccc;
+	 background-color:#FFF;
+	 vertical-align:middle;
+	 text-align:text-align;
+	 cursor:cursor;
+	 padding:4px 8px;
+	 border-radius:4px;
+	 margin-bottom: 3px;
+}
+.btn:active, .btn:focus, .btn:hover {
+	 background-color:#e6e6e6;
+	 border-color: #adadad;
+	 color: #333;
+}
+
+.moveButton {
+	 font-size: 12px;
+	 font-weight:500;
+	 font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+	 border:1px solid #ccc;
+	 background-color:#FFF;
+	 vertical-align:middle;
+	 text-align:text-align;
+	 cursor:cursor;
+	 color:#333;
+	 width: 320px;
+	 height: 45px;
+	 line-height: 45px;
+	 border-radius:4px;
+}
+.moveButton:hover {
+	 background-color:#e6e6e6;
+	 border-color: #adadad;
+	 color: #333;
+}
+
+.boxTF {
+	border:1px solid #999;
+	padding:4px 6px;
+	border-radius:4px;
+	background-color:#ffffff;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+	font-size: 9pt;
+}
+.boxTA {
+	border:1px solid #999;
+	height:150px;
+	padding:3px 6px;
+	border-radius:4px;
+	background-color:#ffffff;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+	font-size: 9pt;
+}
+.selectField {
+	border:1px solid #999;
+	padding:3px 6px;
+	border-radius:4px;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+	font-size: 9pt;
+}
+
+.line1 {height: 1px; font-size: 0pt; padding:0px;}

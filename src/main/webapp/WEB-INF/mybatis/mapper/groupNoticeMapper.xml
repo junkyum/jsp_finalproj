@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupNotice">
+
+<select id="maxNum" resultType="Integer"> 
+   SELECT NVL(MAX(NUM),0) FROM NOTICE
+</select>
+
+<!-- UserId 빼놈!!!!!!!!  -->
+<insert id="insertNotice" parameterType="com.sp.group.notice.GroupNotice">
+   INSERT INTO NOTICE(num, subject, content) 
+         VALUES (#{num}, #{subject}, #{content})
+</insert>
+
+<!-- <insert id="insertNoticeFile" parameterType="com.sp.main.Notice">
+   INSERT INTO NOTICEFILE(FILENUM, NUM, USERID, saveFilename, ORIGINALFILENAME, FILESIZE) 
+         VALUES (noticeFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename},#{originalFilename},#{fileSize} )
+</insert> -->
+
+<sql id="where-list">
+      <if test="searchKey=='subject'">
+         instr(subject, #{searchValue}) >= 1
+      </if>
+      <if test="searchKey=='content'">
+         dbms_lob.instr(content, #{searchValue}) >= 1
+      </if>
+      <if test="searchKey=='created'">
+         TO_CHAR(created, 'YYYY-MM-DD') =#{searchValue}
+      </if>
+</sql>
+
+<select id="dataCount" parameterType="map" resultType="Integer">
+   select NVL(count(*),0) from notice n JOIN member m ON n.userId = m.userId
+      <where>
+         <if test="searchValue != null and searchValue!=''">
+            <include refid="where-list"/>
+         </if>
+      </where>
+</select>
+
+<select id="listNotice" resultType="com.sp.group.notice.GroupNotice" parameterType="map">
+   
+      SELECT * FROM (
+        SELECT ROWNUM rnum, tb.* FROM (
+         SELECT num, userId,subject, content, created
+          FROM notice 
+                  <where>
+                           <if test="searchValue != null and searchValue !='' ">
+                              <include refid="where-list"/><!-- 위에서 만든 sql문 -->
+                           </if>
+                      </where>  
+                   ORDER BY num DESC
+                   <![CDATA[
+                         ) tb WHERE ROWNUM <= #{end}
+                     ) WHERE rnum >= #{start}   
+                   ]]>
+                          
+   </select>
+
+   <select id="readNotice" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
+      select num, m.userId, m.userName, subject, content, created
+            from notice n 
+            join member m on n.userId = m.userId where num =#{num}
+   </select>
+   
+   <select id="listFile" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
+         select fileNum, saveFilename ,originalFilename, fileSize
+            from noticeFile 
+               where num=#{num}
+   </select> 
+   
+      
+    <update id="updateNotice" 
+          parameterType="com.sp.group.notice.GroupNotice">
+          UPDATE notice SET subject=#{subject},
+               content=#{content}, notice=#{notice}
+               WHERE num=#{num}
+    </update>
+    
+   <delete id="deleteNotice" parameterType="Integer">
+      DELETE FROM notice WHERE num=#{num}
+   </delete>
+   
+   <delete id="deleteFile" parameterType="map">
+       DELETE FROM noticeFile WHERE ${field} = #{num}
+   </delete>
+   
+</mapper>

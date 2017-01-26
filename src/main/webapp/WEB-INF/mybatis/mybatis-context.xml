@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>/WEB-INF/mybatis/jdbc.properties</value>
+		</property>
+	</bean>
+
+    <!-- DBCP를 위한 DataSource 객체 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClass}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+  		<property name="maxActive" value="10" />
+  		<property name="maxIdle" value="3" />
+  		<property name="maxWait" value="10000" />
+  		<property name="defaultAutoCommit" value="true" />   <!--  기본:true  -->
+	</bean>
+	
+	<!--  SqlSessionFactoryBean : SqlSessionTemplate 객체를 얻는다. -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" lazy-init="true">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="/WEB-INF/mybatis/mybatis-config.xml"/>
+         <property name="mapperLocations" value="/WEB-INF/mybatis/mapper/*.xml" />
+		 <!-- 
+		 <property name="mapperLocations" value="classpath:com/think/mapper/**/*.xml" />
+		 -->
+         <!-- 
+         <property name="transactionFactory">
+                <bean class="org.apache.ibatis.transaction.managed.ManagedTransactionFactory" />
+          </property>
+           -->
+	</bean>
+
+	<!-- SqlSessionTemplate : MyBatis SQL method 호출 및 관리, 예외처리 담당 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+           <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- 트랜잭션관리자. -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+	<!-- 트랜잭션과 관련된 작업(트랜잭션시작, 커및, 롤백등) -->
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+         <property name="transactionManager" ref="transactionManager" />
+     </bean>
+     
+    <!-- 트랜잭션어드바이스(tx:advice)를통한선언적인방식트랜잭션 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
+	        <tx:method name="insert*" rollback-for="Exception"/>
+	        <tx:method name="update*" rollback-for="Exception"/>
+	        <tx:method name="delete*" rollback-for="Exception"/>
+	    </tx:attributes>
+	</tx:advice>
+	
+	<aop:config proxy-target-class="true">
+	    <!-- com.sp 및 하위 패키지의 Service로 끝나는 클래스의 모든 메소드 -->
+	    <aop:pointcut id="serviceOperation" expression="execution(public * com.sp..*Service.*(..))" />
+	    <aop:advisor id="transactionAdvisor" pointcut-ref="serviceOperation" advice-ref="txAdvice"/>
+	</aop:config>
+</beans>

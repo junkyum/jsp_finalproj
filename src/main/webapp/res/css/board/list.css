@@ -1,0 +1,92 @@
+@CHARSET "UTF-8";
+
+.board {
+	margin:30px auto;
+	width:700px;
+	text-align:left;
+}
+
+.board .board-title {
+	margin-bottom:10px;
+	padding-left:0px;
+	width:700px;   /* 700px - (padding-left+border-left+border-right) */
+	height:30px;
+	line-height:30px;
+	text-align:left;
+	font-weight: bold;
+	font-size:17px;
+	font-family: NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", 돋움, sans-serif;
+}
+
+.board .board-header {
+	padding-top: 15px;
+	height: 33px;
+}
+
+.board .board-header .left-header{
+	width:350px;
+	float:left;
+	text-align:left;
+}
+.board .board-header .right-header{
+	width:350px;
+	float:right;
+	text-align:right;
+}
+
+.board .board-list {
+	clear:both;
+}
+
+.board .board-list .list-title {
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	background-color: #507CD1;
+	color: #FFFFFF;
+}
+
+.board .board-list .list-title dl {
+	height:30px;
+}
+
+.board .board-list .list-title dt {
+	float:left;
+	padding:9px 0px;
+	text-align:center;
+}
+
+.board .board-list dd {
+	float:left;
+	height:28px;
+	line-height:28px;
+	text-align:center;
+}
+
+.board .board-list .num {width:50px;}
+.board .board-list .subject {width:410px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.board .board-list .name {width:95px;}
+.board .board-list .created {width:85px;}
+.board .board-list .hitCount {width:60px;}
+
+.board .board-list .list-row {
+	clear:both;
+}
+
+.board .board-list .list-row dl {
+	float:left;
+	border-bottom:1px solid #ccc;
+}
+
+.board .board-list dd.subject {
+	margin-left:10px;
+	width:400px;
+	text-align:left;
+}
+
+.board .board-paging {
+	margin-top: 10px;
+	clear:both;
+	height:33px;
+	line-height:33px;
+	text-align:center;
+}
