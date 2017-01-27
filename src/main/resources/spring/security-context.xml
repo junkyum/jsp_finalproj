@@ -22,6 +22,7 @@
 		<intercept-url pattern="/member/member" access="permitAll" />
 		<intercept-url pattern="/member/userIdCheck" access="permitAll" />
 		<intercept-url pattern="/res/**" access="permitAll" />
+		<intercept-url pattern="/assets/**" access="permitAll"/>
 		<!--  admin-->
 	<!-- 	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> -->
 		<!-- 모든 페이지 -->

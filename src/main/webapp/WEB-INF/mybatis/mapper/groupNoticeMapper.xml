@@ -9,8 +9,8 @@
 
 <!-- UserId 빼놈!!!!!!!!  -->
 <insert id="insertNotice" parameterType="com.sp.group.notice.GroupNotice">
-   INSERT INTO NOTICE(num, subject, content) 
-         VALUES (#{num}, #{subject}, #{content})
+   INSERT INTO NOTICE(num, userId,subject, content) 
+			VALUES (#{num}, #{userId},#{subject}, #{content})
 </insert>
 
 <!-- <insert id="insertNoticeFile" parameterType="com.sp.main.Notice">
@@ -31,19 +31,19 @@
 </sql>
 
 <select id="dataCount" parameterType="map" resultType="Integer">
-   select NVL(count(*),0) from notice n JOIN member m ON n.userId = m.userId
-      <where>
-         <if test="searchValue != null and searchValue!=''">
-            <include refid="where-list"/>
-         </if>
-      </where>
+ select NVL(count(*),0) from notice n JOIN member m ON n.userId = m.userId
+		<where>
+			<if test="searchValue != null and searchValue!=''">
+				<include refid="where-list"/>
+			</if>
+		</where>
 </select>
 
 <select id="listNotice" resultType="com.sp.group.notice.GroupNotice" parameterType="map">
    
-      SELECT * FROM (
+        SELECT * FROM (
         SELECT ROWNUM rnum, tb.* FROM (
-         SELECT num, userId,subject, content, created
+         SELECT num, userId, subject, content, created
           FROM notice 
                   <where>
                            <if test="searchValue != null and searchValue !='' ">
@@ -56,34 +56,35 @@
                      ) WHERE rnum >= #{start}   
                    ]]>
                           
+                          
    </select>
 
    <select id="readNotice" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
-      select num, m.userId, m.userName, subject, content, created
-            from notice n 
-            join member m on n.userId = m.userId where num =#{num}
+     select num, m.userId, m.userName, subject, content, created
+				from notice n 
+				join member m on n.userId = m.userId where num =#{num}
    </select>
    
    <select id="listFile" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
          select fileNum, saveFilename ,originalFilename, fileSize
-            from noticeFile 
-               where num=#{num}
+				from noticeFile 
+					where num=#{num}
    </select> 
    
       
     <update id="updateNotice" 
           parameterType="com.sp.group.notice.GroupNotice">
-          UPDATE notice SET subject=#{subject},
+         UPDATE notice SET subject=#{subject},
                content=#{content}, notice=#{notice}
                WHERE num=#{num}
     </update>
     
    <delete id="deleteNotice" parameterType="Integer">
-      DELETE FROM notice WHERE num=#{num}
+     DELETE FROM notice WHERE num=#{num}
    </delete>
    
    <delete id="deleteFile" parameterType="map">
-       DELETE FROM noticeFile WHERE ${field} = #{num}
+        DELETE FROM noticeFile WHERE ${field} = #{num}
    </delete>
    
 </mapper>

@@ -44,10 +44,9 @@ function sendLogin() {
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-        <link rel="stylesheet" href="<%=cp%>/res/assets/bootstrap/css/bootstrap.min.css">
-  
-      	<link rel="stylesheet" href="<%=cp%>/res/assets/css/form-elements.css">
-        <link rel="stylesheet" href="<%=cp%>/res/assets/css/style.css">
+        <link rel="stylesheet" href="<%=cp%>/assets/bootstrap/css/bootstrap.min.css">
+      	<link rel="stylesheet" href="<%=cp%>/assets/css/form-elements.css">
+        <link rel="stylesheet" href="<%=cp%>/assets/css/style.css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -57,11 +56,11 @@ function sendLogin() {
         <![endif]-->
 
         <!-- Favicon and touch icons -->
-        <link rel="shortcut icon" href="<%=cp%>/assets/ico/favicon.png">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%=cp%>/res/assets/ico/apple-touch-icon-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%=cp%>/res/assets/ico/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%=cp%>/res/assets/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="<%=cp%>/res/assets/ico/apple-touch-icon-57-precomposed.png">
+        <%-- <link rel="shortcut icon" href="<%=cp%>/assets/ico/favicon.png"> --%>
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%=cp%>/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%=cp%>/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%=cp%>/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="<%=cp%>/assets/ico/apple-touch-icon-57-precomposed.png">
 
     </head>
 
@@ -152,9 +151,7 @@ function sendLogin() {
         <script src="<%=cp%>/res/assets/js/jquery.backstretch.min.js"></script>
         <script src="<%=cp%>/res/assets/js/scripts.js"></script>
          --%>
-        <!--[if lt IE 10]>
-            <script src="assets/js/placeholder.js"></script>
-        <![endif]-->
+       
 
     </body>
 

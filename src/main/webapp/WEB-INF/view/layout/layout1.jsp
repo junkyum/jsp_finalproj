@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="<%=cp%>/res/css/layout/layout.css" type="text/css">
 <link rel="stylesheet" href="<%=cp%>/res/jquery/css/jquery-ui.min.css" type="text/css"/>
 <link rel="stylesheet" href="<%=cp%>/res/jquery/css/smoothness/jquery-ui.min.css" type="text/css"/>
-<link rel="stylesheet" href="<%=cp%>/res/assets/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="<%=cp%>/assets/font-awesome/css/font-awesome.min.css">
 
 <script type="text/javascript" src="<%=cp%>/res/js/util.js"></script>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery-1.12.4.min.js"></script>

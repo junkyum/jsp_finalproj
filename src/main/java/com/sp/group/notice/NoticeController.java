@@ -1,6 +1,7 @@
 package com.sp.group.notice;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
+
+import net.sf.json.JSONObject;
 
 @Controller("notice.noticeController")
 public class NoticeController {
@@ -118,48 +122,70 @@ public class NoticeController {
 		
 		return "group/notice";
 	}
-	@RequestMapping(value="/notice/created",method=RequestMethod.GET)
-	public String createdForm(
-			Model model, HttpSession session) throws Exception {
+	@RequestMapping(value="/notice/created",method=RequestMethod.POST)
+	public String createdSubmit(
+			GroupNotice dto, HttpSession session, Model model) throws Exception {
+
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "notice";
+		//dto.setUserId(info.getUserId());
+		service.insertNotice(dto, pathname);
+		return "redirect:group/";
+	}
+
+	
+	@RequestMapping(value = "/board")
+	public String boardList() throws Exception {
+		return "group/board";
+	}
+	@RequestMapping(value="/notice/update", method=RequestMethod.POST)
+	public String updateSubmit(
+			@RequestParam int num, HttpServletResponse resp,
+			@RequestParam String page,
+			HttpSession session ) throws Exception {
+		
 		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
 			return "redirect:/member/login";
 		}
 		
-		if(! info.getUserId().equals("admin")) {
-			return "redirect:/notice/list";
-		}
-		*/
+		if(! info.getUserId().equals("admin"))
+			return "redirect:/notice/list?page="+page;*/
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "notice";		
+		GroupNotice dto = service.readNotice(num);
+		JSONObject job = new JSONObject();		
+		job.put("subject", dto.getSubject());
+		job.put("content", dto.getContent());
+		resp.setContentType("text/html; charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print(job.toString());
 		
-		model.addAttribute("mode", "created");
-		return "group/notice";
+		//dto.setUserId(info.getUserId());
+		service.updateNotice(dto, pathname);
+		
+		return "group/";
 	}
-	
-	@RequestMapping(value="/notice/created",method=RequestMethod.POST)
-	public String createdSubmit(
-			GroupNotice dto, HttpSession session) throws Exception {
-		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
-		if(info==null) {
-			return "redirect:/member/list";
-		}
-		
-		if(! info.getUserId().equals("admin")) {
-			return "redirect:/notice/list";
-		}*/
-		
-		// 저장
+	@RequestMapping(value="/notice/delete", method=RequestMethod.GET)
+	public String delete(
+			@RequestParam int num,
+			@RequestParam String page,
+			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";		
 		
-		//dto.setUserId(info.getUserId());
-		service.insertNotice(dto, pathname);
+		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
+		if(info==null) {
+			return "redirect:/member/login";
+		}
 		
-		return "redirect:/notice";
+		if(! info.getUserId().equals("admin"))
+			return "redirect:/notice/list?page="+page;*/
+		
+		// 내용 지우기
+		service.deleteNotice(num, pathname);
+		
+		return "group/";
 	}
-	
 
-	@RequestMapping(value = "/board")
-	public String boardList() throws Exception {
-		return "group/board";
-	}
 }
