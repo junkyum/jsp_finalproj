@@ -135,9 +135,7 @@ function updateNoG(num) {
 	      }
 	});
 	
-	<%--	var params = "num="+num+"&page="+page;	
- 	var url = "<%=cp%>/notice/update?" + params; 
-		location.href=url; --%>
+
 }
 
 
@@ -266,9 +264,7 @@ function layoutview(num) {
 		
 	</div>
 	
-	
-<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->	
-	
+
 <div class="modal fade" id="kmModal" role="dialog">
 	<form name="gNotice" method="POST" enctype="multipart/form-data">
 		<div class="modal-dialog">

@@ -30,7 +30,7 @@ public class PhotoController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	@RequestMapping(value="/photo/list")
+	@RequestMapping(value="/groupGally/list")
 	public String list(Model model,HttpServletRequest req,
 			@RequestParam(value="page", defaultValue="1") int current_page,
 			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
@@ -85,7 +85,7 @@ public class PhotoController {
 	   
 
 	    String params="";
-	    String urlList=cp+"/photo/list";
+	    String urlList=cp+"/groupGally/list";
 	    String urlArticle = cp+"/photo/article?page=" + current_page;
 	    
 	    if(searchValue.length()!=0) {
@@ -94,8 +94,8 @@ public class PhotoController {
         }
 	    
 	    if(params.length() !=0){
-	    	 urlList = cp+"/photo/list?" + params;
-	         urlArticle = cp+"/photo/article?page=" + current_page + "&"+ params;
+	    	 urlList = cp+"/groupGally/list?" + params;
+	         urlArticle = cp+"/groupGally/article?page=" + current_page + "&"+ params;
 	    }
 
         
@@ -109,7 +109,7 @@ public class PhotoController {
 	    model.addAttribute("urlArticle", urlArticle);
 
 	   
-		return "photo/list";
+		return "groupGally/list";
 	}
 	
 
@@ -122,7 +122,7 @@ public class PhotoController {
 		
 		service.insertPhoto(dto, path);
 		
-		return "redirect:/photo/list";
+		return "redirect:/groupGally/list";
 	}
 	
 	
@@ -130,7 +130,7 @@ public class PhotoController {
 	//article 만듬
 //	 System.out.println(searchKey+"-------------------");
 //	    System.out.println(searchValue+"------------------");
-	@RequestMapping(value="/photo/article", method=RequestMethod.GET)
+	@RequestMapping(value="/groupGally/article", method=RequestMethod.GET)
 	public String article(
 			@RequestParam(value="groupNum") int groupNum,
 			Model model
@@ -144,7 +144,7 @@ public class PhotoController {
 			model.addAttribute("mode","article");
 			model.addAttribute("dto", dto);
 
-		return "photo/article";
+		return "groupGally/article";
 	}
 	
 	@RequestMapping(value="/photo/delete", method=RequestMethod.GET)
@@ -160,7 +160,7 @@ public class PhotoController {
 		service.deletePhoto(groupNum, dto.getImageFilename(), path);
 		
 		
-		return "redirect:/photo/list";
+		return "redirect:/groupGally/list";
 	}
 	
 	
@@ -175,6 +175,6 @@ public class PhotoController {
 		service.updatePhoto(dto, path);
 		
 
-		return "redirect:/photo/list";
+		return "redirect:/groupGally/list";
 	}
 }
