@@ -220,28 +220,6 @@ div.friendScroll {
 							<c:set var="friendCount" value="15" />
 							
 							
-							<%-- <c:forEach var="dto" items="${friendAskedList}">
-							    <tr height='25' data-tid='${dto.friendUserId}'>
-							        <td align='center' width='30'>
-							            <input type='checkbox' value='${dto.num}' data-userId='${dto.friendUserId}' data-userName='${dto.friendUserName}'>
-							        </td>
-							        <td align='left' width='200'>
-							            ${dto.friendUserName}(${dto.friendUserId})
-							        </td>
-							    </tr>
-							</c:forEach>
-							
-							<!--  친구 리스트 -->
-							<c:forEach var="dto" items="${friendList}">
-    							<tr height='25' data-tid='${dto.friendUserId}'>
-          							<td align='center' width='30'>
-              							<input type='checkbox' value='${dto.num}' data-userId='${dto.friendUserId}'>
-          							</td>
-          							<td align='left' width='200'>
-              							${dto.friendUserName}(${dto.friendUserId})
-          							</td>
-          						</tr>
-							</c:forEach> --%>
 							
 							
 							
