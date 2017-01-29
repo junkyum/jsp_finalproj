@@ -109,7 +109,7 @@ public class PhotoController {
 	    model.addAttribute("urlArticle", urlArticle);
 
 	   
-		return "groupGally/list";
+		return "group/groupGally";
 	}
 	
 
@@ -122,7 +122,7 @@ public class PhotoController {
 		
 		service.insertPhoto(dto, path);
 		
-		return "redirect:/groupGally/list";
+		return "redirect:/group/groupGally";
 	}
 	
 	
@@ -144,7 +144,7 @@ public class PhotoController {
 			model.addAttribute("mode","article");
 			model.addAttribute("dto", dto);
 
-		return "groupGally/article";
+		return "group/groupGally";
 	}
 	
 	@RequestMapping(value="/photo/delete", method=RequestMethod.GET)
@@ -160,7 +160,7 @@ public class PhotoController {
 		service.deletePhoto(groupNum, dto.getImageFilename(), path);
 		
 		
-		return "redirect:/groupGally/list";
+		return "redirect:/group/groupGally";
 	}
 	
 	
@@ -175,6 +175,6 @@ public class PhotoController {
 		service.updatePhoto(dto, path);
 		
 
-		return "redirect:/groupGally/list";
+		return "redirect:/group/groupGally";
 	}
 }

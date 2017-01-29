@@ -84,7 +84,7 @@ $(function(){
 	
 	<div id = "tapmenu" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
 	  	<ul>
-		<li><a href="<%=cp%>/notice"><span>공지사항</span></a></li>
+		<li><a href="<%=cp%>/gnotice"><span>공지사항</span></a></li>
 		<li><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
 		<li><a href="<%=cp%>/groupGally/list"><span>그룹갤러리</span></a></li>
 		<li><a href="<%=cp%>/group/bbs"><span>게시판</span></a></li>
