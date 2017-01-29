@@ -116,7 +116,7 @@ div.friendScroll {
 
 <div id="mk_content">
 
-	<!-- 개인 -->
+	<!-- 개인 222222-->
 	<div id="mk_indiv">
 	
 		<div class="mk_indiv_in">
