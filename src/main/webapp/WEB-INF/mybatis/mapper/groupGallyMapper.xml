@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupGally">
+					
+		<!-- 인설트 부분 -->
+		<insert id="insertPhoto" parameterType="com.sp.group.gally.GroupGally">
+			INSERT INTO groupPhoto(groupNum, groupContent,
+				 groupSubject, imageFilename, userId )
+			VALUES (groupPhotoT_seq.NEXTVAL, #{groupContent},
+			 #{groupSubject}, #{imageFilename}, #{userId} )
+	  
+		</insert>
+		
+		<!-- 검색할때 쓰는 문구 -->
+		<sql id="where-list">
+			  <if test="searchKey=='groupSubject'">
+			       INSTR(groupSubject, #{searchValue}) &gt; 0
+			  </if>
+			  <if test="searchKey=='groupContent'">
+			      INSTR(groupContent, #{searchValue}) &gt; 0 
+			  </if>
+			  <if test="searchKey=='groupCreated'">
+			      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValue}
+			  </if>
+		</sql>
+		
+		
+		
+		<!-- 위에서 0번쨰 넘이 숫자기 떄문에 인터저를 받음. -->
+		<select id="dataCount" resultType="Integer" parameterType="map">
+			SELECT NVL(COUNT(*), 0) FROM groupPhoto p
+				JOIN member m ON p.userId =m.userId
+			<where>
+	     	<if test="searchValue!=null and searchValue!='' ">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     </where>   	
+		</select>
+		
+		<!-- 멤버와 조인을 해서  리스트를 가지고올것이다.  -->
+		<select id="listPhoto" parameterType="map" resultType="com.sp.group.gally.GroupGally">
+			SELECT * FROM (
+				SELECT ROWNUM rnum, tb.*FROM(
+				SELECT groupNum, p.userId, groupSubject, groupContent,
+				imageFilename, TO_CHAR(groupCreated, 'YYYY-MM-DD') groupCreated
+				FROM groupPhoto p JOIN member m
+	                          ON p.userId = m.userId
+                   <where>
+				     	<if test="searchValue!=null and searchValue!='' ">
+				     	    <include refid="where-list"/>
+				     	</if>
+				     </where> 
+	               ORDER BY groupNum DESC
+		<![CDATA[
+		        ) tb WHERE ROWNUM <= #{end}
+		    ) WHERE rnum >= #{start}
+		]]>  
+		
+		</select>
+		
+		<select id="readPhoto" parameterType="Integer"
+	      resultType="com.sp.Gphoto.Photo">
+				SELECT groupNum , p.userId, groupSubject, imageFilename,
+				groupContent, groupCreated
+				             FROM groupPhoto p JOIN member m
+				                      ON p.userId = m.userId
+				             WHERE groupNum=#{groupNum}
+		</select>
+		
+		
+		<delete id="deletePhoto" parameterType="Integer">
+			DELETE FROM groupPhoto WHERE groupNum=#{groupNum}
+		</delete>	
+		
+		
+		<update id="updatePhoto" parameterType="com.sp.group.gally.GroupGally">
+			UPDATE groupPhoto SET  imageFilename=#{imageFilename} , groupSubject=#{groupSubject}
+			 , groupContent=#{groupContent} WHERE groupNum=#{groupNum}
+			
+		</update>
+		
+</mapper>

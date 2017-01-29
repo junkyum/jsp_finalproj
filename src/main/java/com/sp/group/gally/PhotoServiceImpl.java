@@ -28,7 +28,7 @@ public class PhotoServiceImpl implements PhotoService{
 				String newFilename= fileManager.doFileUpload(dto.getUpload(), path);
 				dto.setImageFilename(newFilename);
 				
-				result=dao.insertData("photo.insertPhoto", dto);
+				result=dao.insertData("groupGally.insertPhoto", dto);
 			}
 			
 			
@@ -44,7 +44,7 @@ public class PhotoServiceImpl implements PhotoService{
 		int result=0;
 		
 			try {
-				result=dao.getIntValue("photo.dataCount",map);
+				result=dao.getIntValue("groupGally.dataCount",map);
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
@@ -55,7 +55,7 @@ public class PhotoServiceImpl implements PhotoService{
 	public List<GroupGally> listPhoto(Map<String, Object> map) {
 		List<GroupGally> list= null;
 		try {
-			list=dao.getListData("photo.listPhoto", map);
+			list=dao.getListData("groupGally.listPhoto", map);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -67,7 +67,7 @@ public class PhotoServiceImpl implements PhotoService{
 		GroupGally dto=null;
 		
 		try {
-			dto=dao.getReadData("photo.readPhoto", groupNum);
+			dto=dao.getReadData("groupGally.readPhoto", groupNum);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -85,7 +85,7 @@ public class PhotoServiceImpl implements PhotoService{
 					fileManager.doFileDelete(imageFilename, path);
 			
 			//게시물 지우기
-			result=dao.deleteData("photo.deletePhoto", groupNum);
+			result=dao.deleteData("groupGally.deletePhoto", groupNum);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -115,7 +115,7 @@ public class PhotoServiceImpl implements PhotoService{
 				}
 			}
 				
-			result= dao.updateData("photo.updatePhoto", dto);
+			result= dao.updateData("groupGally.updatePhoto", dto);
 			
 		} catch (Exception e) {
 			System.err.println(e.toString());
