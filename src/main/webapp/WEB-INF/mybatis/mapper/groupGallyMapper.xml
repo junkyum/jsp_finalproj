@@ -60,7 +60,7 @@
 		</select>
 		
 		<select id="readPhoto" parameterType="Integer"
-	      resultType="com.sp.Gphoto.Photo">
+	      resultType="com.sp.group.gally.GroupGally">
 				SELECT groupNum , p.userId, groupSubject, imageFilename,
 				groupContent, groupCreated
 				             FROM groupPhoto p JOIN member m
