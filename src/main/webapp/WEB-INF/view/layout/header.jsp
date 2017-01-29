@@ -36,7 +36,7 @@
               >고객센터 <b class="caret"></b></a>
               <ul class="dropdown-menu" role="menu">
                 <li>
-                  <a href="#">공지사항</a>
+                  <a href="<%=cp%>/tnotice/list">공지사항</a>
                 </li>
                 <li>
                   <a href="#">fAQ</a>

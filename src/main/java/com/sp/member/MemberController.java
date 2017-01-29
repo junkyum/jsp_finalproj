@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,9 +74,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.POST)
-	public String memberSubmit(Member dto , Model model) {
+	public String memberSubmit(Member dto , Model model,HttpSession session) {
 		
-		
+		   ShaPasswordEncoder passwordEncoder=new ShaPasswordEncoder(256);
+		      String hashed=passwordEncoder.encodePassword(dto.getUserPW(), null);
+		      dto.setUserPW(hashed);
+		      
 		
 		int result=service.insertMember(dto);
 		
@@ -125,6 +129,7 @@ public class MemberController {
 			HttpSession session,
 			Model model) {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
 		if(info==null) {
 			return"redirect:/member/login";
 		}
@@ -146,18 +151,25 @@ public class MemberController {
 			,@RequestParam(value="mode") String mode
 			,Model model
 	     ) {
-		
+		      
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
 			return "redirect:/member/login";
 		}
-		
 		Member dto=service.readMember(info.getUserId());
+		
+		
+		
 		if(dto==null) {
 			session.invalidate();
 			return "redirect:/";
 		}
 		
+		  ShaPasswordEncoder passwordEncoder=new ShaPasswordEncoder(256);
+		  userPW=passwordEncoder.encodePassword(userPW, null);
+	   
+	      
+	      
 		if(! dto.getUserPW().equals(userPW)) {
 			if(mode.equals("update")) {
 				model.addAttribute("mode", "update");
@@ -165,6 +177,8 @@ public class MemberController {
 			} else {
 				model.addAttribute("mode", "dropout");
 			}
+			
+			
 			model.addAttribute("message", "패스워드가 일치하지 않습니다.");
 			return ".member.pwd";
 		}

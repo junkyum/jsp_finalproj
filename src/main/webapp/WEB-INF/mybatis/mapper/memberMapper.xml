@@ -93,7 +93,7 @@
     <!-- 어쏘러티(권한) 테이블 -->    
 	<insert id="insertAuthority" parameterType="com.sp.member.Member">
 	    INSERT INTO memberAuthority(num, userId, authority)
-	        VALUES (memberAuthority_seq.NEXTVAL, #{userId}, #{authority})
+	        VALUES (memberauthoritySeq.NEXTVAL, #{userId}, #{authority})
 	</insert>
      
 	<select id="readAuthority" parameterType="Integer" resultType="com.sp.member.Member">
