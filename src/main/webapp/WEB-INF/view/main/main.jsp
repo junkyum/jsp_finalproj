@@ -10,28 +10,43 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
 function mk_main_indiv() {
-	mk_indiv.style.display="block";
-	//  mk_indivMenu.style.display="block";
-	// mk_group.style.display="none";
-	mk_groupMenu.style.display="none";
-	$("#mk_group").hide("fade",1000);
-	$("#mk_indivMenu").delay(2000).animate({
+	document.getElementById("mk_indiv").style.width="50%";
+	document.getElementById("mk_indivMenu").style.width="50%";
+	
+	document.getElementById("mk_group").style.width="0";
+	document.getElementById("mk_groupMenu").style.width="0";
+	
+	document.getElementById("mk_indiv_friend").style.width="0";
+	$("#mk_indivMenu").delay(1000).animate({
 		left:0
-	},"clip");
-	$("#mk_indivMenu").show("blind",1200);
+	},"clip")
+	$("#mk_indivMenu").show("slide",1000);
 }
 function mk_main_group() {
-	// mk_indiv.style.display="none";
-	mk_indivMenu.style.display="none";
-	mk_group.style.display="block";
-	// mk_groupMenu.style.display="block";
-	$("#mk_indiv").hide("fade",1000);
-	// $("#mk_group").hide("fade",1000);
-	$("#mk_groupMenu").delay(2000).animate({
+	document.getElementById("mk_indiv").style.width="0";
+	document.getElementById("mk_indivMenu").style.width="0";
+	
+	document.getElementById("mk_group").style.width="50%";
+	document.getElementById("mk_groupMenu").style.width="50%";
+	
+	document.getElementById("mk_indiv_friend").style.width="0";
+	$("#mk_groupMenu").delay(1000).animate({
 		left:0
-	},"clip");
-	// $("#mk_group").show("drop",2000);
-	$("#mk_groupMenu").show("clip",2000);
+	},"clip")
+	$("#mk_groupMenu").show("slide",1000);
+}
+function mk_indiv_friend() {
+	document.getElementById("mk_indiv").style.width="50%";
+	document.getElementById("mk_indivMenu").style.width="0";
+	
+	document.getElementById("mk_group").style.width="0";
+	document.getElementById("mk_groupMenu").style.width="0";
+	
+	document.getElementById("mk_indiv_friend").style.width="50%";
+	$("#mk_indiv_friend").delay(1000).animate({
+		left:0
+	},"clip")
+	$("#mk_indiv_friend").show("slide",1000);
 }
 </script>
 
@@ -43,7 +58,6 @@ function mk_main_group() {
 	height:500px;
 }
 #mk_indiv {
-	background-color: #C4B73B;
 	text-align: center;
 	width: 49%;
 	height: 100%;
@@ -52,10 +66,8 @@ function mk_main_group() {
 }
 .mk_indiv_in {
 	display: inline-block;
-	background-color: #C4B73B;
 }
 #mk_group {
-	background-color: #6B66FF;
 	text-align: center;
 	width: 49%;
 	height: 100%;
@@ -64,23 +76,39 @@ function mk_main_group() {
 }
 .mk_group_in {
 	display: inline-block;
-	background-color: #6B66FF;
 }
 #mk_indivMenu {
-	background-color: #6B66FF;
 	text-align: center;
 	width: 50%;
 	height: 100%;
 	float: left;	
 	padding-top: 50px;
+	display: none;
 }
 #mk_groupMenu {
-	background-color: #C4B73B;
 	text-align: center;
 	width: 50%;
 	height: 100%;
 	float: left;
-	padding-top: 50px;	
+	padding-top: 50px;
+	display: none;	
+}
+#mk_indiv_friend {
+	text-align: center;
+	width : 25%;
+	float: left;
+	padding-top: 50px;
+	display: none;
+}
+div.friendScroll {
+	scrollbar-highlight-color:#FFFFFF;
+	scrollbar-shadow-color:#FFFFFF;
+	scrollbar-arrow-color:#B4751B;
+	scrollbar-face-color:#FFFFFF;
+	scrollbar-3dlight-color:#FFFFFF;
+	scrollbar-darkshadow-color:#FFFFFF;
+	scrollbar-track-color:#FFFFFF;
+	overflow:auto;
 }
 
 </style>
@@ -92,8 +120,7 @@ function mk_main_group() {
 	<div id="mk_indiv">
 	
 		<div class="mk_indiv_in">
-			<button type="button" onclick="mk_main_indiv();" 
-					id="btn_indiv"  style="background-color:#C4B73B; border: 0px;">
+			<button type="button" onclick="mk_main_indiv();"  id="btn_indiv"  style="background-color:#FFFFFF; border: 0px;">
 				<img src="<%=cp%>/res/images/indiv.png" style="width: 80%">
 			</button>
 		</div>
@@ -104,21 +131,20 @@ function mk_main_group() {
 	<div id="mk_group">
 	
 		<div class="mk_group_in">
-			<button type="button" onclick="mk_main_group();" 
-					id="btn_group" style="background-color:#6B66FF; border: 0px;" >
+			<button type="button" onclick="mk_main_group();"  id="btn_group" style="background-color:#FFFFFF; border: 0px;" >
 				<img src="<%=cp%>/res/images/group.png" style="width: 80%;">
 			</button>
 		</div>
 	</div>
 	
 	<!-- 개인 메뉴바 -->
-	<div id="mk_indivMenu" style="display: none;">
+	<div id="mk_indivMenu">
 		<div>
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="mk_indiv_friend();"  id="btn_indiv_friend"  style="border: 0px; width:25%;">
+				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 100%; height: 135px;">
+			</button>
 		
-			<a href="<%=cp%>/board/list">
+			<a href="<%=cp%>/tboard/list">
 				<img src="<%=cp%>/res/images/img_B.jpg" style="width: 25%; height: 135px;">
 			</a>
 		</div>
@@ -143,7 +169,7 @@ function mk_main_group() {
 	</div>
 	
 	<!-- 그룹 메뉴바 -->
-	<div id="mk_groupMenu" style="display: none;">
+	<div id="mk_groupMenu">
 		<div>
 			<a href="<%=cp%>/#">
 				<img src="<%=cp%>/res/images/img_F.jpg" style="width: 25%; height: 135px;">
@@ -172,6 +198,76 @@ function mk_main_group() {
 			</a>
 		</div>
 	</div>
-</div>
+	
+	<!-- 개인 친구 -->
+	<div id="mk_indiv_friend">
+		<table class="friend_table" style="margin: 0px auto; width:500px ;height: 400px; " border="1">
+			<tr style="height: 1px">
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+			</tr>
+			<tr style="height: 20px;">
+				<td colspan="3">친구 검색</td>
+				<td colspan="2">input 예정</td>
+			</tr>
+			<tr>
+				<td colspan="5">
+					<div class="friendScroll" style="height: 400px">
+						<table border="1" style="width:480px; border-style: hidden hidden solid hidden;">
+							<c:set var="friendCount" value="15" />
+							
+							
+							<%-- <c:forEach var="dto" items="${friendAskedList}">
+							    <tr height='25' data-tid='${dto.friendUserId}'>
+							        <td align='center' width='30'>
+							            <input type='checkbox' value='${dto.num}' data-userId='${dto.friendUserId}' data-userName='${dto.friendUserName}'>
+							        </td>
+							        <td align='left' width='200'>
+							            ${dto.friendUserName}(${dto.friendUserId})
+							        </td>
+							    </tr>
+							</c:forEach>
+							
+							<!--  친구 리스트 -->
+							<c:forEach var="dto" items="${friendList}">
+    							<tr height='25' data-tid='${dto.friendUserId}'>
+          							<td align='center' width='30'>
+              							<input type='checkbox' value='${dto.num}' data-userId='${dto.friendUserId}'>
+          							</td>
+          							<td align='left' width='200'>
+              							${dto.friendUserName}(${dto.friendUserId})
+          							</td>
+          						</tr>
+							</c:forEach> --%>
+							
+							
+							
+							
+							 <c:forEach var="index" begin="0" end="30" step="1">
+								<tr>
+									<td style="width:75%;"> 친구 이름</td>
+									<td style="width:25%;"> 쪽지|수정 |삭제</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr style="height: 1px">
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 20%"></td>
+			</tr>
+		</table>
+	</div>
+	
+	
+	
+</div><!-- 전체  div -->
 
 
