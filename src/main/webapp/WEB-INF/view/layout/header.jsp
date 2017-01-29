@@ -21,7 +21,7 @@
  <span class="icon-bar"></span>
  <span class="icon-bar"></span>
  </button>
- <a class="navbar-brand" href="<%=cp%>/"> 우리의 프로젝트입니다 다나가주세요</a>
+ <a class="navbar-brand" href="<%=cp%>/"> 우리의 프로젝트입니다 다나가주세요 ㅇㅎㅇㅎㅇㅎㅇ</a>
  </div>
  
  <div class="collapse navbar-collapse navbar-ex1-collapse">
