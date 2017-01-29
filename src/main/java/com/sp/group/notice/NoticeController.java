@@ -33,8 +33,8 @@ public class NoticeController {
 	private NoticeService service;
 	@Autowired 
 	private MyUtil myUtil;
-	@Autowired 
-	private FileManager fileManager;
+	//@Autowired 
+	//private FileManager fileManager;
 
 	@RequestMapping(value = "/gnotice")
 	public String noticeList(
