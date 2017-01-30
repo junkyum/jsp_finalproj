@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gboard">
+<select id="maxNum" resultType="Integer" >
+	select NVL(max(gbnum), 0) from groupboard
+</select>
+
+<!-- 게시글 생성 -->
+<insert id="insertGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
+	insert into groupboard (gbnum, userId, gbsubject, gbcontent)  
+         values ( #{gbnum}, #{userId}, #{gbsubject}, #{gbcontent})
+</insert>
+
+
+<insert id="insertGroupBoardFile">
+	insert into groupboard(gbfileNum, gbnum, userId, saveFilename, originalFilename, gbfileSize)
+		 values ( gboardFile_seq.NEXTVAL, #{gbnum}, #{userId}, #{saveFilename}, #{originalFilename}, #{gbfileSize})
+</insert>
+
+<sql id="where-list">
+	<if test="searchKey=='subject'">
+		DBMS_LOB.INSTR(subject, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='content'">
+		DBMS_LOB.INSTR(content, #{searchValue}) =1
+	</if>
+	<if test="searchKey=='created'">
+		to_char(created, 'YYYY-MM-DD') = #{searchValue}
+	</if>
+</sql>
+
+<select id="dataCount" parameterType="map" resultType="Integer">
+	SELECT NVL(COUNT(gbnum), 0) FROM groupboard
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+</select>
+
+
+<select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
+SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+ 				select gbnum, b.userId, m.userName, gbsubject, gbhitCount, gbcreated
+  					from groupboard b
+  					join member m on b.userId = m.userId
+	<where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+				ORDER BY gbnum DESC
+	<![CDATA[                
+            ) tb WHERE ROWNUM <= #{end}
+        ) WHERE rnum >= #{start}
+	]]>
+</select>
+
+<update id="updateHitCount" parameterType="Integer">
+		update groupboard set gbhitCount=gbhitCount+1
+		where num = #{num}
+</update>
+	
+<select id="readGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
+	select gbnum, b.userId, userName, gbsubject, gbcontent, gbhitCount, gbcreated
+  		from groupboard b
+  		join member m on b.userId = m.userId
+  		where gbnum =#{gbnum}
+</select>
+
+<select id="preReadGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
+		select tb.* from (
+		  select gbnum, subject from groupboard
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (gbnum > #{gbnum})
+		  	]]>
+		  </where>
+		  order by gbnum ASC
+		) tb where ROWNUM=1
+</select>
+	
+<select id="nextReadTBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
+		select tb.* from (
+		  select gbnum, gbsubject from groupboard
+		  <where>
+		  	<if test="searchValue!= null and searchValue !=''">
+		  		<include refid="where-list"/>
+		  	</if>
+		  	<![CDATA[
+		  		and (gbnum < #{gbnum})
+		  	]]>
+		  </where>
+		  order by gbnum DESC
+		) tb where ROWNUM=1
+</select>
+
+<select id="listFile" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
+	select gbnum, gbfileNum, userId, saveFilename, originalFilename, gbfileSize
+	 from groupboardFile
+	  where gbnum =#{gbnum}
+</select>
+
+<select id="readFile" parameterType="Integer" resultType="com.sp.group.gboard.GroupBoard">
+	SELECT  gbfileNum, gbnum, saveFilename, 
+	 originalFilename, gbfileSize
+	  FROM groupboardFile WHERE gbfileNum=#{gbfileNum}      
+</select>
+	
+<update id="updateGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
+	UPDATE groupboard SET gbsubject=#{gbsubject},
+	  gbcontent=#{gbcontent}
+	   WHERE gbnum=#{gbnum}
+</update>
+    
+<delete id="deleteGroupBoard" parameterType="Integer">
+	DELETE FROM groupboard WHERE gbnum=#{gbnum}
+</delete>
+	
+<delete id="deleteFile" parameterType="map">
+	DELETE FROM groupboardFile WHERE ${field} = #{gbnum}
+</delete>
+
+
+<insert id="insertReply" parameterType="com.sp.group.gboard.GroupBoard">
+	insert into groupboardReply ( gbreplyNum, gbnum, userId, content, answer)  
+         values ( #{gbreplyNum} #{gbnum}, #{userId}, #{content}, #{answer})
+</insert>
+</mapper>
