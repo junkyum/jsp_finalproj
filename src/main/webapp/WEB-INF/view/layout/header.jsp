@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css"/>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<!-- class="navbar navbar-default" -->
+<!-- class="navbar navbar-default"asfdasfasfd -->
 <!-- class="navbar navbar-light" style="background-color: #e3f2fd;" -->
    <nav class="navbar navbar-inverse bg-inverse" style="background-color: #e3f2fd;" role="navigation">
  

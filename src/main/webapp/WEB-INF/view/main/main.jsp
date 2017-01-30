@@ -171,7 +171,7 @@ div.friendScroll {
 	<!-- 그룹 메뉴바 -->
 	<div id="mk_groupMenu">
 		<div>
-			<a href="<%=cp%>/#">
+			<a href="<%=cp%>/group">
 				<img src="<%=cp%>/res/images/img_F.jpg" style="width: 25%; height: 135px;">
 			</a>
 		
