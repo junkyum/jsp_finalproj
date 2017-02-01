@@ -70,7 +70,7 @@ public class MemberController {
 	public String memberForm(Model model) {
 		model.addAttribute("mode", "created");
 		
-		return ".member.member";
+		return "member/member";
 	}
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.POST)
@@ -99,7 +99,7 @@ public class MemberController {
 			model.addAttribute("mode", "created");
 		
 
-			return ".member.member";
+			return "/member/member";
 		}
 	}
 
