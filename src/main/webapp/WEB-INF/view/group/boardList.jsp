@@ -6,9 +6,10 @@
 	String cp = request.getContextPath();
 %>
 <style>
-.container {
+.bestbig {
+	margin:0 auto;
 	width: 900px;
-	height: 680px;
+/* 	height: 680px; */
 	border: 1px solid #5D5D5D;
 }
 </style>
@@ -22,14 +23,14 @@
 <script type="text/javascript">
 function searchList() {
 		var f=document.searchForm;
-		f.action="<%=cp%>/tboard/list";
+		f.action="<%=cp%>/group/boardList";
 		f.submit();
 }
 </script>
 
 </head>
 <body>
-	<div class="container" style="clear: both;">
+	<div class="bestbig">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -42,19 +43,17 @@ function searchList() {
 			</thead>
 			<tbody>
 				<c:forEach var="dto" items="${list}">
-							<tr>
-								<td class="text-center">${dto.listNum}</td>
-								<td>
-									<a href="${articleUrl}&num=${dto.gbnum}">${dto.gbsubject}</a>
-									<c:if test="${dto.gap < 1}">
+					<tr>
+						<td class="text-center">${dto.listNum}</td>
+						<td><a href="${articleUrl}&num=${dto.gbnum}">${dto.gbsubject}</a>
+							<c:if test="${dto.gap < 1}">
                               			 // 새글 표시
-                            		</c:if>
-                            	</td>
-								<td class="text-center">${dto.userName}</td>
-								<td class="text-center">${dto.gbcreated}</td>
-								<td class="text-center">${dto.gbhitCount}</td>
-							</tr>
-						</c:forEach>
+                            		</c:if></td>
+						<td class="text-center">${dto.userName}</td>
+						<td class="text-center">${dto.gbcreated}</td>
+						<td class="text-center">${dto.gbhitCount}</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 		<div class="paging"
@@ -66,8 +65,8 @@ function searchList() {
                 ${paging}
             </c:if>
 		</div>
-		
-		
+
+
 		<div class="threediv" style="clear: both;">
 			<div style="float: left; width: 20%; min-width: 85px;">
 				<button type="button" class="btn btn-default btn wbtn">
@@ -90,8 +89,7 @@ function searchList() {
 					</button>
 				</form>
 			</div>
-			<div
-				style="float: left; width: 20%; min-width: 85px; text-align: right;">
+			<div style="float: left; width: 20%; min-width: 85px; text-align: right;">
 				<button type="button" class="btn btn-default btn wbtn" id="btnpen"
 					data-toggle="modal" data-target="#myModal">
 					<span class="glyphicon glyphicon glyphicon-pencil"></span>
@@ -99,9 +97,10 @@ function searchList() {
 
 			</div>
 		</div>
-
 	</div>
-<div class="modal fade" id="myModal" role="dialog">
+
+
+	<div class="modal fade" id="myModal" role="dialog">
 		<!-- 모달 Div 이걸 따로 빼야하는지 그냥 둬도 되는건지 내일 물어보기!  -->
 		<div class="modal-dialog">
 
@@ -114,12 +113,12 @@ function searchList() {
 				</div>
 				<div class="modal-body">
 					<input type="text" name="subject" class="form-control input"
-						value="제목을 입력해주세요." required="required"><br>
+						placeholder="제목을 입력해주세요." required="required"><br>
 					<textarea name="content" class="form-control" rows="15"
 						required="required"></textarea>
 					<br> <input type="file" name="upload"
 						class="form-control input"><br> <input type="text"
-						name="subject" class="form-control input" value="태그를 입력해주세요.">
+						name="subject" class="form-control input" placeholder="태그를 입력해주세요.">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">

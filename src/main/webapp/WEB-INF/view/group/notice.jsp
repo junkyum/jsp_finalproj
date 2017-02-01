@@ -10,7 +10,7 @@
 	margin:0 auto;
 	width: 900px;
 /* 	height: 680px; */
-	/* border: 1px solid #5D5D5D; */
+	border: 1px solid #5D5D5D;
 }
 
 .bigdiv {
@@ -110,7 +110,7 @@ $(function(){
 		var content = $("#kmcontent").val().trim();
 		if(subject !=null && content !=null){
 			var f = document.gNotice;	
-				f.action = "<%=cp%>/notice/created";			
+				f.action = "<%=cp%>/group/notice/created";			
 			 f.submit();
 		}
 	});	
@@ -134,8 +134,6 @@ function updateNoG(num) {
 	    	  console.log(e.responseText);
 	      }
 	});
-	
-
 }
 
 
@@ -184,6 +182,28 @@ function layoutview(num) {
 }
 
 
+$(function(){	 //버튼이 어떤걸로 눌리는걸로 하면됌 
+	var url = "<%=cp%>/group/notice/created";
+	
+	$.ajax({
+		type:"post",
+		url :url,
+		dataType:"json",
+		success:function(data){
+			if(data.res=="ok"){
+			alert("가려진시간");
+			}else
+				alert("gjf");
+		},error:function(e) {
+	    	  console.log(e.responseText);
+	      }
+	});
+});
+/*
+ * 제이슨에서 바꾸는 작업 
+ 컨트롤러에서 메소드타입을 보이드로 바꿔준다
+ 
+ */
 
 </script>
 
