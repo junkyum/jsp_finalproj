@@ -1,8 +1,8 @@
 package com.sp.group;
 
 public class Group {
-	private String guroupName,userId,introduce,area,created,keyword;
-	private String join_date,condition;
+	private String guroupName,userId,introduce,place,created,keyword;
+	private String joindate,condition;
 	private String profile;
 	
 	public String getProfile() {
@@ -13,12 +13,12 @@ public class Group {
 		this.profile = profile;
 	}
 
-	public String getJoin_date() {
-		return join_date;
+	public String getJoindate() {
+		return joindate;
 	}
 
-	public void setJoin_date(String join_date) {
-		this.join_date = join_date;
+	public void setJoindate(String joindate) {
+		this.joindate = joindate;
 	}
 
 	public String getCondition() {
@@ -53,12 +53,12 @@ public class Group {
 		this.introduce = introduce;
 	}
 
-	public String getArea() {
-		return area;
+	public String getPlace() {
+		return place;
 	}
 
-	public void setArea(String area) {
-		this.area = area;
+	public void setPlace(String place) {
+		this.place = place;
 	}
 
 	public String getCreated() {

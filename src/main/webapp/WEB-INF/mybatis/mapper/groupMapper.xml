@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group">
+
+<sql id="where-list">
+      <if test="searchKey=='name'">
+          instr(groupName, #{searchValue}) >= 1
+      </if>
+      <if test="searchKey=='place'">
+          instr(place, #{searchValue}) >= 1
+      </if>
+      <if test="searchKey=='keyword'">
+          instr(keyword, #{searchValue}) >= 1
+      </if>
+</sql>
+
+<insert id="insertGroup" parameterType="com.sp.group.Group">
+       INSERT INTO ggroup
+            (groupName, userId, introduce, profile, place, keyword )  VALUES 
+            (#{guroupName}, #{userId}, #{introduce}, #{profile}, #{place}, #{keyword} )
+</insert>
+
+<insert id="insertGroupMember" parameterType="com.sp.group.Group">
+       INSERT INTO groupMember
+            (groupName, userId, condition, joindate)  VALUES 
+            (#{guroupName},#{userId},#{condition}, sysdate)
+</insert>
+
+<select id="listGroup" resultType="com.sp.group.Group" parameterType="map">
+   
+        SELECT * FROM (
+        SELECT ROWNUM rnum, tb.* FROM (
+         SELECT groupName, introduce, userId, created, keyword, place
+          FROM ggroup 
+                  <where>
+                           <if test="searchValue != null and searchValue !='' ">
+                              <include refid="where-list"/><!-- 위에서 만든 sql문 -->
+                           </if>
+                      </where>  
+                   ORDER BY groupName DESC
+                   <![CDATA[
+                         ) tb WHERE ROWNUM <= #{end}
+                     ) WHERE rnum >= #{start}   
+                   ]]>
+                          
+</select>
+
+<select id="readgroup" parameterType="String" resultType="com.sp.group.Group">
+     select groupName, introduce,profile, userId, created, keyword, place
+				from ggroup
+</select>
+
+<select id="dataCount" parameterType="map"
+            resultType="Integer">            
+       SELECT COUNT(*) FROM ggroup 
+</select>
+
+<update id="updateGroup" 
+          parameterType="com.sp.group.Group">
+         UPDATE ggroup SET introduce=#{introduce},
+               profile=#{profile}
+               WHERE groupName=#{groupName}
+</update>
+    
+<delete id="deleteGroup" parameterType="String">
+     DELETE FROM ggroup WHERE groupName=#{groupName}
+</delete>
+
+
+</mapper>

@@ -48,6 +48,49 @@ function mk_indiv_friend() {
 	},"clip")
 	$("#mk_indiv_friend").show("slide",1000);
 }
+function maker(){
+	    $("#divGroupMaker").dialog({
+	       title:"그룹만들기",
+	       modal:true,
+	       width:300,
+	       height:300,
+		   show:"clip",
+		   hide:"clip",
+		   buttons:{
+				"만들기":function(){
+					alert("야호");
+				},"취소":function(){
+					$(this).dialog("close");
+				}
+			}
+	    });
+}
+function finder(){
+	    $("#divGroupFinder").dialog({
+	       title:"그룹찾기",
+	       modal:true,
+	       width:400,
+	       height:200,
+		   show:"clip",
+		   hide:"clip",
+		   buttons:{
+				"찾기":function(){
+					alert("야호");
+				},"취소":function(){
+					$(this).dialog("close");
+				}
+			}
+	    });
+}
+function grouplist(){
+	alert("그룹리스트");
+}
+function map(){
+	alert("맵");
+}
+function option(){
+	alert("설정");
+}
 </script>
 
 
@@ -110,7 +153,10 @@ div.friendScroll {
 	scrollbar-track-color:#FFFFFF;
 	overflow:auto;
 }
-
+.jkbutton{
+	background:none;
+	border:none;
+}
 </style>
 
 
@@ -171,31 +217,30 @@ div.friendScroll {
 	<!-- 그룹 메뉴바 -->
 	<div id="mk_groupMenu">
 		<div>
-			<a href="<%=cp%>/group">
-				<img src="<%=cp%>/res/images/img_F.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="maker();" class="jkbutton">
+				<img src="<%=cp%>/res/images/maker.png" style="width: 135px; height: 135px;">
+			</button>
 		
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_E.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="finder();" class="jkbutton">
+				<img src="<%=cp%>/res/images/finder.png" style="width: 135px; height: 135px;">
+			</button>
 		</div>
 		<div>
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_D.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="grouplist();" class="jkbutton">
+				<img src="<%=cp%>/res/images/mygroup.png" style="width: 135px; height: 135px;">
+			</button>
 		
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_C.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="map();" class="jkbutton">
+				<img src="<%=cp%>/res/images/map.png" style="width: 135px; height: 135px;">
+			</button>
 		</div>
 		<div>
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_B.jpg" style="width: 25%; height: 135px;">
-			</a>
-		
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 25%; height: 135px;">
-			</a>
+			<button type="button" onclick="option();" class="jkbutton">
+				<img src="<%=cp%>/res/images/option.png" style="width: 135px; height: 135px;">
+			</button>
+			<button type="button" onclick="javascript:location.href='<%=cp%>/';" class="jkbutton">
+				<img src="<%=cp%>/res/images/home.png" style="width: 135px; height: 135px;">
+			</button>
 		</div>
 	</div>
 	
@@ -248,4 +293,22 @@ div.friendScroll {
 	
 </div><!-- 전체  div -->
 
+<div id="divGroupMaker" style = "display:none;">
+<form >
+이름:<input type="text" id="name" name="name"><br>
+소개:<input type="text" id="intro" name="intro"><br>
+장소:<input type="text" id="place" name="place"><br>
+키워드:<input type="text" id="keyword" name="keyword"><br>
+</form>
+</div>
 
+<div id="divGroupFinder" style = "display:none;">
+<form >
+<select name="searchKey">
+<option value="name">이름</option>
+<option value="place">장소</option>
+<option value="keyword">키워드</option>
+</select>
+<input type="text" name="searchValue"><br>
+</form>
+</div>

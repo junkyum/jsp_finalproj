@@ -43,7 +43,7 @@
             
        SELECT COUNT(*) FROM member 
        
-       </select>
+    </select>
     
 	<select id="listMember" parameterType="map"
 	            resultType="com.sp.member.Member">
