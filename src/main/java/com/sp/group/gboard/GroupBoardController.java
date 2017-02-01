@@ -27,15 +27,16 @@ import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 import com.sp.member.SessionInfo;
 
-@Controller("gboard.groupBoardController")
+@Controller("group.groupBoardController")
 public class GroupBoardController {
 
 	@Autowired private GroupBoardService service;
 	@Autowired private MyUtil util;
 	@Autowired private FileManager fileManager;
 	
-	@RequestMapping(value="/gboard/boardList")
+	@RequestMapping(value="/group/boardList")
 	public String list(
+			@RequestParam(value="gbnum", defaultValue = "1") int gbnum,
 			@RequestParam(value ="page",defaultValue="1") int current_page,
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
@@ -46,7 +47,7 @@ public class GroupBoardController {
 		}
 
 		int numPerPage=10;
-		int dataCount, total_page;
+		int dataCount=0, total_page=0;
 		Map<String, Object> map= new HashMap<>();
 
 		map.put("searchKey", searchKey);
@@ -54,10 +55,11 @@ public class GroupBoardController {
 
 		dataCount = service.dataCount(map);
 
-		total_page= util.pageCount(numPerPage, dataCount);
+		if (dataCount != 0)
+			total_page= util.pageCount(numPerPage, dataCount);
 
-		if(current_page>total_page)
-			current_page=total_page;
+		if (total_page < current_page)
+			current_page = total_page;
 		int start = (current_page-1)*numPerPage+1;
 		int end = current_page*numPerPage;
 
@@ -93,8 +95,8 @@ public class GroupBoardController {
 		}
 		
 		String cp= req.getContextPath();
-		String listUrl= cp+"/gboard/boardList";
-		String articleUrl=cp+"/gboard/boardArticle?page="+current_page;
+		String listUrl= cp+"/group/boardList";
+		String articleUrl=cp+"/group/boardArticle?page="+current_page;
 
 		String params="";
 		if(searchValue.length()!=0){
@@ -117,10 +119,10 @@ public class GroupBoardController {
 		model.addAttribute("paging",paging);
 
 
-		return ".gboard.boardList";
+		return "group/boardList";
 	}
 
-	@RequestMapping(value="/gboard/created", method=RequestMethod.GET)
+	@RequestMapping(value="/group/created", method=RequestMethod.GET)
 	public String createdForm( HttpSession session, Model model) throws Exception {
 
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
@@ -130,10 +132,10 @@ public class GroupBoardController {
 
 		model.addAttribute("mode","created");
 		
-		return ".gboard.created";
+		return ".group.created";
 	}
 
-	@RequestMapping(value="/gboard/created", method=RequestMethod.POST)
+	@RequestMapping(value="/group/created", method=RequestMethod.POST)
 	public String createdSubmit( GroupBoard dto, HttpSession session) throws Exception {
 
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
