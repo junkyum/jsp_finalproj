@@ -29,15 +29,12 @@ import net.sf.json.JSONObject;
 
 @Controller("group.noticeController")
 public class NoticeController {
-	@Autowired 
-	private NoticeService service;
-	@Autowired 
-	private MyUtil myUtil;
-	//@Autowired 
-	//private FileManager fileManager;
+	@Autowired private NoticeService service;
+	@Autowired private MyUtil myUtil;
+	@Autowired private FileManager fileManager;
 
-	@RequestMapping(value = "/gnotice")
-	public String noticeList(
+	@RequestMapping(value = "/group/notice")
+	public void noticeList(
 			@RequestParam(value="num", defaultValue = "1") int num,
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
 			@RequestParam(value = "searchKey", defaultValue = "subject") String searchKey,
@@ -102,14 +99,14 @@ public class NoticeController {
 		}
 		
 		String params = "";
-        String urlList = cp+"/notice";
+        String urlList = cp+"/group/notice";
         if(searchValue.length()!=0) {
         	params = "searchKey=" +searchKey + 
         	             "&searchValue=" + URLEncoder.encode(searchValue, "utf-8");	
         }
         
         if(params.length()!=0) {
-            urlList = cp+"/notice?" + params;
+            urlList = cp+"/group/notice?" + params;
         }
         
         String paging = myUtil.paging(current_page, total_page, urlList);
@@ -120,25 +117,27 @@ public class NoticeController {
 		model.addAttribute("dataCount", dataCount);
 		model.addAttribute("paging", paging);
 		
-		return "group/notice";
 	}
-	@RequestMapping(value="/gnotice/created",method=RequestMethod.POST)
-	public String createdSubmit(
-			GroupNotice dto, HttpSession session, Model model) throws Exception {
+	@RequestMapping(value="/group/notice/created",method=RequestMethod.POST)
+	public void createdSubmit(
+			GroupNotice dto, HttpSession session, Model model, HttpServletResponse resp) throws Exception {
 
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
 		//dto.setUserId(info.getUserId());
-		service.insertNotice(dto, pathname);
-		return "redirect:group/";
+		int res = service.insertNotice(dto, pathname);
+		String result="fail";
+		if(res>0)
+			result="ok";
+		JSONObject job = new JSONObject();
+		job.put("res", result);
+		PrintWriter out = resp.getWriter();
+		out.println(job.toString());
+		
 	}
 
 	
-	@RequestMapping(value = "/board")
-	public String boardList() throws Exception {
-		return "group/board";
-	}
-	@RequestMapping(value="/gnotice/update", method=RequestMethod.POST)
+	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
 	public String updateSubmit(
 			@RequestParam int num, HttpServletResponse resp,
 			@RequestParam String page,
@@ -164,9 +163,9 @@ public class NoticeController {
 		//dto.setUserId(info.getUserId());
 		service.updateNotice(dto, pathname);
 		
-		return "group/";
+		return "group/notice";
 	}
-	@RequestMapping(value="/gnotice/delete", method=RequestMethod.GET)
+	@RequestMapping(value="/group/notice/delete", method=RequestMethod.GET)
 	public String delete(
 			@RequestParam int num,
 			@RequestParam String page,
@@ -185,7 +184,7 @@ public class NoticeController {
 		// 내용 지우기
 		service.deleteNotice(num, pathname);
 		
-		return "group/";
+		return "group/notice";
 	}
 
 }
