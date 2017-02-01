@@ -18,8 +18,8 @@ $(function(){
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
-			그룹정보sdsdzzzzzz..<br> 
-			그룹이zzzzz름<br> 
+			그룹정보..<br> 
+			그룹이름<br> 
 			그룹사진<br>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
