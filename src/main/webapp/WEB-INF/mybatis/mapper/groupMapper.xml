@@ -83,11 +83,11 @@
 </update>
 
 <delete id="deleteGroup" parameterType="String">
-     DELETE FROM ggroup WHERE groupName=#{groupName}
+     DELETE FROM ggroup WHERE groupName=#{groupName} 
 </delete>
 
-<delete id="deleteGroupMember" parameterType="String">
-     DELETE FROM groupmember WHERE userId=#{userId}
+<delete id="deleteGroupMember" parameterType="map">
+     DELETE FROM groupmember WHERE userId=#{userId} and groupname = #{groupName}
 </delete>
 
 </mapper>

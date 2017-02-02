@@ -50,7 +50,7 @@ public class GroupServiceImpl implements GroupService {
 	public int dataCount(Map<String, Object> map) {
 		int result = 0;
 		try {
-			result = dao.getIntValue("group.dataCount", map);
+			result = dao.getIntValue("group.dataCountGroup", map);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -113,10 +113,10 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public int deleteGroupMember(String userId) {
+	public int deleteGroupMember(Map<String, Object> map) {
 		int result = 0;
 		try {
-			result = dao.deleteData("group.deleteGroupMember", userId);
+			result = dao.deleteData("group.deleteGroupMember", map);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}

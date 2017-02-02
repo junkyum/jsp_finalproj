@@ -58,15 +58,15 @@ public class GroupContoller {
 		JSONObject job = new JSONObject();
 		if(result==0)
 		{
-			job.put("res","false");
-			
+			job.put("res","false");	
 		}
 		else
 		{
-			job.put("res",dto.getGuroupName());
+			service.insertGroupMember(dto);
+			job.put("res",dto.getGroupName());
 		}
 		PrintWriter out = resp.getWriter();
-		  out.println(job.toString());
+		out.println(job.toString());
 	}
 	//그룹리스트
 	@RequestMapping(value="/group/list")
@@ -77,7 +77,7 @@ public class GroupContoller {
 			HttpServletRequest req,
 			HttpServletResponse resp
 			)throws Exception {
-		  String cp = req.getContextPath();
+		    String cp = req.getContextPath();
 	   	    
 			int numPerPage = 5; 
 			int total_page = 0;
@@ -126,20 +126,97 @@ public class GroupContoller {
 		    out.println(job.toString());
 	     
 	}
+	//그룹업데이트
 	@RequestMapping(value="/group/update")
 	public void updateGroup(
-			HttpServletRequest req,
+			HttpServletResponse resp,
+			Group dto
+			)throws Exception {
+			
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 map.put("groupName", dto.getGroupName());
+		 map.put("introduce", dto.getIntroduce());
+		 map.put("profile",dto.getProfile());
+		 
+		 int res = service.updateGroup(map);
+		 JSONObject job = new JSONObject();
+		 if(res == 0){
+			 job.put("res", "fail");
+		 }
+		 else{
+			 job.put("res", "ok");
+		 }
+		 PrintWriter out = resp.getWriter();
+		 out.println(job.toString());
+		 
+	}
+	//그룹딜레이트
+	@RequestMapping(value="/group/delete")
+	public void deleteGroup(
 			HttpServletResponse resp,
 			@RequestParam String groupName
 			)throws Exception {
-			
-			
-			
-	}
-	@RequestMapping(value="/group/delete")
-	public void deleteGroup()throws Exception {
 		
+		 int res = service.deleteGroup(groupName);
+		 JSONObject job = new JSONObject();
+		 if(res == 0){
+			 job.put("res", "fail");
+		 }
+		 else{
+			 job.put("res", "ok");
+		 }
+		 PrintWriter out = resp.getWriter();
+		 out.println(job.toString());
 	}
+	
+	@RequestMapping(value="/group/signout")
+	public void signinGroup(
+			HttpServletResponse resp,
+			HttpSession session,
+			@RequestParam String groupName
+			)throws Exception{
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			
+			Group dto = new Group();
+			dto.setUserId(info.getUserId());
+			dto.setGroupName(groupName);
+			dto.setCondition("2");
+			int res = service.insertGroupMember(dto);
+			JSONObject job = new JSONObject();
+			if(res == 0){
+			 job.put("res", "fail");
+			}
+			else{
+			 job.put("res", "ok");
+			}
+			PrintWriter out = resp.getWriter();
+			out.println(job.toString());
+		}
+			
+		
+
+	@RequestMapping(value="/group/signout")
+	public void signoutGroup(
+			HttpServletResponse resp,
+			HttpSession session,
+			@RequestParam String groupName
+			)throws Exception{
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("userId", info.getUserId());
+			map.put("groupName", groupName);
+			int res = service.deleteGroupMember(map);
+			JSONObject job = new JSONObject();
+			if(res == 0){
+			 job.put("res", "fail");
+			}
+			else{
+			 job.put("res", "ok");
+			}
+			PrintWriter out = resp.getWriter();
+			out.println(job.toString());
+	}
+	
 	
 	
 }

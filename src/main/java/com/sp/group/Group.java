@@ -1,7 +1,7 @@
 package com.sp.group;
 
 public class Group {
-	private String guroupName,userId,introduce,place,created,keyword;
+	private String groupName,userId,introduce,place,created,keyword;
 	private String joindate,condition;
 	private String profile;
 	private int listNum;
@@ -37,12 +37,12 @@ public class Group {
 		this.condition = condition;
 	}
 
-	public String getGuroupName() {
-		return guroupName;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setGuroupName(String guroupName) {
-		this.guroupName = guroupName;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 	public String getUserId() {
