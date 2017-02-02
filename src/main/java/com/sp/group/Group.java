@@ -4,7 +4,15 @@ public class Group {
 	private String guroupName,userId,introduce,place,created,keyword;
 	private String joindate,condition;
 	private String profile;
-	
+	private int listNum;
+	public int getListNum() {
+		return listNum;
+	}
+
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
+
 	public String getProfile() {
 		return profile;
 	}

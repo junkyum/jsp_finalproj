@@ -46,14 +46,33 @@
                           
 </select>
 
-<select id="readgroup" parameterType="String" resultType="com.sp.group.Group">
-     select groupName, introduce,profile, userId, created, keyword, place
-				from ggroup
+<select id="listGroupMember" resultType="com.sp.group.Group" parameterType="String">
+ 
+         SELECT groupName, userId, condition FROM groupmember where groupName=#{groupName}
+    
 </select>
 
-<select id="dataCount" parameterType="map"
+<select id="readGroup" parameterType="String" resultType="com.sp.group.Group">
+   select groupName, introduce, profile, userId, created, keyword, place 
+        from ggroup  where groupName = #{groupName}
+</select>
+
+<select id="readGroupMember" parameterType="map" resultType="com.sp.group.Group">
+  	select groupName, userId, condition from groupmember where userId = #{userId} and groupname = #{groupName}
+</select>
+
+<select id="dataCountGroup" parameterType="map"
             resultType="Integer">            
        SELECT COUNT(*) FROM ggroup 
+       <where>
+		<if test="searchValue != null and searchValue !='' ">
+			<include refid="where-list" />
+		</if>
+	</where>
+</select>
+
+<select id="dataCountMember"  resultType="Integer" parameterType="String">            
+       SELECT COUNT(*) FROM groupmember where groupName=#{groupName}
 </select>
 
 <update id="updateGroup" 
@@ -62,10 +81,13 @@
                profile=#{profile}
                WHERE groupName=#{groupName}
 </update>
-    
+
 <delete id="deleteGroup" parameterType="String">
      DELETE FROM ggroup WHERE groupName=#{groupName}
 </delete>
 
+<delete id="deleteGroupMember" parameterType="String">
+     DELETE FROM groupmember WHERE userId=#{userId}
+</delete>
 
 </mapper>

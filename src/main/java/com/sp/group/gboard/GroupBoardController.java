@@ -122,7 +122,7 @@ public class GroupBoardController {
 		return "group/boardList";
 	}
 
-	@RequestMapping(value="/group/created", method=RequestMethod.GET)
+	@RequestMapping(value="/group/board/created", method=RequestMethod.GET)
 	public String createdForm( HttpSession session, Model model) throws Exception {
 
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
@@ -135,7 +135,7 @@ public class GroupBoardController {
 		return ".group.created";
 	}
 
-	@RequestMapping(value="/group/created", method=RequestMethod.POST)
+	@RequestMapping(value="/group/board/created", method=RequestMethod.POST)
 	public String createdSubmit( GroupBoard dto, HttpSession session) throws Exception {
 
 		SessionInfo info = (SessionInfo)session.getAttribute("member");

@@ -20,51 +20,6 @@ public class MemberController {
 	@Autowired
 	private MemberService service;
 	
-	/*// 로그인 및 로그아웃 -----------------------
-	@RequestMapping(value="/member/login", method=RequestMethod.GET)
-	public String loginForm(Model model) throws Exception {
-		return ".member.login";
-	}
-	
-	@RequestMapping(value="/member/login", method=RequestMethod.POST)
-	public String loginSubmit(
-			HttpSession session,
-			@RequestParam("userId") String userId,
-			@RequestParam("userPW") String userPW,
-			Model model
-			) throws Exception {
-		
-		Member dto = service.readMember(userId);
-		
-		
-		if(dto==null || (! dto.getUserPW().equals(userPW))) {
-			
-			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
-			
-			return "/";
-		}
-		
-		// 로그인 날짜 변경
-		service.updateLastLogin(dto.getUserId());
-
-		// 로그인 정보를 세션에 저장
-		SessionInfo info = new SessionInfo();
-		info.setUserId(dto.getUserId());
-		info.setUserName(dto.getUserName());
-		session.setAttribute("member", info);
-		
-		return "/";
-	}	
-
-	@RequestMapping(value="/member/logout")
-	public String logout(HttpSession session) throws Exception {
-		// 로그인 정보를 세션에서 삭제 한다.
-		session.removeAttribute("member");
-		session.invalidate();
-		
-		return "/";
-	}*/
-	
 	// 회원가입 및 회원정보 수정 -----------------------
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
 	public String memberForm(Model model) {

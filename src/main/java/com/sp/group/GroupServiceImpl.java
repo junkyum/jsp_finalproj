@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sp.common.dao.CommonDAO;
 
+@Service("group.groupServiceImpl")
 public class GroupServiceImpl implements GroupService {
 	@Autowired 
 	private CommonDAO dao;
@@ -15,6 +17,7 @@ public class GroupServiceImpl implements GroupService {
 		int result = 0;
 		try {
 			result = dao.insertData("group.insertGroup", dto);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -63,6 +66,61 @@ public class GroupServiceImpl implements GroupService {
 			System.out.println(e.toString());
 		}
 		return list;
+	}
+
+	@Override
+	public int updateGroup(Map<String, Object> map) {
+		int res = 0;
+		try {
+			res = dao.updateData("group.updateGroup", map);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return res;
+	}
+
+	@Override
+	public int insertGroupMember(Group dto) {
+		int res = 0;
+		try {
+			res=dao.insertData("group.insertGroupMember",dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return res;
+	}
+
+	@Override
+	public int dataCountMember(Map<String, Object> map) {
+		int res = 0;
+		try {
+			res=dao.getIntValue("group.dataCountMember", map);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return res;
+	}
+
+	@Override
+	public List<Group> listGroupMemer(String groupName) {
+		List<Group> list=null;
+		try {
+			list = dao.getListData("group.listGroupMember", groupName);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return list;
+	}
+
+	@Override
+	public int deleteGroupMember(String userId) {
+		int result = 0;
+		try {
+			result = dao.deleteData("group.deleteGroupMember", userId);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
 	}
 
 }
