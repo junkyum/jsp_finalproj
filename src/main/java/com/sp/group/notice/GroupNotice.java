@@ -8,7 +8,7 @@ public class GroupNotice {
 	   private  int num,listNum;
 	   private  int fileNum;
 	   private  long fileSize;
-	   private    String userId,subject,userName;
+	   private    String userId, groupName, subject,userName;
 	   private    String created,content;
 	   private    String saveFilename,originalFilename;
 	   
@@ -55,6 +55,14 @@ public class GroupNotice {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 	public String getSubject() {

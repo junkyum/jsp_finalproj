@@ -23,7 +23,7 @@ public class NoticeServiceImpl implements NoticeService{
 		try {
 			int maxNum =dao.getIntValue("groupNotice.maxNum");
 			dto.setNum(maxNum+1);
-			dao.insertData("groupNotice.insertNotice", dto);
+			res = dao.insertData("groupNotice.insertNotice", dto);
 			
 			if(dto.getUpload() !=null && !dto.getUpload().isEmpty()){
 				for(MultipartFile mf : dto.getUpload()){
@@ -68,18 +68,6 @@ public class NoticeServiceImpl implements NoticeService{
 		return list;
 	}
 
-
-/*	@Override
-	public int updateHitCount(int num) {
-		int res =0;		
-		try {
-			res = dao.updateData("notice.hitCount", num);
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		return res;
-	}*/
-
 	@Override
 	public GroupNotice readNotice(int num) {
 		GroupNotice dto = null;
@@ -90,31 +78,6 @@ public class NoticeServiceImpl implements NoticeService{
 		}
 		return dto;
 	}
-
-	/*@Override
-	public Notice preReadNotice(Map<String, Object> map) {
-		Notice dto = null;
-		try {
-			dto = dao.getReadData("notice.preReadNotice", map);
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		
-		return dto;
-	}
-
-	@Override
-	public Notice nextReadNotice(Map<String, Object> map) {
-		Notice dto = null;
-		try {
-			dto = dao.getReadData("notice.nextReadNotice", map);
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		
-		return dto;
-	}*/
-
 
 	@Override
 	public int insertFile(GroupNotice dto) {
@@ -175,6 +138,7 @@ public class NoticeServiceImpl implements NoticeService{
 			
 			result=dao.deleteData("groupNotice.deleteNotice", num);
 		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
 		
 		return result;

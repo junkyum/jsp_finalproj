@@ -3,7 +3,6 @@ package com.sp.group.notice;
 import java.io.File;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,9 +20,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
+import com.sp.member.SessionInfo;
 
 import net.sf.json.JSONObject;
 
@@ -31,16 +31,22 @@ import net.sf.json.JSONObject;
 public class NoticeController {
 	@Autowired private NoticeService service;
 	@Autowired private MyUtil myUtil;
-	@Autowired private FileManager fileManager;
 
-	@RequestMapping(value = "/group/notice")
+	
+	@RequestMapping(value="/group/notice")
+	public String notice() throws Exception{
+		return "group/notice";
+	}
+	
+	@RequestMapping(value="/group/noticeList")
 	public void noticeList(
+			Model model,HttpServletRequest req,
 			@RequestParam(value="num", defaultValue = "1") int num,
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			@RequestParam(value = "searchKey", defaultValue = "subject") String searchKey,
-			@RequestParam(value = "searchValue", defaultValue = "") String searchValue, Model model,
-			HttpServletRequest req) throws Exception {
-		String cp = req.getContextPath();
+			@RequestParam(value="pageNo", defaultValue="1") int current_page,
+			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
+			@RequestParam(value="searchValue", defaultValue="") String searchValue
+			) throws Exception{
+		
 
 		int numPerPage = 3; // 한 화면에 보여주는 게시물 수
 		int total_page = 0;
@@ -49,10 +55,10 @@ public class NoticeController {
 		if (req.getMethod().equalsIgnoreCase("GET")) { // GET 방식인 경우
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
 		}
-		searchValue = URLDecoder.decode(searchValue, "utf-8");
+		
+		GroupNotice dto = service.readNotice(num);		
+/*		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));   //이거 에러남 ! */
 
-		GroupNotice dto = service.readNotice(num);
-		// 전체 페이지 수
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
@@ -73,7 +79,7 @@ public class NoticeController {
 
 		// 글 리스트
 		List<GroupNotice> noticeList = service.listNotice(map);
-
+		
 		Date endDate = new Date();
 		long gap;
 		int listNum, n = 0;
@@ -98,7 +104,7 @@ public class NoticeController {
 			n++;
 		}
 		
-		String params = "";
+		/*String params = "";
         String urlList = cp+"/group/notice";
         if(searchValue.length()!=0) {
         	params = "searchKey=" +searchKey + 
@@ -108,35 +114,49 @@ public class NoticeController {
         if(params.length()!=0) {
             urlList = cp+"/group/notice?" + params;
         }
-        
-        String paging = myUtil.paging(current_page, total_page, urlList);
+        */
+        String paging = myUtil.paging(current_page, total_page);
 		
+	    model.addAttribute("total_page", total_page);
+	    model.addAttribute("searchKey", searchKey);
+	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
+        
         model.addAttribute("dto", dto);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("page", current_page);
 		model.addAttribute("dataCount", dataCount);
 		model.addAttribute("paging", paging);
-		
 	}
+	
+	
 	@RequestMapping(value="/group/notice/created",method=RequestMethod.POST)
-	public void createdSubmit(
-			GroupNotice dto, HttpSession session, Model model, HttpServletResponse resp) throws Exception {
-
+	@ResponseBody
+	public Map<String, Object> createdSubmit(
+			GroupNotice dto,
+			HttpSession session,  
+			HttpServletResponse resp,
+			HttpServletRequest req) throws Exception {
+		
+		String cp = req.getContextPath();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info==null){
+			resp.sendRedirect(cp+"/member/login.do");
+		}
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
-		//dto.setUserId(info.getUserId());
+		dto.setGroupName("개발자"); ///////////////////////////// 수정할것!... 
+		dto.setUserId(info.getUserId());
 		int res = service.insertNotice(dto, pathname);
-		String result="fail";
-		if(res>0)
-			result="ok";
-		JSONObject job = new JSONObject();
-		job.put("res", result);
-		PrintWriter out = resp.getWriter();
-		out.println(job.toString());
 		
+		String result="true";
+		if(res==0)
+			result="false";
+		
+		Map <String, Object> model = new HashMap<>();
+		model.put("result", result);
+		return model;		
 	}
 
-	
 	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
 	public String updateSubmit(
 			@RequestParam int num, HttpServletResponse resp,
@@ -165,26 +185,29 @@ public class NoticeController {
 		
 		return "group/notice";
 	}
-	@RequestMapping(value="/group/notice/delete", method=RequestMethod.GET)
-	public String delete(
-			@RequestParam int num,
-			@RequestParam String page,
-			HttpSession session) throws Exception {
-		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + File.separator + "uploads" + File.separator + "notice";		
+	
+	@RequestMapping(value="/group/notice/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> delete(
+			@RequestParam(value="num") int num, HttpSession session ) throws Exception {
 		
-		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "notice";
+		
+		SessionInfo info=(SessionInfo) session.getAttribute("member");
+		
+		String state="false";
 		if(info==null) {
-			return "redirect:/member/login";
+			state="loginFail";
+		}else if(info.getUserId().equals("admin")) {
+			service.deleteNotice(num, pathname);
+			state="true";
 		}
 		
-		if(! info.getUserId().equals("admin"))
-			return "redirect:/notice/list?page="+page;*/
-		
-		// 내용 지우기
-		service.deleteNotice(num, pathname);
-		
-		return "group/notice";
+		// 작업 결과를 json으로 전송
+		Map<String, Object> model = new HashMap<>();
+		model.put("state", state);
+		return model;
 	}
 
 }

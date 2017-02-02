@@ -4,13 +4,13 @@
 <mapper namespace="groupNotice">
 
 <select id="maxNum" resultType="Integer"> 
-   SELECT NVL(MAX(NUM),0) FROM gNOTICE
+   SELECT NVL(MAX(NUM),0) FROM groupNotice
 </select>
 
 <!-- UserId 빼놈!!!!!!!!  -->
 <insert id="insertNotice" parameterType="com.sp.group.notice.GroupNotice">
-   INSERT INTO gNOTICE(num, userId, subject, content) 
-			VALUES (#{num}, #{userId},#{subject}, #{content})
+   INSERT INTO groupNotice(num, userId, groupName, subject, content) 
+			VALUES (#{num}, #{userId}, #{groupName}, #{subject}, #{content})
 </insert>
 
 <!-- <insert id="insertNoticeFile" parameterType="com.sp.main.Notice">
@@ -31,7 +31,7 @@
 </sql>
 
 <select id="dataCount" parameterType="map" resultType="Integer">
- select NVL(count(*),0) from gnotice n JOIN member m ON n.userId = m.userId
+ select NVL(count(*),0) from groupNotice n JOIN member m ON n.userId = m.userId
 		<where>
 			<if test="searchValue != null and searchValue!=''">
 				<include refid="where-list"/>
@@ -44,7 +44,7 @@
         SELECT * FROM (
         SELECT ROWNUM rnum, tb.* FROM (
          SELECT num, userId, subject, content, created
-          FROM gnotice 
+          FROM groupNotice 
                   <where>
                            <if test="searchValue != null and searchValue !='' ">
                               <include refid="where-list"/><!-- 위에서 만든 sql문 -->
@@ -61,7 +61,7 @@
 
    <select id="readNotice" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
      select num, m.userId, m.userName, subject, content, created
-				from gnotice n 
+				from groupNotice n 
 				join member m on n.userId = m.userId where num =#{num}
    </select>
    
@@ -74,13 +74,13 @@
       
     <update id="updateNotice" 
           parameterType="com.sp.group.notice.GroupNotice">
-         UPDATE gnotice SET subject=#{subject},
+         UPDATE groupNotice SET subject=#{subject},
                content=#{content}
                WHERE num=#{num}
     </update>
     
    <delete id="deleteNotice" parameterType="Integer">
-     DELETE FROM gnotice WHERE num=#{num}
+     DELETE FROM groupNotice WHERE num=#{num}
    </delete>
    
 <!--    <delete id="deleteFile" parameterType="map">
