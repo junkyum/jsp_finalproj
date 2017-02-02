@@ -169,7 +169,7 @@ public class GroupContoller {
 		 out.println(job.toString());
 	}
 	
-	@RequestMapping(value="/group/signout")
+	@RequestMapping(value="/group/signin")
 	public void signinGroup(
 			HttpServletResponse resp,
 			HttpSession session,
