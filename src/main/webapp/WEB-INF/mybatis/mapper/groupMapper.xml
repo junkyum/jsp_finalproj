@@ -51,6 +51,12 @@
          SELECT groupName, userId, condition FROM groupmember where groupName=#{groupName}
     
 </select>
+<select id="listMyGroup" resultType="com.sp.group.Group" parameterType="String">
+ 
+       SELECT m.groupName, introduce, g.userId, keyword, place 
+         FROM ggroup g join groupmember m on g.groupName=m.groupName where  m.userId=#{userId}
+    
+</select>
 
 <select id="readGroup" parameterType="String" resultType="com.sp.group.Group">
    select groupName, introduce, profile, userId, created, keyword, place 

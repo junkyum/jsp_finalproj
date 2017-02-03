@@ -11,6 +11,7 @@ public interface GroupService {
 	public int deleteGroup(String groupName);
 	public int dataCount(Map<String, Object> map);
 	public List <Group> listGroup(Map<String, Object> map);
+	public List <Group> listMyGroup(String userId);
 	//맴버관련
 	public int insertGroupMember(Group dto);
 	public int dataCountMember(Map<String, Object> map);

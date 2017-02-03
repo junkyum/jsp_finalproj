@@ -76,6 +76,7 @@ function maker(){
 								$('#keyword').val("");
 								$('#profile').val("");
 								$("#divGroupMaker").dialog("close");
+								listPage(1);
 							}
 							
 						},error:function(e) {
@@ -130,7 +131,24 @@ function finder(){
 	    });
 }
 function grouplist(){
-	alert("그룹리스트");
+	
+	var url="<%=cp%>/group/myGrouplist";
+	$.get(url, function(data) {
+		$("#myGroupList").html(data);
+	});
+    $("#myGroup").dialog({
+       title:"내그룹",
+       modal:true,
+       width:500,
+       height:600,
+	   show:"clip",
+	   hide:"clip",
+	   buttons:{
+			"닫기":function(){
+				$(this).dialog("close");
+			}
+		}
+    });
 }
 function map(){
 	alert("맵");
@@ -363,7 +381,7 @@ div.friendScroll {
 <div>
     <!-- 새로고침  -->
 	<div style="float: left; width: 15%; min-width: 85px;">
-		<button type="button" class="btn btn-default btn wbtn">
+		<button type="button" class="btn btn-default btn wbtn" onclick="listPage(1);" >
 			<span class="glyphicon glyphicon-repeat"></span>
 		</button>
 	</div>
@@ -386,4 +404,8 @@ div.friendScroll {
 	<div id="grouplist"></div>
 </div>
 
+</div>
+<div id="myGroup" style = "display:none;">
+<div id="myGroupList">
+</div>
 </div>

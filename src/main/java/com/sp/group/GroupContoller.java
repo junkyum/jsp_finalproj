@@ -123,6 +123,20 @@ public class GroupContoller {
 			model.addAttribute("paging", paging);
 		    return "/main/grouplist";
 	}
+	@RequestMapping(value="/group/myGrouplist")
+	public String myGroupList(
+			HttpSession session,
+			Model model
+			)throws Exception {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String userId=info.getUserId();
+	        List<Group> list = service.listMyGroup(userId);
+	   
+			model.addAttribute("list", list);
+			model.addAttribute("distinction","my");
+			
+		    return "/main/grouplist";
+	}
 	//그룹업데이트
 	@RequestMapping(value="/group/update")
 	public void updateGroup(
