@@ -112,7 +112,7 @@ function finder(){
 											
 							}else {
 							
-							asdwdwd
+							
 							}
 							
 						},error:function(e) {
