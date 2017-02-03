@@ -23,9 +23,9 @@
 	               <a onclick='deleteReply("${GRP.replyNum}", "${pageNo}");'> 댓 글삭제하기</a>
 	</c:if>	 
 		   
-	<%-- <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">		   
+	 <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">		   
 	                <a href='#'>신고</a>
-	</c:if>	  --%>  
+	</c:if>  
 	            </div>
 	        </div>
 	        <div style="clear: both; padding: 5px 0 5px 0px;  min-height: 70px;"> ${GRP.content} </div>
@@ -46,7 +46,7 @@
 				            	<span id="disLikeCount${GRP.replyNum}">${GRP.disLikeCount}</span></button>
 				            </div>                           
 	        </div>
-	              
+	             
 	              
 	           <div class="replyAnswer" style="display: none;">
 	        

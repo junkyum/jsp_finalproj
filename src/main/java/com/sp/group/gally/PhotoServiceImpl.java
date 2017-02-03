@@ -197,6 +197,7 @@ public class PhotoServiceImpl implements PhotoService{
 		
 		return result;
 	}
+	
 	@Override
 	public int replyGroupCountAnswer(int replyAnswer) {
 		int result = 0;
@@ -210,26 +211,36 @@ public class PhotoServiceImpl implements PhotoService{
 			
 		return result;
 	}
-
-	
-	@Override
-	public int dataReplyAnswerCount(ReplyGPhoto dto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	
 	
 	@Override
-	public int insertPhotoLike(GroupGally dto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insertGallyReplyLike(ReplyGPhoto dto) {
+		int result=0;
+		try {
+	
+			result = dao.insertData("groupGally.insertGroupReplyLike", dto);
+				
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return result;
 	}
+	
 	@Override
-	public int groupPhotoLikeCount(GroupGally dto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Map<String, Object> groupGeplyCountLike(int replyNum) {
+		
+		Map<String, Object> map = null;
+		try {
+			map=dao.getReadData("groupGally.groupGeplyCountLike",replyNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
 	}
+	
+	
+	
 
 
 	

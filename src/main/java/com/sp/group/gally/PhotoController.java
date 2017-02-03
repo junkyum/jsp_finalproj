@@ -3,6 +3,7 @@ package com.sp.group.gally;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -374,4 +375,50 @@ public class PhotoController {
 		
 		return model;
 	}
+
+	
+	////group/photo/gallryReplyLike
+	@RequestMapping(value="/group/photo/gallryReplyLike",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> replyLike(ReplyGPhoto dto, HttpSession session)throws Exception{
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String state = "true";
+		if(info==null){
+			state="loginFail";
+		}else{
+			dto.setUserId(info.getUserId());
+			int result= service.insertGallyReplyLike(dto);
+			if(result==0)
+				state="false";
+		}
+		
+		Map<String, Object>model = new HashMap<>();
+		model.put("state", state);
+		
+		return model;
+	}
+
+
+	@RequestMapping(value="/group/photo/groupCountLike", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> groupCountLike(@RequestParam int replyNum)throws Exception{
+		int likeCount=0, disLikeCount=0;
+		Map<String, Object> map = service.groupGeplyCountLike(replyNum);
+		if(map!=null){
+			likeCount=((BigDecimal)map.get("LIKECOUNT")).intValue();
+			disLikeCount=((BigDecimal)map.get("DISLIKECOUNT")).intValue();
+			}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("likeCount", likeCount);
+		model.put("dislikeCount", disLikeCount);
+		
+		return model;
+	}
+
+	
+	
+	
 }
