@@ -90,6 +90,7 @@ function maker(){
 	    });
 }
 function finder(){
+		listPage(1);
 	    $("#divGroupFinder").dialog({
 	       title:"그룹찾기",
 	       modal:true,
@@ -107,17 +108,19 @@ function finder(){
 						data : query,
 						dataType:"json",
 						success:function(data){
-							var result = data.result;
-							if(data.res=="false"){
-											
-							}else {
+							if(data.res=="false")
+							{
+								listPage(1);
+							}
+							else {
 							
-							
+								listPage(1);
 							}
 							
-						},error:function(e) {
+						},
+						error:function(e) {
 					    	  console.log(e.responseText);
-					      }
+					    }
 					
 				});	
 				},"취소":function(){
@@ -134,6 +137,14 @@ function map(){
 }
 function option(){
 	alert("설정");
+}
+function listPage(page) {
+	var url="<%=cp%>/group/list";
+
+	$.get(url,{page:page}, function(data) {
+		$("#grouplist").html(data);
+		
+	});
 }
 </script>
 
@@ -372,6 +383,7 @@ div.friendScroll {
 				<img src="<%=cp%>/res/images/maker.png" style="width: 20px; height: 20px;">
 			</button>
 	</div>
+	<div id="grouplist"></div>
 </div>
 
 </div>

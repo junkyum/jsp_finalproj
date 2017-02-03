@@ -37,8 +37,6 @@ public class GroupContoller {
 			@RequestParam String groupName,
 			Model model
 			) throws Exception {
-		   
-			
 			Group dto = service.readGroup(groupName);
 			model.addAttribute("dto",dto);
 			
@@ -71,12 +69,13 @@ public class GroupContoller {
 	}
 	//그룹리스트
 	@RequestMapping(value="/group/list")
-	public void groupList(
+	public String groupList(
 			@RequestParam(value="page", defaultValue="1") int current_page,
 			@RequestParam(value="searchKey", defaultValue="name") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue,
 			HttpServletRequest req,
-			HttpServletResponse resp
+			HttpServletResponse resp,
+			Model model
 			)throws Exception {
 		    String cp = req.getContextPath();
 	   	    
@@ -114,18 +113,15 @@ public class GroupContoller {
 				data.setListNum(listNum);
 				n++;
 			}
+			
 			String urlList = cp + "/group/list";
-			
 			String paging = myUtil.paging(current_page, total_page, urlList);
-			JSONObject	job = new JSONObject();
-			PrintWriter out = resp.getWriter();
 			
-		    job.put("list", list);
-		    job.put("page", current_page);
-		    job.put("paging", paging);
-
-		    out.println(job.toString());
-	     
+			
+			model.addAttribute("list", list);
+			model.addAttribute("page", current_page);
+			model.addAttribute("paging", paging);
+		    return "/main/grouplist";
 	}
 	//그룹업데이트
 	@RequestMapping(value="/group/update")
