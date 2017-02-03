@@ -10,7 +10,6 @@
 	margin: 0 auto;
 	width: 900px;
 	/* 	height: 680px; */
-	border: 1px solid #5D5D5D;
 }
 </style>
 <head>

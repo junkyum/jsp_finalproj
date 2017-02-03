@@ -37,7 +37,7 @@
 	width: 250px;
 	float: left;
 	font-size: 20px;
-	/* 	border: 1px solid #5D5D5D; */
+	
 }
 
 .smalldiv ul {
