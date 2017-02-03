@@ -3,14 +3,46 @@ package com.sp.group.gally;
 import org.springframework.web.multipart.MultipartFile;
 
 public class GroupGally {
-	private int groupNum, listNum, chkNum;
-	private String groupName,groupContent;
-	private String groupCreated, groupSubject;
+	private int gallyNum, listNum, chkNum;
+	private String groupName,content ;
+	private String created , subject;
     private String imageFilename,userId;
 
     private MultipartFile upload;
 
  
+
+	public int getGallyNum() {
+		return gallyNum;
+	}
+
+	public void setGallyNum(int gallyNum) {
+		this.gallyNum = gallyNum;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
 	public int getChkNum() {
 		return chkNum;
@@ -22,14 +54,6 @@ public class GroupGally {
 
 	
 	
-	public int getGroupNum() {
-		return groupNum;
-	}
-
-	public void setGroupNum(int groupNum) {
-		this.groupNum = groupNum;
-	}
-
 	public int getListNum() {
 		return listNum;
 	}
@@ -44,30 +68,6 @@ public class GroupGally {
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
-	}
-
-	public String getGroupContent() {
-		return groupContent;
-	}
-
-	public void setGroupContent(String groupContent) {
-		this.groupContent = groupContent;
-	}
-
-	public String getGroupCreated() {
-		return groupCreated;
-	}
-
-	public void setGroupCreated(String groupCreated) {
-		this.groupCreated = groupCreated;
-	}
-
-	public String getGroupSubject() {
-		return groupSubject;
-	}
-
-	public void setGroupSubject(String groupSubject) {
-		this.groupSubject = groupSubject;
 	}
 
 	public String getImageFilename() {

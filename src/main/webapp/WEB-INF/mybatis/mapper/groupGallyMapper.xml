@@ -3,33 +3,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="groupGally">
 					
-		<!-- 인설트 부분 -->
-		<insert id="insertPhoto" parameterType="com.sp.group.gally.GroupGally">
-			INSERT INTO groupPhoto(groupNum, groupContent,
-				 groupSubject, imageFilename, userId )
-			VALUES (groupPhotoT_seq.NEXTVAL, #{groupContent},
-			 #{groupSubject}, #{imageFilename}, #{userId} )
-	  
-		</insert>
-		
-		<!-- 검색할때 쓰는 문구 -->
+ 	
+ 	 <insert id="insertPhoto" parameterType="com.sp.group.gally.GroupGally">
+				INSERT INTO groupGally(gallyNum, groupName, 
+				 subject, content ,imageFilename, userId )
+			VALUES (groupGally_seq.NEXTVAL, #{groupName},
+			 #{subject}, #{content}, #{imageFilename}, #{userId})
+	</insert> 
+	
+	<!-- 검색할때 쓰는 문구 -->
 		<sql id="where-list">
-			  <if test="searchKey=='groupSubject'">
-			       INSTR(groupSubject, #{searchValue}) &gt; 0
+			  <if test="searchKey=='subject'">
+			       INSTR(subject, #{searchValue}) &gt; 0
 			  </if>
-			  <if test="searchKey=='groupContent'">
-			      INSTR(groupContent, #{searchValue}) &gt; 0 
+			  <if test="searchKey=='content'">
+			      INSTR(content, #{searchValue}) &gt; 0 
 			  </if>
-			  <if test="searchKey=='groupCreated'">
+			  <if test="searchKey=='created'">
 			      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValue}
 			  </if>
 		</sql>
-		
-		
-		
+	
 		<!-- 위에서 0번쨰 넘이 숫자기 떄문에 인터저를 받음. -->
 		<select id="dataCount" resultType="Integer" parameterType="map">
-			SELECT NVL(COUNT(*), 0) FROM groupPhoto p
+			SELECT NVL(COUNT(*), 0) FROM groupGally p
 				JOIN member m ON p.userId =m.userId
 			<where>
 	     	<if test="searchValue!=null and searchValue!='' ">
@@ -41,17 +38,17 @@
 		<!-- 멤버와 조인을 해서  리스트를 가지고올것이다.  -->
 		<select id="listPhoto" parameterType="map" resultType="com.sp.group.gally.GroupGally">
 			SELECT * FROM (
-				SELECT ROWNUM rnum, tb.*FROM(
-				SELECT groupNum, p.userId, groupSubject, groupContent,
-				imageFilename, TO_CHAR(groupCreated, 'YYYY-MM-DD') groupCreated
-				FROM groupPhoto p JOIN member m
-	                          ON p.userId = m.userId
+				SELECT ROWNUM rnum, tb. * FROM (
+				SELECT gallyNum, p.userId, subject, content,
+					imageFilename, TO_CHAR (p.created, 'YYYY-MM-DD') created, p.groupName
+					FROM groupGally p JOIN ggroup m
+		                          ON p.groupName = m.groupName
                    <where>
 				     	<if test="searchValue!=null and searchValue!='' ">
 				     	    <include refid="where-list"/>
 				     	</if>
 				     </where> 
-	               ORDER BY groupNum DESC
+	                ORDER BY gallyNum DESC
 		<![CDATA[
 		        ) tb WHERE ROWNUM <= #{end}
 		    ) WHERE rnum >= #{start}
@@ -59,25 +56,111 @@
 		
 		</select>
 		
-		<select id="readPhoto" parameterType="Integer"
-	      resultType="com.sp.group.gally.GroupGally">
-				SELECT groupNum , p.userId, groupSubject, imageFilename,
-				groupContent, groupCreated
-				             FROM groupPhoto p JOIN member m
+		<select id="readPhoto" parameterType="Integer" resultType="com.sp.group.gally.GroupGally">
+				SELECT gallyNum , p.userId, 
+					subject, content, groupName, created, imageFilename
+				             FROM groupGally p JOIN member m
 				                      ON p.userId = m.userId
-				             WHERE groupNum=#{groupNum}
+				             WHERE gallyNum= #{gallyNum}
+		</select>
+		
+		<delete id="deletePhoto" parameterType="Integer">
+			DELETE FROM groupGally WHERE gallyNum=#{gallyNum}
+		</delete>	
+		
+		<update id="updatePhoto" parameterType="com.sp.group.gally.GroupGally">
+			UPDATE groupGally SET  imageFilename=#{imageFilename} , subject=#{subject}
+			 , content=#{content} WHERE gallyNum=#{gallyNum}
+			
+		</update>
+		<!-- 댓글ㅇ 등록 -->
+		<insert id="insertGReply" parameterType="com.sp.group.gally.ReplyGPhoto">
+			INSERT INTO groupGallyReply(replyNum, content, replyAnswer, gallyNum, userId)
+			VALUES(replyGPhoto_seq.NEXTVAL, #{content}, #{replyAnswer} , #{gallyNum} , #{userId})
+		</insert>
+		
+		<!-- 댓글의 카운트 -->
+		<select id="GReplyDataCount" resultType="Integer" parameterType="map">
+				SELECT NVL(COUNT(*),0) FROM groupGallyReply WHERE gallyNum=#{gallyNum} AND replyAnswer=0
+		</select>
+		
+		<!-- 댓글의 리스트. -->
+		<select id="listGReply" parameterType="map" resultType="com.sp.group.gally.ReplyGPhoto">
+			SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+            SELECT tbGreply.replyNum, userId, gallyNum,
+                      content, created, tbGreply.replyAnswer
+                        ,NVL(answerCount, 0) answerCount
+                        ,NVL(likeCount, 0) likeCount
+                        ,NVL(disLikeCount, 0) disLikeCount
+		        FROM
+		        (
+				      (
+                 SELECT replyNum, r.gallyNum, r.userId, r.content,
+                        r.created ,  replyAnswer          
+                    FROM groupGallyReply r
+                          JOIN groupGally p ON r.gallyNum=p.gallyNum
+                          JOIN member m ON r.userId=m.userId
+                            WHERE r.gallyNum=#{gallyNum} AND replyAnswer=0
+			           ) tbGreply
+			           LEFT OUTER JOIN
+			           (
+			                SELECT replyAnswer, COUNT(*) answerCount
+                  				  FROM groupGallyReply GROUP BY replyAnswer
+                  
+			           ) tbGreplyAnswer ON tbGreply.replyNum = tbGreplyAnswer.replyAnswer
+			           LEFT OUTER JOIN
+			           (
+			                SELECT replyNum, 
+			                         COUNT(DECODE(gallryreplylike, 1, 1)) likeCount,
+			                         COUNT(DECODE(gallryreplylike, 0, 1)) disLikeCount
+                                 FROM groupGallyReplylike GROUP BY replyNum
+			           ) tbGlike ON tbGreply.replyNum = tbGlike.replyNum
+	           )
+	           ORDER BY replyNum DESC
+				<![CDATA[
+				        ) tb WHERE ROWNUM <= #{end}
+				    ) WHERE rnum >= #{start}
+		]]>
+		</select>
+	
+		<!-- 댓글 삭제.-->
+		<delete id="deleteReply" parameterType="Integer">
+			DELETE FROM groupGallyReply WHERE replyNum IN (SELECT replyNum FROM groupGallyReply 
+					START WITH replyNum=#{replyNum} CONNECT BY PRIOR replyNum = replyAnswer)
+		</delete>
+		
+		
+		<!-- 리플에대한 리스트   content, replyAnswer, gallyNum -->
+		<select id="listReplyAnswer" parameterType="Integer" resultType="com.sp.group.gally.ReplyGPhoto">
+			SELECT replyNum, gallyNum, tbreply.userId, content, created , replyAnswer
+			   	 FROM groupGallyReply tbreply 
+			   		JOIN member m ON tbreply.userId=m.userId 
+			   			 WHERE replyAnswer=#{replyAnswer}
+		  						 ORDER BY replyNum DESC
+		</select>
+		
+		<!-- 리플에 대한 답변 삭제 -->
+		<delete id="deleteReplyAnswer" parameterType="Integer">
+			DELETE FROM groupGallyReply WHERE replyNum=#{replyNum}
+		</delete>
+		
+		
+		<select id="replyGroupCountAnswer" parameterType="Integer" resultType="Integer">
+			  SELECT NVL(COUNT(*), 0)
+			        FROM groupGallyReply WHERE replyAnswer=#{replyAnswer}
 		</select>
 		
 		
-		<delete id="deletePhoto" parameterType="Integer">
-			DELETE FROM groupPhoto WHERE groupNum=#{groupNum}
-		</delete>	
 		
 		
-		<update id="updatePhoto" parameterType="com.sp.group.gally.GroupGally">
-			UPDATE groupPhoto SET  imageFilename=#{imageFilename} , groupSubject=#{groupSubject}
-			 , groupContent=#{groupContent} WHERE groupNum=#{groupNum}
-			
-		</update>
+		
+		
+		
+		
+		
+		
+		
+		
 		
 </mapper>
