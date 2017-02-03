@@ -70,7 +70,12 @@ function maker(){
 							if(data.res=="false"){
 							   alert("안만들어짐");					
 							}else {
-								alert("만들어짐");		
+								$('#groupName').val("");
+								$('#introduce').val("");
+								$('#place').val("");
+								$('#keyword').val("");
+								$('#profile').val("");
+								$("#divGroupMaker").dialog("close");
 							}
 							
 						},error:function(e) {
@@ -89,12 +94,29 @@ function finder(){
 	       title:"그룹찾기",
 	       modal:true,
 	       width:400,
-	       height:200,
+	       height:600,
 		   show:"clip",
 		   hide:"clip",
 		   buttons:{
 				"찾기":function(){
-					alert("야호");
+					var url="<%=cp%>/group/created";
+					var query=$('form[name=findForm]').serialize();
+					$.ajax({
+						type:"post",
+						url :url,
+						data : query,
+						dataType:"json",
+						success:function(data){
+							var result = data.result;
+							if(data.res=="false"){
+							   alert("결과 없음");					
+							}else {
+								$('#searchValue').val("");
+								
+							}
+						},error:function(e) {
+					    	  console.log(e.responseText);
+					      }
 				},"취소":function(){
 					$(this).dialog("close");
 				}
@@ -323,12 +345,12 @@ div.friendScroll {
 </div>
 
 <div id="divGroupFinder" style = "display:none;">
-<form >
+<form name = "findForm">
 <select name="searchKey">
 <option value="name">이름</option>
 <option value="place">장소</option>
 <option value="keyword">키워드</option>
 </select>
-<input type="text" name="searchValue"><br>
+<input type="text" name="searchValue" id="searchValue"><br>
 </form>
 </div>
