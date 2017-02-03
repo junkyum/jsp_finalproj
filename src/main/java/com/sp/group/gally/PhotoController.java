@@ -367,7 +367,7 @@ public class PhotoController {
 		
 		int count = 0;
 		count = service.replyGroupCountAnswer(replyAnswer);
-		System.out.println(count+"       -------------");
+		System.out.println(count+"       -----------ssssssssssssssssssssssssssss--");
 		Map<String, Object> model = new HashMap<>();
 		
 		model.put("count", count);
