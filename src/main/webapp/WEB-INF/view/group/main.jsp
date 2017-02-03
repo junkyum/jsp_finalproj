@@ -86,7 +86,7 @@ $(function(){
 	  	<ul>
 		<li><a href="<%=cp%>/group/notice"><span>공지사항</span></a></li>
 		<li><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
-		<li><a href="<%=cp%>/groupGally/list"><span>그룹갤러리</span></a></li>
+		<li><a href="<%=cp%>/groupGally/gally"><span>그룹갤러리</span></a></li>
 		<li><a href="<%=cp%>/group/boardList"><span>게시판</span></a></li>
 		</ul>
 	</div>

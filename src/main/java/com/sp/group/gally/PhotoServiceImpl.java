@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
-@Service("Gphoto.photoServiceImpl")
+
+@Service("group.photoService")
 public class PhotoServiceImpl implements PhotoService{
 
 	@Autowired
@@ -18,9 +19,12 @@ public class PhotoServiceImpl implements PhotoService{
 	private FileManager fileManager;
 	
 	
+	
+	
 	@Override
 	public int insertPhoto(GroupGally dto, String path) {
-		int result=0;
+
+ 	int result=0;
 		
 		try {
 			if(dto.getUpload()!=null && !dto.getUpload().isEmpty()){
@@ -37,20 +41,21 @@ public class PhotoServiceImpl implements PhotoService{
 		}
 		
 		return result;
-	}
 
+
+	}
 	@Override
 	public int dataCount(Map<String, Object> map) {
+
 		int result=0;
 		
-			try {
-				result=dao.getIntValue("groupGally.dataCount",map);
-			} catch (Exception e) {
-				System.err.println(e.toString());
-			}
-		return result;
+		try {
+			result=dao.getIntValue("groupGally.dataCount",map);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+	return result;
 	}
-
 	@Override
 	public List<GroupGally> listPhoto(Map<String, Object> map) {
 		List<GroupGally> list= null;
@@ -61,44 +66,21 @@ public class PhotoServiceImpl implements PhotoService{
 		}
 		return list;
 	}
-
 	@Override
-	public GroupGally readPhoto(int groupNum) {
+	public GroupGally readPhoto(int gallyNum) {
 		GroupGally dto=null;
 		
 		try {
-			dto=dao.getReadData("groupGally.readPhoto", groupNum);
+			dto=dao.getReadData("groupGally.readPhoto", gallyNum);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
 		
 		return dto;
 	}
-
-
-	@Override
-	public int deletePhoto(int groupNum, String imageFilename, String path) {
-		int result=0;
-		
-		try {
-			if(imageFilename!=null)
-					fileManager.doFileDelete(imageFilename, path);
-			
-			//게시물 지우기
-			result=dao.deleteData("groupGally.deletePhoto", groupNum);
-		} catch (Exception e) {
-			System.err.println(e.toString());
-		}
-
-		return result;
-	}
-	
-	
-
-	//삭제?
 	@Override
 	public int updatePhoto(GroupGally dto, String path) {
-		int result =0;
+	int result =0;
 		
 		try {
 			
@@ -107,7 +89,7 @@ public class PhotoServiceImpl implements PhotoService{
 				
 				if(newFilename != null){
 					//이전 파일 지우기.
-					GroupGally vo =readPhoto(dto.getGroupNum());
+					GroupGally vo =readPhoto(dto.getGallyNum());
 					if(vo != null && vo.getImageFilename()!= null){
 							fileManager.doFileDelete(vo.getImageFilename(),path);
 					}
@@ -124,5 +106,131 @@ public class PhotoServiceImpl implements PhotoService{
 		
 		return result;
 	}
+	@Override
+	public int deletePhoto(int gallyNum, String imageFilename, String path) {
+			int result=0;
+					
+		try {
+			if(imageFilename!=null)
+								fileManager.doFileDelete(imageFilename, path);
+						
+						//게시물 지우기
+				result=dao.deleteData("groupGally.deletePhoto", gallyNum);
+			} catch (Exception e) {
+						System.err.println(e.toString());
+		}
+			
+		return result;
+	}
+	
+
+	@Override
+	public int insertGReply(ReplyGPhoto dto) {
+		int result=0;
+		
+		try {
+			result=dao.insertData("groupGally.insertGReply", dto);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		
+		return result;
+	}
+	@Override
+	public int GReplyDataCount(int gallyNum) {
+			int result =0;
+		
+		try {
+			
+			result=dao.getIntValue("groupGally.GReplyDataCount", gallyNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+	@Override
+	public List<ReplyGPhoto> listGReply(Map<String, Object> map) {
+		List<ReplyGPhoto> list=null;
+		
+		try {
+			list=dao.getListData("groupGally.listGReply", map);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		
+		return list;
+	}
+	@Override
+	public int deleteReply(ReplyGPhoto dto) {
+		int result =0;
+		try {
+			result=dao.deleteData("groupGally.deleteReply", dto);
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
+	return result;
+	}
+	
+	
+	@Override
+	public List<ReplyGPhoto> listReplyAnswer(int replyAnswer) {
+		List<ReplyGPhoto> list=null;
+		
+		try {
+			list=dao.getListData("groupGally.listReplyAnswer", replyAnswer);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		return list;
+	}
+	@Override
+	public int deleteReplyAnswer(ReplyGPhoto dto) {
+		
+		int result=0;
+		try {
+			result=dao.deleteData("groupGally.deleteReplyAnswer", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	@Override
+	public int replyGroupCountAnswer(int replyAnswer) {
+		int result = 0;
+		try {
+			result = dao.getReadData("groupGally.replyGroupCountAnswer",replyAnswer);
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		
+		}
+			
+		return result;
+	}
+
+	
+	@Override
+	public int dataReplyAnswerCount(ReplyGPhoto dto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
+	
+	@Override
+	public int insertPhotoLike(GroupGally dto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public int groupPhotoLikeCount(GroupGally dto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 	
 }
