@@ -28,7 +28,7 @@ function listReplyAnswer(replyAnswer){
 		$(listReplyAnswerId).html(data);
 	});
 }
-//댓글별 답글 갯수   a작스?
+//댓글별 답글 갯수   a작스?  안된다.
 function countAnswer(replyAnswer) {
 	var url="<%=cp%>/group/photo/replyCountAnswer";
 	$.post(url, {replyAnswer:replyAnswer}, function(data){
