@@ -1,20 +1,23 @@
 package com.sp.group.gboard;
 
 public class GroupBoardReply {
-	private int replyNum, gbNum;
-	private String userId, userName, gbcontent, gbcreated;
+	private int replyNum, boardNum;
+	private String userId, userName, content, created;
 	private int answer;
+	private int replyLike;
+	
+	
 	public int getReplyNum() {
 		return replyNum;
 	}
 	public void setReplyNum(int replyNum) {
 		this.replyNum = replyNum;
 	}
-	public int getGbNum() {
-		return gbNum;
+	public int getBoardNum() {
+		return boardNum;
 	}
-	public void setGbNum(int gbNum) {
-		this.gbNum = gbNum;
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
 	}
 	public String getUserId() {
 		return userId;
@@ -28,17 +31,17 @@ public class GroupBoardReply {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getGbcontent() {
-		return gbcontent;
+	public String getContent() {
+		return content;
 	}
-	public void setGbcontent(String gbcontent) {
-		this.gbcontent = gbcontent;
+	public void setContent(String content) {
+		this.content = content;
 	}
-	public String getGbcreated() {
-		return gbcreated;
+	public String getCreated() {
+		return created;
 	}
-	public void setGbcreated(String gbcreated) {
-		this.gbcreated = gbcreated;
+	public void setCreated(String created) {
+		this.created = created;
 	}
 	public int getAnswer() {
 		return answer;
@@ -46,6 +49,14 @@ public class GroupBoardReply {
 	public void setAnswer(int answer) {
 		this.answer = answer;
 	}
+	public int getReplyLike() {
+		return replyLike;
+	}
+	public void setReplyLike(int replyLike) {
+		this.replyLike = replyLike;
+	}
+	
+	
 	
 	
 }

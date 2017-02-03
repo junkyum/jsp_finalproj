@@ -3,19 +3,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="gboard">
 <select id="maxNum" resultType="Integer" >
-	select NVL(max(gbnum), 0) from groupboard
+	select NVL(max(boardNum), 0) from groupboard
 </select>
 
 <!-- 게시글 생성 -->
 <insert id="insertGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
-	insert into groupboard (gbnum, userId, gbsubject, gbcontent)  
-         values ( #{gbnum}, #{userId}, #{gbsubject}, #{gbcontent})
+	insert into groupboard (boardNum, userId, subject, content)  
+         values ( #{boardNum}, #{userId}, #{subject}, #{content})
 </insert>
 
 
 <insert id="insertGroupBoardFile">
-	insert into groupboard(gbfileNum, gbnum, userId, saveFilename, originalFilename, gbfileSize)
-		 values ( gboardFile_seq.NEXTVAL, #{gbnum}, #{userId}, #{saveFilename}, #{originalFilename}, #{gbfileSize})
+	insert into groupboard(fileNum, boardNum, userId, saveFilename, originalFilename, fileSize)
+		 values ( gboardFile_seq.NEXTVAL, #{boardNum}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize})
 </insert>
 
 <sql id="where-list">
@@ -31,7 +31,9 @@
 </sql>
 
 <select id="dataCount" parameterType="map" resultType="Integer">
-	SELECT NVL(COUNT(gbnum), 0) FROM groupboard
+	SELECT NVL(COUNT(*), 0) FROM groupboard b
+		join member m 
+		ON b.userId = m.userId
 	<where>
 		<if test="searchValue != null and searchValue !='' ">
 			<include refid="where-list" />
@@ -43,7 +45,7 @@
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
 SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
- 				select gbnum, b.userId, m.userName, gbsubject, gbhitCount, gbcreated
+ 				select boardNum, b.userId, m.userName, subject, hitCount, created
   					from groupboard b
   					join member m on b.userId = m.userId
 	<where>
@@ -51,7 +53,7 @@ SELECT * FROM (
 			<include refid="where-list" />
 		</if>
 	</where>
-				ORDER BY gbnum DESC
+				ORDER BY boardNum DESC
 	<![CDATA[                
             ) tb WHERE ROWNUM <= #{end}
         ) WHERE rnum >= #{start}
@@ -59,76 +61,108 @@ SELECT * FROM (
 </select>
 
 <update id="updateHitCount" parameterType="Integer">
-		update groupboard set gbhitCount=gbhitCount+1
-		where num = #{num}
+		update groupboard set hitCount=hitCount+1
+		where boardNum = #{boardNum}
 </update>
 	
 <select id="readGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
-	select gbnum, b.userId, userName, gbsubject, gbcontent, gbhitCount, gbcreated
+	select boardNum, b.userId, userName, subject, content, hitCount, b.created
   		from groupboard b
   		join member m on b.userId = m.userId
-  		where gbnum =#{gbnum}
+  		where boardNum =#{boardNum}
 </select>
 
 <select id="preReadGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
 		select tb.* from (
-		  select gbnum, subject from groupboard
+		  select boardNum, subject from groupboard b 
+		  	join member m on b.userId = m.userId
 		  <where>
 		  	<if test="searchValue!= null and searchValue !=''">
 		  		<include refid="where-list"/>
 		  	</if>
 		  	<![CDATA[
-		  		and (gbnum > #{gbnum})
+		  		and (boardNum > #{boardNum})
 		  	]]>
 		  </where>
-		  order by gbnum ASC
+		  order by boardNum ASC
 		) tb where ROWNUM=1
 </select>
 	
-<select id="nextReadTBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
+<select id="nextReadGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
 		select tb.* from (
-		  select gbnum, gbsubject from groupboard
+		  select boardNum, subject from groupboard b 
+		  	join member m on b.userId = m.userId
 		  <where>
 		  	<if test="searchValue!= null and searchValue !=''">
 		  		<include refid="where-list"/>
 		  	</if>
 		  	<![CDATA[
-		  		and (gbnum < #{gbnum})
+		  		and (boardNum < #{boardNum})
 		  	]]>
 		  </where>
-		  order by gbnum DESC
+		  order by boardNum DESC
 		) tb where ROWNUM=1
 </select>
 
 <select id="listFile" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
-	select gbnum, gbfileNum, userId, saveFilename, originalFilename, gbfileSize
+	select boardNum, fileNum, userId, saveFilename, originalFilename, fileSize
 	 from groupboardFile
-	  where gbnum =#{gbnum}
+	  where boardNum =#{boardNum}
 </select>
 
 <select id="readFile" parameterType="Integer" resultType="com.sp.group.gboard.GroupBoard">
-	SELECT  gbfileNum, gbnum, saveFilename, 
-	 originalFilename, gbfileSize
-	  FROM groupboardFile WHERE gbfileNum=#{gbfileNum}      
+	SELECT  fileNum, boardNum, saveFilename, 
+	 originalFilename, fileSize
+	  FROM groupboardFile WHERE fileNum=#{fileNum}      
 </select>
 	
 <update id="updateGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
-	UPDATE groupboard SET gbsubject=#{gbsubject},
-	  gbcontent=#{gbcontent}
+	UPDATE groupboard SET subject=#{subject},
+	  content=#{content}
 	   WHERE gbnum=#{gbnum}
 </update>
     
 <delete id="deleteGroupBoard" parameterType="Integer">
-	DELETE FROM groupboard WHERE gbnum=#{gbnum}
+	DELETE FROM groupboard WHERE boardNum=#{boardNum}
 </delete>
 	
 <delete id="deleteFile" parameterType="map">
-	DELETE FROM groupboardFile WHERE ${field} = #{gbnum}
+	DELETE FROM groupboardFile WHERE ${field} = #{boardNum}
 </delete>
 
 
-<insert id="insertReply" parameterType="com.sp.group.gboard.GroupBoard">
-	insert into groupboardReply ( gbreplyNum, gbnum, userId, content, answer)  
-         values ( #{gbreplyNum} #{gbnum}, #{userId}, #{content}, #{answer})
+<insert id="insertReply" parameterType="com.sp.group.gboard.GroupBoardReply">
+	insert into groupboardReply ( replyNum, boardNum, userId, content)  
+         values ( #{replyNum} #{boardNum}, #{userId}, #{content})
 </insert>
+
+<select id="dataCountReply" resultType="Integer" parameterType="Integer">
+	   SELECT NVL(COUNT(*), 0)
+	        FROM groupboardReply WHERE boardNum=#{boardNum}
+	</select>
+	
+<select id="listReply" resultType="com.sp.group.gboard.GroupBoardReply" 
+	          parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT replyNum, boardNum, r.userId, userName 
+                      ,content, created
+			    FROM groupboardReply r 
+	            JOIN member m ON r.userId=m.userId
+	            WHERE r.boardNum=#{boardNum}
+	            ORDER BY replyNum DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+	    ) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+<delete id="deleteReply" parameterType="Integer">
+	DELETE groupboardReply WHERE replyNum=#{replyNum}
+</delete>
+
+<delete id="deleteAllReply" parameterType="Integer">
+	DELETE groupboardReply WHERE boardNum=#{boardNum}
+</delete>
+
 </mapper>

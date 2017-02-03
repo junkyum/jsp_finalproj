@@ -1,7 +1,6 @@
 package com.sp.group.gboard;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -34,10 +33,15 @@ public class GroupBoardController {
 	@Autowired private MyUtil util;
 	@Autowired private FileManager fileManager;
 	
+	@RequestMapping(value="/group/groupBoard")
+	public String groupBoard() throws Exception{
+		return "group/groupBoard";
+	}
+	
 	@RequestMapping(value="/group/boardList")
-	public String list(
-			@RequestParam(value="gbnum", defaultValue = "1") int gbnum,
-			@RequestParam(value ="page",defaultValue="1") int current_page,
+	public void groupBoardList(
+			@RequestParam(value="boardNum", defaultValue = "1") int boardNum,
+			@RequestParam(value ="pageNo",defaultValue="1") int current_page,
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
 			HttpServletRequest req, Model model) throws Exception{
@@ -48,8 +52,8 @@ public class GroupBoardController {
 
 		int numPerPage=10;
 		int dataCount=0, total_page=0;
-		Map<String, Object> map= new HashMap<>();
-
+		
+		Map<String, Object> map= new HashMap<String, Object>();
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 
@@ -67,19 +71,19 @@ public class GroupBoardController {
 		map.put("end",end);
 
 		//글리스트
-		List<GroupBoard> list = service.listGroupBoard(map);
+		List<GroupBoard> boardList = service.listGroupBoard(map);
 		Date endDate = new Date();
 		long gap;
 		//리스트의 번호
 		int listNum , n=0;
-		Iterator<GroupBoard> it = list.iterator();
+		Iterator<GroupBoard> it = boardList.iterator();
 		while(it.hasNext()){
 			GroupBoard data = it.next();
 			listNum = dataCount-(start+n-1);
 			data.setListNum(listNum);
 
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-			Date beginDate = formatter.parse(data.getGbcreated());
+			Date beginDate = formatter.parse(data.getCreated());
 
 			//날짜 차이 (일)
 			//gap =(endDate.getTime()-beginDate.getTime())/(24*60*60*1000);
@@ -89,7 +93,7 @@ public class GroupBoardController {
 			gap =(endDate.getTime()-beginDate.getTime())/(60*60*1000);
 			data.setGap(gap);
 
-			data.setGbcreated(data.getGbcreated().substring(0,10));
+			data.setCreated(data.getCreated().substring(0,10));
 
 			n++;
 		}
@@ -110,7 +114,7 @@ public class GroupBoardController {
 
 		String paging =util.paging(current_page, total_page, listUrl);
 
-		model.addAttribute("list",list);
+		model.addAttribute("boardList",boardList);
 		model.addAttribute("page",current_page);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("total_page",total_page);
@@ -118,44 +122,40 @@ public class GroupBoardController {
 		model.addAttribute("articleUrl",articleUrl);
 		model.addAttribute("paging",paging);
 
-
-		return "group/boardList";
 	}
 
-	@RequestMapping(value="/group/board/created", method=RequestMethod.GET)
-	public String createdForm( HttpSession session, Model model) throws Exception {
-
+	@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> createdForm( 
+			GroupBoard dto, HttpSession session,
+			HttpServletResponse resp, HttpServletRequest req
+			) throws Exception {
+		String cp = req.getContextPath();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null){
-			return "redirect:/member/login";
+			resp.sendRedirect(cp+"/member/login.do");
 		}
-
-		model.addAttribute("mode","created");
-		
-		return ".group.created";
-	}
-
-	@RequestMapping(value="/group/board/created", method=RequestMethod.POST)
-	public String createdSubmit( GroupBoard dto, HttpSession session) throws Exception {
-
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		if(info==null) {
-			return "redirect:/member/login";
-		}
-
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+File.separator+"uploads"+File.separator+"GroupBoard";
-
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "notice";
+		dto.setGroupName("개발자"); ///////////////////////////// 수정할것!... 
 		dto.setUserId(info.getUserId());
-
-		service.insertGroupBoard(dto, pathname);
-
-		return "redirect:/gboard/list";
+		
+		int res = service.insertGroupBoard(dto, pathname);
+		
+		String result="true";
+		if(res==0)
+			result="false";
+		
+		Map <String, Object> model = new HashMap<>();
+		model.put("result", result);
+		return model;		
+		
 	}
 
-	@RequestMapping(value="/gboard/boardArticle")
+	
+	/*@RequestMapping(value="/gboard/boardArticle")
 	public String article(
-			@RequestParam int gbnum, @RequestParam int page,
+			@RequestParam int boardNum, @RequestParam int page,
 			@RequestParam(value="searchKey", defaultValue="subject") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue,
 			HttpSession session, Model model) throws Exception {
@@ -165,16 +165,16 @@ public class GroupBoardController {
 			return "redirect:/member/login";
 		}
 		searchValue = URLDecoder.decode(searchValue,"UTF-8");
-		service.updateHitCount(gbnum);
+		service.updateHitCount(boardNum);
 
-		GroupBoard dto = service.readGroupBoard(gbnum);
+		GroupBoard dto = service.readGroupBoard(boardNum);
 		if(dto==null)
 			return "redirect:/gboard/boardList?page="+page;
 
-		dto.setGbcontent(dto.getGbcontent().replaceAll("\n", "<br>"));
+		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("gbnum", gbnum);
+		map.put("boardNum", boardNum);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 
@@ -186,7 +186,7 @@ public class GroupBoardController {
 		if(searchValue.length()!=0)
 			params+="&searchKey="+searchKey+"&searchValue="+searchValue;
 
-		List<GroupBoard> listFile = service.listFile(gbnum);
+		List<GroupBoard> listFile = service.listFile(boardNum);
 
 		model.addAttribute("listFile", listFile);
 		model.addAttribute("dto", dto);
@@ -199,7 +199,7 @@ public class GroupBoardController {
 
 	@RequestMapping(value="/gboard/update", method=RequestMethod.GET)
 	public String updateForm(
-			@RequestParam(value="gbnum") int gbnum,
+			@RequestParam(value="boardNum") int boardNum,
 			@RequestParam(value="page") String page,
 			Model model, HttpSession session) throws Exception {
 
@@ -208,12 +208,12 @@ public class GroupBoardController {
 			return "redirect:/member/login";
 		}
 
-		GroupBoard dto = (GroupBoard) service.readGroupBoard(gbnum);
+		GroupBoard dto = (GroupBoard) service.readGroupBoard(boardNum);
 		if(dto==null) {
 			return "redirect:/gboard/list?page="+page;
 		}
 
-		List<GroupBoard> listFile=service.listFile(gbnum);
+		List<GroupBoard> listFile=service.listFile(boardNum);
 
 		model.addAttribute("mode", "update");
 		model.addAttribute("page", page);
@@ -248,7 +248,7 @@ public class GroupBoardController {
 
 	@RequestMapping(value="/gboard/delete", method=RequestMethod.GET)
 	public String delete(
-			@RequestParam int gbnum,
+			@RequestParam int boardNum,
 			@RequestParam String page,
 			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
@@ -263,7 +263,7 @@ public class GroupBoardController {
 			return "redirect:/gboard/list?page="+page;
 
 		// 내용 지우기
-		service.deleteGroupBoard(gbnum, pathname);
+		service.deleteGroupBoard(boardNum, pathname);
 
 		return "redirect:/gboard/boardList?page="+page;
 	}
@@ -271,7 +271,7 @@ public class GroupBoardController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@RequestMapping(value="/gboard/download")
 	public void download(
-			@RequestParam int gbfileNum,
+			@RequestParam int fileNum,
 			HttpServletResponse resp,
 			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
@@ -279,7 +279,7 @@ public class GroupBoardController {
 
 		boolean b = false;
 
-		GroupBoard dto = service.readFile(gbfileNum);
+		GroupBoard dto = service.readFile(fileNum);
 		if(dto!=null) {
 			String saveFilename = dto.getSaveFilename();
 			String originalFilename = dto.getOriginalFilename();
@@ -302,20 +302,20 @@ public class GroupBoardController {
 	@RequestMapping(value="/gboard/deleteFile", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> deleteFile(
-			@RequestParam int gbfileNum,
+			@RequestParam int fileNum,
 			HttpServletResponse resp,
 			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";
 
-		GroupBoard dto=service.readFile(gbfileNum);
+		GroupBoard dto=service.readFile(fileNum);
 		if(dto!=null) {
 			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
 		}
 
 		Map<String, Object> map=new HashMap<String, Object>();
-		map.put("field", "gbfileNum");
-		map.put("gbnum", gbfileNum);
+		map.put("field", "fileNum");
+		map.put("boarNum", fileNum);
 		service.deleteFile(map);
 
 		Map<String, Object> model = new HashMap<>(); 
@@ -340,5 +340,5 @@ public class GroupBoardController {
 		service.insertGroupBoard(dto, pathname);
 
 		return "redirect:/gboard/boardArticle";
-	}
+	}*/
 }
