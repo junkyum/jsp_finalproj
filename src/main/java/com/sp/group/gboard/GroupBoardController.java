@@ -38,14 +38,15 @@ public class GroupBoardController {
 		return "group/groupBoard";
 	}
 	
-	@RequestMapping(value="/group/boardList")
+	@RequestMapping(value="/group/groupBoardList")
 	public void groupBoardList(
-			@RequestParam(value="boardNum", defaultValue = "1") int boardNum,
-			@RequestParam(value ="pageNo",defaultValue="1") int current_page,
+			@RequestParam(value ="page",defaultValue="1") int current_page,
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
 			HttpServletRequest req, Model model) throws Exception{
 
+		String cp= req.getContextPath();
+		
 		if(req.getMethod().equalsIgnoreCase("GET")){
 			searchValue =URLDecoder.decode(searchValue,"UTF-8");
 		}
@@ -58,7 +59,6 @@ public class GroupBoardController {
 		map.put("searchValue", searchValue);
 
 		dataCount = service.dataCount(map);
-
 		if (dataCount != 0)
 			total_page= util.pageCount(numPerPage, dataCount);
 
@@ -98,8 +98,8 @@ public class GroupBoardController {
 			n++;
 		}
 		
-		String cp= req.getContextPath();
-		String listUrl= cp+"/group/boardList";
+		/*String cp= req.getContextPath();
+		String listUrl= cp+"/group/groupBoardList";
 		String articleUrl=cp+"/group/boardArticle?page="+current_page;
 
 		String params="";
@@ -110,21 +110,24 @@ public class GroupBoardController {
 		if(params.length()!=0){
 			listUrl=listUrl+"?"+params;
 			articleUrl=articleUrl+"&"+params;
-		}
+		}*/
 
-		String paging =util.paging(current_page, total_page, listUrl);
+		String paging =util.paging(current_page, total_page);
 
 		model.addAttribute("boardList",boardList);
 		model.addAttribute("page",current_page);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("total_page",total_page);
-
-		model.addAttribute("articleUrl",articleUrl);
+/*
+		model.addAttribute("articleUrl",articleUrl);*/
 		model.addAttribute("paging",paging);
-
+		model.addAttribute("searchKey", searchKey);
+	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
+        
+	 
 	}
 
-	@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
+	/*@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> createdForm( 
 			GroupBoard dto, HttpSession session,
@@ -151,7 +154,7 @@ public class GroupBoardController {
 		return model;		
 		
 	}
-
+*/
 	
 	/*@RequestMapping(value="/gboard/boardArticle")
 	public String article(

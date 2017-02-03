@@ -146,7 +146,7 @@ function layoutview(num) {
 						<h4 class="modal-title">
 							<span class="glyphicon glyphicon glyphicon-pencil"></span>&nbsp;
 							공지사항을 작성합니다.
-						</h4>
+						</h4> 
 					</div>
 					<div class="modal-body">
 						<input type="text" name="subject" id="kmsubject"
