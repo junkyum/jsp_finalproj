@@ -5,10 +5,7 @@
 <%
     	String cp = request.getContextPath();
 %>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css">
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <script type="text/javascript">
 $(function(){
 	$("#tapmenu").tabs();

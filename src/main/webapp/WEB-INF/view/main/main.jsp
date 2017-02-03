@@ -350,10 +350,10 @@ div.friendScroll {
 <div id="divGroupFinder" style = "display:none;">
 
 <div>
+    <!-- 새로고침  -->
 	<div style="float: left; width: 15%; min-width: 85px;">
 		<button type="button" class="btn btn-default btn wbtn">
 			<span class="glyphicon glyphicon-repeat"></span>
-			<!-- 새로고침  -->
 		</button>
 	</div>
 	<div style="float: left; width: 60%; min-width: 85px;">
@@ -368,8 +368,8 @@ div.friendScroll {
 	</div>
 	<!--그룹만들기  -->
 	<div style="float: left; width: 15%; min-width: 85px; text-align: right;">
-			<button type="button">
-				<span class="glyphicon glyphicon glyphicon-pencil"></span>
+			<button type="button" class="btn btn-default btn wbtn" onclick="maker();">
+				<img src="<%=cp%>/res/images/maker.png" style="width: 20px; height: 20px;">
 			</button>
 	</div>
 </div>
