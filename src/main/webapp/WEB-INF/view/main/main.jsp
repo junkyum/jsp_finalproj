@@ -58,7 +58,26 @@ function maker(){
 		   hide:"clip",
 		   buttons:{
 				"만들기":function(){
-					alert("야호");
+					var url="<%=cp%>/group/created";
+					var query=$('form[name=createdForm]').serialize();
+					$.ajax({
+						type:"post",
+						url :url,
+						data : query,
+						dataType:"json",
+						success:function(data){
+							var result = data.result;
+							if(data.res=="false"){
+							   alert("안만들어짐");					
+							}else {
+								alert("만들어짐");		
+							}
+							
+						},error:function(e) {
+					    	  console.log(e.responseText);
+					      }
+					
+				});	
 				},"취소":function(){
 					$(this).dialog("close");
 				}
@@ -294,11 +313,12 @@ div.friendScroll {
 </div><!-- 전체  div -->
 
 <div id="divGroupMaker" style = "display:none;">
-<form >
-이름:<input type="text" id="name" name="name"><br>
-소개:<input type="text" id="intro" name="intro"><br>
+<form name = "createdForm">
+이름:<input type="text" id="groupName" name="groupName"><br>
+소개:<input type="text" id="introduce" name="introduce"><br>
 장소:<input type="text" id="place" name="place"><br>
 키워드:<input type="text" id="keyword" name="keyword"><br>
+프로필 사진:<input type="text" id="profile" name="profile"><br>
 </form>
 </div>
 

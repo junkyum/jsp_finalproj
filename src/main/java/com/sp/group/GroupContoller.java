@@ -42,7 +42,7 @@ public class GroupContoller {
 			Group dto = service.readGroup(groupName);
 			model.addAttribute("dto",dto);
 			
-			return ".group.main";	
+			return ".group.main";
 	}
 	//그룹만들기
 	@RequestMapping(value="/group/created", method=RequestMethod.POST)
@@ -63,7 +63,8 @@ public class GroupContoller {
 		else
 		{
 			service.insertGroupMember(dto);
-			job.put("res",dto.getGroupName());
+			String name=dto.getGroupName();
+			job.put("res",name);
 		}
 		PrintWriter out = resp.getWriter();
 		out.println(job.toString());

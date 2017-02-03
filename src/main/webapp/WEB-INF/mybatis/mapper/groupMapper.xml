@@ -18,13 +18,13 @@
 <insert id="insertGroup" parameterType="com.sp.group.Group">
        INSERT INTO ggroup
             (groupName, userId, introduce, profile, place, keyword )  VALUES 
-            (#{guroupName}, #{userId}, #{introduce}, #{profile}, #{place}, #{keyword} )
+            (#{groupName}, #{userId}, #{introduce}, #{profile}, #{place}, #{keyword} )
 </insert>
 
 <insert id="insertGroupMember" parameterType="com.sp.group.Group">
        INSERT INTO groupMember
             (groupName, userId, condition, joindate)  VALUES 
-            (#{guroupName},#{userId},#{condition}, sysdate)
+            (#{groupName},#{userId},#{condition}, sysdate)
 </insert>
 
 <select id="listGroup" resultType="com.sp.group.Group" parameterType="map">
