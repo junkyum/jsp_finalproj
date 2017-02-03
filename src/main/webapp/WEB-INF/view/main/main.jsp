@@ -52,8 +52,8 @@ function maker(){
 	    $("#divGroupMaker").dialog({
 	       title:"그룹만들기",
 	       modal:true,
-	       width:300,
-	       height:300,
+	       width:400,
+	       height:700,
 		   show:"clip",
 		   hide:"clip",
 		   buttons:{
@@ -93,13 +93,33 @@ function finder(){
 	    $("#divGroupFinder").dialog({
 	       title:"그룹찾기",
 	       modal:true,
-	       width:400,
+	       width:500,
 	       height:600,
 		   show:"clip",
 		   hide:"clip",
 		   buttons:{
 				"찾기":function(){
+					var url="<%=cp%>/group/list";
+					var query=$('form[name=findForm]').serialize();
+					$.ajax({
+						type:"post",
+						url :url,
+						data : query,
+						dataType:"json",
+						success:function(data){
+							var result = data.result;
+							if(data.res=="false"){
+											
+							}else {
+							
+							
+							}
+							
+						},error:function(e) {
+					    	  console.log(e.responseText);
+					      }
 					
+				});	
 				},"취소":function(){
 					$(this).dialog("close");
 				}
@@ -319,21 +339,39 @@ div.friendScroll {
 
 <div id="divGroupMaker" style = "display:none;">
 <form name = "createdForm">
-이름:<input type="text" id="groupName" name="groupName"><br>
-소개:<input type="text" id="introduce" name="introduce"><br>
-장소:<input type="text" id="place" name="place"><br>
-키워드:<input type="text" id="keyword" name="keyword"><br>
-프로필 사진:<input type="text" id="profile" name="profile"><br>
+이름:<input type="text" id="groupName" name="groupName" class="form-control"><br>
+소개:<input type="text" id="introduce" name="introduce" class="form-control"><br>
+장소:<input type="text" id="place" name="place" class="form-control"><br>
+키워드:<input type="text" id="keyword" name="keyword" class="form-control"><br>
+프로필 사진:<input type="text" id="profile" name="profile" class="form-control"><br>
 </form>
 </div>
 
 <div id="divGroupFinder" style = "display:none;">
-<form name = "findForm">
-<select name="searchKey">
-<option value="name">이름</option>
-<option value="place">장소</option>
-<option value="keyword">키워드</option>
-</select>
-<input type="text" name="searchValue" id="searchValue"><br>
-</form>
+
+<div>
+	<div style="float: left; width: 15%; min-width: 85px;">
+		<button type="button" class="btn btn-default btn wbtn">
+			<span class="glyphicon glyphicon-repeat"></span>
+			<!-- 새로고침  -->
+		</button>
+	</div>
+	<div style="float: left; width: 60%; min-width: 85px;">
+		<form name = "findForm">
+			<select name="searchKey" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
+			<option value="name">이름</option>
+			<option value="place">장소</option>
+			<option value="keyword">키워드</option>
+			</select>
+			<input type="text" name="searchValue" id="searchValue" class="form-control" style = "width: 60%;float: left;"><br>
+		</form>
+	</div>
+	<!--그룹만들기  -->
+	<div style="float: left; width: 15%; min-width: 85px; text-align: right;">
+			<button type="button">
+				<span class="glyphicon glyphicon glyphicon-pencil"></span>
+			</button>
+	</div>
+</div>
+
 </div>
