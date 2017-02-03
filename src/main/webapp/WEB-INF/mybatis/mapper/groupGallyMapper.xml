@@ -153,10 +153,17 @@
 		
 		
 		
+		<insert id="insertGroupReplyLike" parameterType="com.sp.group.gally.ReplyGPhoto">
+				INSERT INTO groupgallyReplyLike(replyNum, userId, gallryReplyLike)
+				   VALUES (#{replyNum}, #{userId}, #{gallryReplyLike})
+		</insert>
 		
 		
-		
-		
+		<select id="groupGeplyCountLike" resultType="map"  parameterType="Integer">
+		   SELECT  NVL(COUNT(DECODE(gallryReplyLike, 1, 1)), 0) likeCount,
+				        NVL(COUNT(DECODE(gallryReplyLike, 0, 1)), 0) disLikeCount
+		        FROM groupgallyReplyLike WHERE replyNum=#{replyNum}
+		</select> 
 		
 		
 		

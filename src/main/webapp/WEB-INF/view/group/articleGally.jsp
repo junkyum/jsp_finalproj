@@ -28,11 +28,13 @@ function listReplyAnswer(replyAnswer){
 		$(listReplyAnswerId).html(data);
 	});
 }
-//댓글별 답글 갯수   a작스?  안된다.
+//댓글별 답글 갯수   a작스?  
 function countAnswer(replyAnswer) {
 	var url="<%=cp%>/group/photo/replyCountAnswer";
+	alert(replyAnswer);
 	$.post(url, {replyAnswer:replyAnswer}, function(data){
 		var count="("+data.count+")";
+
 		var answerCountId="#answerCount"+replyAnswer;
 		var answerGlyphiconId="#answerGlyphicon"+replyAnswer;
 		
@@ -64,7 +66,7 @@ $(function(){
 			$divGReplyAnswer.show();
 			//답변 버튼눌럿을떄도 리스트나오게 하는것
 			listReplyAnswer(replyNum);
-			//countAnswer(replyAnswer);
+			countAnswer(replyNum);
 		}
 		
 	});
@@ -108,7 +110,7 @@ function sendGReplyAnswer(replyNum) {
 				console.log("들어감");
 				//등록해도 리스트 나오게 한는것
 				listReplyAnswer(replyNum);
-				
+				countAnswer(replyNum);
 				
 			}
 		}
@@ -155,11 +157,59 @@ function deleteReplyAnswerList(replyNum, replyAnswer) {
 		}, "json");	
 	}	
 }
+///////////////////////////////////////////// num, tphotoLike
+function sendReplyLike(replyNum, gallryReplyLike) {
+	var userId="${sessionScope.member.userId}";
+	
+	var msg="게시물이 마음에 들지 않으십니까 ?";
+	if(gallryReplyLike==1)
+		msg="게시물에 공감하십니까 ?";
+	if(! confirm(msg))
+		return false;
+	
+	var query="replyNum="+replyNum;
+	query+="&gallryReplyLike="+gallryReplyLike;
+	
+	var url="<%=cp%>/group/photo/gallryReplyLike";
+	
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+					
+			} else if(state=="false") {
+					alert("한번만 할수있다.");
+			} else if(state=="loginFail") {
+					login();
+			}
+		}
+		,error:function(e) {
+			alert(e.responseText);
+		}
+		
+	});
+}
 
-
-
-
-
+//댓글  좋아요 갯수
+function groupCountLike (replyNum) {
+	var url="<%=cp%>/group/photo/groupCountLike";
+	$.post(url, {replyNum:replyNum}, function(data){
+		var likeCountId="#likeCount"+replyNum;
+		var disLikeCountId="#disLikeCount"+replyNum;
+		var likeCount=data.likeCount;
+		var disLikeCount=data.disLikeCount;
+		  
+		$(likeCountId).html(likeCount);
+		$(disLikeCountId).html(disLikeCount);
+	}, "JSON");
+	
+}
 
 </script>
 <style type="text/css">

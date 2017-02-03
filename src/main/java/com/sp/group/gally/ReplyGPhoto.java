@@ -6,18 +6,28 @@ public class ReplyGPhoto {
 	private String userId, content, created;
 	private String groupName;
 	private int replyAnswer, answerCount;
-
+	private int gallryReplyLike;
+				
 	//private int replyAnswerCount;
+	private int gallylike;//좋아싫어?사용하려고만든 변수
+	private int likeCount;
+	private int disLikeCount;
 	
+	
+	
+	
+	public int getGallryReplyLike() {
+		return gallryReplyLike;
+	}
+	public void setGallryReplyLike(int gallryReplyLike) {
+		this.gallryReplyLike = gallryReplyLike;
+	}
 	public String getGroupName() {
 		return groupName;
 	}
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-	private int gallylike;//좋아싫어?사용하려고만든 변수
-	private int likeCount;
-	private int disLikeCount;
 	public int getReplyNum() {
 		return replyNum;
 	}
