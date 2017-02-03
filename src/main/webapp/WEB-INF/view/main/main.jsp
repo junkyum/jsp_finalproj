@@ -99,24 +99,7 @@ function finder(){
 		   hide:"clip",
 		   buttons:{
 				"찾기":function(){
-					var url="<%=cp%>/group/created";
-					var query=$('form[name=findForm]').serialize();
-					$.ajax({
-						type:"post",
-						url :url,
-						data : query,
-						dataType:"json",
-						success:function(data){
-							var result = data.result;
-							if(data.res=="false"){
-							   alert("결과 없음");					
-							}else {
-								$('#searchValue').val("");
-								
-							}
-						},error:function(e) {
-					    	  console.log(e.responseText);
-					      }
+					
 				},"취소":function(){
 					$(this).dialog("close");
 				}
