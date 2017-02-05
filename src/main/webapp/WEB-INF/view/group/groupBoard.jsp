@@ -5,37 +5,33 @@
 <%
    String cp=request.getContextPath();
 %>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+.gbbestbig {
+	margin: 0 auto;
+	width: 900px;
+	/* 	height: 680px; */
+}
+</style>
+<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 $(function(){
-	listPage(1);
+	gboardlistPage(1);
 });
 
-function listPage(page) {
-	var url="<%=cp%>/group/BoardList";
-	var boardnum="${dto.boardNum}";
-	$.get(url, {boardNum:boardNum, pageNo:page}, function(data){
+function gboardlistPage(page) {
+	var url="<%=cp%>/group/groupBoardList";
+	$.get(url, {page:page}, function(data){
 		$("#gblistlayout").html(data);
 	});
 }
 
-
-
-
-function searchList() {
-		var f=document.searchForm;
-		f.action="<%=cp%>/group/boardList";
-		f.submit();
-}
 </script>
 
-<div class="bestbig">
+<div class="gbbestbig">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -46,16 +42,16 @@ function searchList() {
 					<th class="text-center" style="width: 70px;">조회수</th>
 				</tr>
 			</thead>
-			<tbody>
-				
-			</tbody>
 		</table>
 		<div id="gblistlayout"></div>
-	</div>
+		
+</div>
 
 
 
-<div class="modal fade" id="myModal" role="dialog">
+
+
+<div class="modal fade" id="myModalGboard" role="dialog">
 		<!-- 모달 Div 이걸 따로 빼야하는지 그냥 둬도 되는건지 내일 물어보기!  -->
 		<div class="modal-dialog">
 

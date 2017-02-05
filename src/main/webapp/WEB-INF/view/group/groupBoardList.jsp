@@ -10,48 +10,37 @@
 	margin: 0 auto;
 	width: 900px;
 	/* 	height: 680px; */
-	border: 1px solid #5D5D5D;
 }
 </style>
 <head>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 </head>
 
-<c:forEach var="dto" items="${list}">
+<c:forEach var="dto" items="${boardList}">
 	<tr>
 		<td class="text-center">${dto.listNum}</td>
-		<td><a href="${articleUrl}&num=${dto.boardNum}">${dto.subject}</a>
+	<%-- 	<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.subject}</a>
 			<c:if test="${dto.gap < 1}">
-                              			 // 새글 표시
-                            		</c:if></td>
+			
+            </c:if></td> --%>
+        <td class="text-center">${dto.subject}</td>    
 		<td class="text-center">${dto.userName}</td>
 		<td class="text-center">${dto.created}</td>
 		<td class="text-center">${dto.hitCount}</td>
 	</tr>
 </c:forEach>
 
+<div style="clear: both;">
+	<div class="paging"	style="text-align: center; min-height: 50px; line-height: 50px;">
+		<c:if test="${dataCount==0 }">등록된 게시물이 없습니다.</c:if>
+		<c:if test="${dataCount!=0 }">${paging}</c:if>
+	</div>
 
-
-
-
-<div class="paging"
-	style="text-align: center; min-height: 50px; line-height: 50px;">
-	<c:if test="${dataCount==0 }">
-				등록된 게시물이 없습니다.
-            </c:if>
-	<c:if test="${dataCount!=0 }">
-                ${paging}
-            </c:if>
-</div>
-
-<div class="threediv" style="clear: both;">
 	<div style="float: left; width: 20%; min-width: 85px;">
 		<button type="button" class="btn btn-default btn wbtn">
 			<span class="glyphicon glyphicon-repeat"></span>
@@ -75,13 +64,18 @@
 	</div>
 	<div
 		style="float: left; width: 20%; min-width: 85px; text-align: right;">
-		<button type="button" class="btn btn-default btn wbtn" id="btnpen"
-			data-toggle="modal" data-target="#myModal">
+		<button type="button" class="btn btn-default btn wbtn"
+			data-toggle="modal" data-target="#myModalGboard">
 			<span class="glyphicon glyphicon glyphicon-pencil"></span>
 		</button>
-
 	</div>
+
 </div>
+
+
+
+
+
 
 
 

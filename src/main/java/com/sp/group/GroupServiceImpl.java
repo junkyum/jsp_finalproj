@@ -123,4 +123,15 @@ public class GroupServiceImpl implements GroupService {
 		return result;
 	}
 
+	@Override
+	public List<Group> listMyGroup(String userId) {
+		List<Group> list=null;
+		try {
+			list = dao.getListData("group.listMyGroup", userId);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return list;
+	}
+
 }

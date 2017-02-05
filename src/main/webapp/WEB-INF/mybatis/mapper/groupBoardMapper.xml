@@ -43,7 +43,7 @@
 
 
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
-SELECT * FROM (
+		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
  				select boardNum, b.userId, m.userName, subject, hitCount, created
   					from groupboard b
