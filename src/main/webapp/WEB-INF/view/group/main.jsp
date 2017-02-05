@@ -20,61 +20,7 @@ $(function(){
 			그룹사진<br>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
-			<div class="btn-group"> 
-			<button type="button" class="btn btn-default dropdown-toggle"
-				data-toggle="dropdown" aria-expanded="false">
-				준겸 <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">쪽지하기</a></li>
-				<li><a href="#">채팅하기</a></li>
-			</ul>
-			</div>
-			<br>
-			<div class="btn-group"> 
-			<button type="button" class="btn btn-default dropdown-toggle"
-				data-toggle="dropdown" aria-expanded="false">
-				경미 <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">쪽지하기</a></li>
-				<li><a href="#">채팅하기</a></li>
-			</ul>
-			</div>
-			<br>
-			<div class="btn-group"> 
-			<button type="button" class="btn btn-default dropdown-toggle"
-				data-toggle="dropdown" aria-expanded="false">
-				김철<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">쪽지하기</a></li>
-				<li><a href="#">채팅하기</a></li>
-			</ul>
-			</div>
-			<br>
-			<div class="btn-group"> 
-			<button type="button" class="btn btn-default dropdown-toggle"
-				data-toggle="dropdown" aria-expanded="false">
-				문구 <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">쪽지하기</a></li>
-				<li><a href="#">채팅하기</a></li>
-			</ul>
-			</div>
-			<br>
-			<div class="btn-group"> 
-			<button type="button" class="btn btn-default dropdown-toggle"
-				data-toggle="dropdown" aria-expanded="false">
-				세영 <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">쪽지하기</a></li>
-				<li><a href="#">채팅하기</a></li>
-			</ul>
-			</div>
-			<br>
+			
 		</div>
 
 	</div>
