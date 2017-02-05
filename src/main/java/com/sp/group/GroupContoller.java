@@ -37,9 +37,18 @@ public class GroupContoller {
 			@RequestParam String groupName,
 			Model model
 			) throws Exception {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
 			Group dto = service.readGroup(groupName);
+			List<Group> list = service.listGroupMemer(groupName);
+			String res="notyet";
+			Iterator<Group> it = list.iterator();
+			while (it.hasNext()) {
+				Group data = it.next();
+				if(data.getUserId().equals(info.getUserId()))
+				res="already";
+			}
+			model.addAttribute("res",res);
 			model.addAttribute("dto",dto);
-			
 			return ".group.main";
 	}
 	//그룹만들기
@@ -181,7 +190,7 @@ public class GroupContoller {
 	}
 	
 	@RequestMapping(value="/group/signin")
-	public void signinGroup(
+	public String signinGroup(
 			HttpServletResponse resp,
 			HttpSession session,
 			@RequestParam String groupName
@@ -192,22 +201,15 @@ public class GroupContoller {
 			dto.setUserId(info.getUserId());
 			dto.setGroupName(groupName);
 			dto.setCondition("2");
-			int res = service.insertGroupMember(dto);
-			JSONObject job = new JSONObject();
-			if(res == 0){
-			 job.put("res", "fail");
-			}
-			else{
-			 job.put("res", "ok");
-			}
-			PrintWriter out = resp.getWriter();
-			out.println(job.toString());
+		    service.insertGroupMember(dto);
+			
+			return "redirect:/group?groupName="+groupName;
 		}
 			
 		
 
 	@RequestMapping(value="/group/signout")
-	public void signoutGroup(
+	public String signoutGroup(
 			HttpServletResponse resp,
 			HttpSession session,
 			@RequestParam String groupName
@@ -216,16 +218,8 @@ public class GroupContoller {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("userId", info.getUserId());
 			map.put("groupName", groupName);
-			int res = service.deleteGroupMember(map);
-			JSONObject job = new JSONObject();
-			if(res == 0){
-			 job.put("res", "fail");
-			}
-			else{
-			 job.put("res", "ok");
-			}
-			PrintWriter out = resp.getWriter();
-			out.println(job.toString());
+		    service.deleteGroupMember(map);
+			return "redirect:/group?groupName="+groupName;
 	}
 	
 	
