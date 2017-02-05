@@ -300,7 +300,7 @@ div.friendScroll {
 		</div>
 		<div>
 			<button type="button" onclick="grouplist();" class="jkbutton">
-				<img src="<%=cp%>/res/images/mygroup.png" style="width: 135px; height: 135px;">
+				<img src="<%=cp%>/res/images/mm.png" style="width: 135px; height: 135px;">
 			</button>
 		
 			<button type="button" onclick="map();" class="jkbutton">
