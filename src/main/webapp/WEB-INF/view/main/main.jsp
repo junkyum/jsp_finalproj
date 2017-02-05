@@ -66,7 +66,6 @@ function maker(){
 						data : query,
 						dataType:"json",
 						success:function(data){
-							var result = data.result;
 							if(data.res=="false"){
 							   alert("안만들어짐");					
 							}else {
@@ -106,7 +105,6 @@ function finder(){
 					var searchValue=$('#searchValue').val();
 					$.get(url,{searchKey:searchKey,searchValue:searchValue}, function(data) {
 						$("#grouplist").html(data);
-						
 					});
 				},"취소":function(){
 					$(this).dialog("close");

@@ -10,19 +10,24 @@
 $(function(){
 	$("#tapmenu").tabs();
 });
+
+
 </script>
 
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
-			그룹정보..<br> 
 			${dto.groupName }<br> 
+			그룹정보<br>
 			그룹사진<br>
+			
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">가입</button>
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signout?groupName=${dto.groupName}';">탈퇴</button>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
 			
 		</div>
-
+		
 	</div>
 	
 	<div id = "tapmenu" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
