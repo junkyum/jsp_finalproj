@@ -19,10 +19,14 @@ $(function(){
 			그룹정보<br>
 			그룹사진<br>
 			<c:if test="${res=='notyet' }">
-			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">가입</button>
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">
+			가입
+			</button>
 			</c:if>
 			<c:if test="${res=='already' }">
-			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signout?groupName=${dto.groupName}';">탈퇴</button>
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signout?groupName=${dto.groupName}';">
+			탈퇴
+			</button>
 			</c:if>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
