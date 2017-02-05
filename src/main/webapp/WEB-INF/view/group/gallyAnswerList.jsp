@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String cp=request.getContextPath();
+//대댓글 리스트
 %>
 <c:forEach var="vo" items="${listAnswer}">
     <div class='answer'  style='padding: 0px 10px;'>

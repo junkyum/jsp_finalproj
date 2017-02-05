@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String cp=request.getContextPath();
+//글보기 후 밑에 나오는 답글 리스트
 %>
 
 <c:if test="${GReplyCount!=0}">
@@ -20,7 +21,8 @@
 	            <div style="float: left;"> ${GRP.created}</div>
 	            <div style="float: right;  text-align: rigth;">
 	<c:if test="${sessionScope.member.userId==GRP.userId || sessionScope.member.userId=='admin'}">		   
-	               <a onclick='deleteReply("${GRP.replyNum}", "${pageNo}");'> 댓 글삭제하기</a>
+	               <a onclick='deletePhotoReply("${GRP.replyNum}", "${pageNo}");'> 댓 글삭제하기</a>
+	               <!-- 댓글 삭재구간. -->
 	</c:if>	 
 		   
 	 <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">		   
@@ -28,10 +30,16 @@
 	</c:if>  
 	            </div>
 	        </div>
-	        <div style="clear: both; padding: 5px 0 5px 0px;  min-height: 70px;"> ${GRP.content} </div>
+	        <div style="clear: both; padding: 5px 0 5px 0px;  min-height: 70px;"> 
+	        ${GRP.replyNum}  리플의번호<br>
+	        ${GRP.userId}     유저 아이디<br>
+	        ${GRP.content}    리플내용<br>
+	        ${GRP.gallyNum}    사진번호<br>
+	        ${GRP.replyAnswer}    리플 답변
+	        </div>
 	        
 	        
-	        <div style="clear: both; min-height: 30px;">
+	        <div style="clear: both; min-height: 30px;" id="kimch">
 	        
 				            <div style="float: left;">
 									<button type="button" class="btn btnGroupAnwerLaout" data-replyNum='${GRP.replyNum}'>답글
@@ -48,7 +56,7 @@
 	        </div>
 	             
 	              
-	           <div class="replyAnswer" style="display: none;">
+	       <div class="GroupReplyAnswer" style="display: none;">  
 	        
 	        	<div>
 	        	

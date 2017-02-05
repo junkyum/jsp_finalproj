@@ -41,16 +41,41 @@ h4{
 }
 </style>
 
+<!-- a작스로 파일저장시 필요한거, -->
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
-
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<!-- 위에있는거 모달 띠워주는것 -->
 <script type="text/javascript">
+$(function(){
+	$(".chk1").click(function() {
+	      $("#chk2").dialog({
+	         title:"등록하기",
+	         modal:true,
+	         width:500,
+	         height:500
+	          
+	      });
+	   });
+});
+//수정@글보기  숨기고 보이고 하는거.
+function updatePhoto(){
+		document.getElementById("kim_article").style.display="none";
+		document.getElementById("kim_update").style.display="block";	
+}
+
+$(function(){
+	listPage(1);
+});
+/* 이게 listGally.jsp를 출력하게 해주는 곳 */
+function listPage(page) {
+	var url="<%=cp%>/groupGally/list";
+
+	$.get(url,{pageNo:page}, function(data) {
+		$("#gallyLayout").html(data);
+	});
+}
+
 //사진삭제하는곳
 function deletePhoto(gallyNum) {
 	
@@ -68,7 +93,7 @@ function deletePhoto(gallyNum) {
 			var state=data.state;
 	
 			if(state=="false") {
-				$('#myModal').modal('hide');
+				$('#gallyMyModal').modal('hide');
 				listPage(1);
 			} else{
 				listPage(1);
@@ -79,13 +104,9 @@ function deletePhoto(gallyNum) {
 		}
 	});
 }
-//수정@글보기  숨기고 보이고 하는거.
-function updatePhoto(){
-		document.getElementById("kim_article").style.display="none";
-		document.getElementById("kim_update").style.display="block";	
-}
+
 ///수정 하는곳
-function updateOK() {
+function updateOK(gallyNum) {
 	
   var f=document.dialogForm;
   var formData = new FormData(f);
@@ -99,16 +120,18 @@ function updateOK() {
 			 ,dataType:"json"
 			 ,success:function(data) {
 				var state=data.state;
-				if(state=="false")
-					alert("작업 실패 !!!");		 
-				$('#myModal').modal('hide');
-				listPage(1);//이거 안먹힌다...씨빨.
-				 
+				if(state=="false"){
+					alert("작업 실패 !!!");		
+				} else {
+					 
+				$('#gallyMyModal').modal('hide');
+				listPage(1);
 				$("#groupName").val("");
 				$("#subject").val("");
 				$("#content").val("");
 				$("#imageFilename").val("");			
-	
+			
+				}
 			}
 			,error:function(e) {
 				console.log(e.responseText);
@@ -117,31 +140,16 @@ function updateOK() {
 		});
    
 }
-
-$(function(){
+//등록창 누르는 상태에서 취소를 눌럿을떄.
+function finsh() {
+	$("#chk2").dialog("close");
 	listPage(1);
-});
-/* 이게 listGally.jsp를 출력하게 해주는 곳 */
-function listPage(page) {
-	var url="<%=cp%>/groupGally/list";
-
-	$.get(url,{pageNo:page}, function(data) {
-		$("#listlayout").html(data);
-		 //$("#chk2").dialog("close");
-	});
+	$("#groupName").val("");
+	$("#subject").val("");
+	$("#content").val("");
+	$("#imageFilename").val("");
 }
 
-$(function(){
-	$(".chk1").click(function() {
-	      $("#chk2").dialog({
-	         title:"등록하기",
-	         modal:true,
-	         width:500,
-	         height:500
-	          
-	      });
-	   });
-});
 //사진등록 
 function send(){
 	
@@ -181,16 +189,14 @@ function send(){
 				var state=data.state;
 				if(state=="false")
 					alert("작업 실패 !!!");
+				
 				$("#chk2").dialog("close");
-				 
+				listPage(1);
 				 
 				$("#groupName").val("");
 				$("#subject").val("");
 				$("#content").val("");
 				$("#imageFilename").val("");			
-				
-				listPage(1);
-	
 			}
 			 
 			,error:function(e) {
@@ -201,25 +207,25 @@ function send(){
 
 }
 
-//모달띠이우는곳
+//글보기후 모달띠이우는곳
 function updateDialog(gallyNum) {
 	var url="<%=cp%>/group/photo/article?gallyNum="+gallyNum;
-	
-	$('#myModal .modal-body').load(url, function() {
-	    $('#myModal .modal-title').html('정보');
-		$('#myModal').modal('show');
+
+	$('#gallyMyModal .modal-body').load(url, function() {
+	    $('#gallyMyModal .modal-title').html('정보');
+		$('#gallyMyModal').modal('show');
 		$("input[name='name']").focus();
 	});
 }
 
 function updateCancel() {
-	$('#myModal').modal('hide');
+	$('#gallyMyModal').modal('hide');
 }
 
 function updateOk() {
 	alert("ok");
 }
-
+////////////////////////////////////////////////////////////////////
 //리플 등록
 function GReply(gallyNum) {
 	var userId="${sessionScope.member.userId}";
@@ -229,6 +235,7 @@ function GReply(gallyNum) {
 		$("#answerContent").focus();
 		return;
 	}
+
 	
 	var query="gallyNum="+gallyNum;
 	query+="&content="+content;
@@ -249,7 +256,8 @@ function GReply(gallyNum) {
 			if(loginChk=="false") {
 				alert("들어왔당");
 			} else{
-				listPage(1);
+				listPageAnswer(1);
+
 			}
 		}
 		,error:function(e) {
@@ -257,6 +265,24 @@ function GReply(gallyNum) {
 		}
 	});
 }
+
+$(function () {
+	$("#findGallyKButtn").click(function () {
+		alert("눌력음1");
+		var searchValueK=$.trim($("#searchValueK").val());
+		alert(searchValueK);
+		if(!searchValueK){
+			alert("검색할 값을 입력 하세요 !!!");
+			$("#searchValueK").focus();
+			return;
+		}
+		
+		
+		
+	});
+});
+
+
 
 </script>
 <div style="margin:0px; padding:0px; width: 1200px; height: 600px; ">
@@ -268,15 +294,14 @@ function GReply(gallyNum) {
 							<button type="button">
 								<img src="<%=cp%>/res/images/btn.png"
 									style="width: 50px; height: 50px; position: relative; top: 10pk;">
-								<div id="finsh">등록하기</div>
+								<div>등록하기</div>
 							</button>
 						</div>
 					</div>
 			</div>
 		</div> 
 		
-		
-		<div id="listlayout"> </div>
+		<div id="gallyLayout"> </div>
 </div>		
 
 	
@@ -286,7 +311,7 @@ function GReply(gallyNum) {
 				<div style="height: 300px; width: 480px; border: 1px solid black;">
 					<h3 style="margin-top: 10px; margin-left: 220px;">그룹명</h3>
 					<div style="width: 200px; height: 50px; margin-left: 30px; background: red;">
-					 그릅명: 	<input type="text" id="groupName" name="groupName">
+					 그릅명: <input type="text" id="groupName" name="groupName">
 					</div>
 						<div style="margin-top: 10px;">
 							<h4 style="float: left; margin: 0px;">재 목 :&nbsp;</h4>
@@ -306,7 +331,8 @@ function GReply(gallyNum) {
 				
 				<div style="margin-left: 100px; margin-top: 20px; float: right; " >
 					<button type="button" id="btn" name="btn" onclick="send();" >등록하기</button>
-					<button type="button" onclick="javascript:location.href='<%=cp%>/groupGally/list';">취소</button>
+					
+					<button type="button" onclick="finsh();">취소</button>
 				</div>
 		    </form>	
 		</div>
@@ -316,7 +342,7 @@ function GReply(gallyNum) {
 	
 	
 	<!-- 글보기 눌럿을떄 팝업 창을 띠우기 위해서 만들어논거. -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+		<div class="modal fade" id="gallyMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">

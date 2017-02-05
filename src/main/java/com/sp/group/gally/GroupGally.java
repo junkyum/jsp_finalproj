@@ -4,13 +4,39 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class GroupGally {
 	private int gallyNum, listNum, chkNum;
-	private String groupName,content ;
+	private String groupName,content;
 	private String created , subject;
     private String imageFilename,userId;
 
     private MultipartFile upload;
+    
+	private int gallyLike;
+    private int gallyLikeCount;
+    
+	
 
- 
+
+
+
+
+	
+	public int getGallyLikeCount() {
+		return gallyLikeCount;
+	}
+
+	public void setGallyLikeCount(int gallyLikeCount) {
+		this.gallyLikeCount = gallyLikeCount;
+	}
+
+	public int getGallyLike() {
+		return gallyLike;
+	}
+
+	public void setGallyLike(int gallyLike) {
+		this.gallyLike = gallyLike;
+	}
+
+
 
 	public int getGallyNum() {
 		return gallyNum;

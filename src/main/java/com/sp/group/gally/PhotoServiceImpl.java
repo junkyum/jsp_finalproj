@@ -241,6 +241,30 @@ public class PhotoServiceImpl implements PhotoService{
 	
 	
 	
+	@Override
+	public int insertGallyLike(GroupGally dto) {
+		int result=0;
+		try {
+			result = dao.insertData("groupGally.insertGallyLike", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> groupGallyLikeCount(int gallyNum) {
+		Map<String, Object> map = null;
+		try {
+			map = dao.getReadData("groupGally.groupGallyLikeCount",gallyNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
+	}
+	
+
+	
+	
 
 
 	

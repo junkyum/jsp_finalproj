@@ -4,7 +4,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
+//글등록후 리스트 뽑는곳
 %>
+
 	<c:if test="${dataCount !=0}">
 	 &nbsp;&nbsp;총${dataCount}개&nbsp;(${page}현제/${total_page}전체페이지) 
 		<c:forEach var="dto" items="${list}" varStatus="status">
@@ -46,9 +48,11 @@
 		 	<div style="margin: 15px auto; text-align: center; margin-top: 0px;">
 			   <c:if test="${dataCount==0 }"> 등록된 게시물이 없습니다.</c:if>
 	            <c:if test="${dataCount!=0 }"> ${paging} </c:if>
-			</div> 
+	</div> 
+	
+	
 			
-			<!-- 여기서부턴 검색   ckear  초기화-->
+	<!-- 여기서부턴 검색   ckear  초기화-->
 		<div style="clear: both;">
 		<!-- 페이징 처리 밑단 검색 부분 -->
 			<div style="float: left; width: 20%; min-width: 85px; margin-left: 40px;">
@@ -56,18 +60,18 @@
 			</div>
 			
 			<div style="float: left; width: 60%; text-align: center;">
-				<form name="searchPhoto" method="post">
 				
-					<select name="searchKey">
+				
+					<select name="searchKeyK" id="searchKeyK">
 						<option value="subject">제목</option>
-						<option value="#">작성자</option>
+						<option value="userId">작성자</option>
 						<option value="content">내용</option>
 						<option value="created">등록일</option>
 					</select>
 					
-					 <input type="text" name="searchValue" style="width: 40%;">
-					 <button type="button" onclick="searchList();"> 검색</button>
-				</form>
+					 <input type="text" name="searchValueK" id="searchValueK" style="width: 40%;">
+					 <button type="button" id="findGallyKButtn"> 검색</button>
+				
 			</div>
 			
 	</div>

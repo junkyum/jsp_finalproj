@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public interface PhotoService {
 	
 	public int insertPhoto(GroupGally dto, String path);
@@ -12,24 +13,25 @@ public interface PhotoService {
 	public GroupGally readPhoto(int gallyNum);
 	public int updatePhoto(GroupGally dto, String path);
 	public int deletePhoto(int gallyNum, String imageFilename, String path);
-
-
-	//위에 3개까지만.  insertPhotoLike  groupPhotoLikeCount
+	
+	//게시물 좋아요 하는곳
+	public int insertGallyLike(GroupGally dto);
+	public Map<String, Object> groupGallyLikeCount(int gallyNum);
 	
 	//리플 메소드  GReply
 	public int insertGReply(ReplyGPhoto dto);
-	//개시물 답글=>답변삭제
 	public int GReplyDataCount(int gallyNum);//리플 갯수 새려고 만ㄷ
 	public List<ReplyGPhoto> listGReply(Map<String, Object>map);//댓글의 리스트를 뽑기위해서.
 	public int deleteReply(ReplyGPhoto dto);//댓글 삭제할꺼야
 	
 	//개시물 답글=>답변 관련된것들
-	public int replyGroupCountAnswer(int replyAnswer);
 	public List<ReplyGPhoto> listReplyAnswer(int replyAnswer);
-
 	public int deleteReplyAnswer(ReplyGPhoto dto);
 	
-	public int insertGallyReplyLike(ReplyGPhoto dto);
-	//groupGeplyCountLike
+	public int replyGroupCountAnswer(int replyAnswer);//대댓글 갯수 세는곳
+	
+	public int insertGallyReplyLike(ReplyGPhoto dto);//댓글 좋아@싫어 추가하는거
 	public Map<String, Object> groupGeplyCountLike(int replyNum);
+	
+
 }

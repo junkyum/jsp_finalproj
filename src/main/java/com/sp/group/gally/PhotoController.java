@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sp.common.MyUtil;
 import com.sp.member.SessionInfo;
 
+
 import net.sf.json.JSONObject;
 
 
@@ -46,7 +47,7 @@ public class PhotoController {
 	@RequestMapping(value="/groupGally/list")
 	public String list(Model model,HttpServletRequest req,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
-			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
+			@RequestParam(value="searchKey", defaultValue="subject") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue
 			)throws Exception{
 		
@@ -115,7 +116,11 @@ public class PhotoController {
 		String state="false";
 
 		dto.setUserId(info.getUserId());//아이디저장.	
-	
+		System.out.println(dto.getUserId()+"  ----------------------등록할떄");
+		System.out.println(dto.getGroupName()+"  ---------------------등록할떄");
+		System.out.println(dto.getSubject()+"  ----------------------등록할떄");
+		System.out.println(dto.getContent()+"  ----------------------등록할때");
+
 		int result=service.insertPhoto(dto, path);
 		
 		if(result!=0)
@@ -144,19 +149,11 @@ public class PhotoController {
 	@ResponseBody
 	public Map<String, Object> delete(@RequestParam int gallyNum, HttpSession session) throws Exception{
 		
-	  	//SessionInfo info=(SessionInfo)session.getAttribute("member");
-	  	
 		String root=session.getServletContext().getRealPath("/");
 		String path=root+File.separator+"uploadf"+File.separator+"photo";
 		String state="false";
-		
+
 		GroupGally dto = service.readPhoto(gallyNum);//읽어온다.
-	/*	if(! dto.getUserId().equals(info.getUserId()) && ! info.getUserId().equals("admin")) {
-			
-			state="false";
-		} else {
-			state="true";
-		}*/
 		Map<String, Object> model= new HashMap<>();
 		service.deletePhoto(gallyNum, dto.getImageFilename(), path);
 		model.put("state", state);
@@ -174,8 +171,6 @@ public class PhotoController {
 		String path=root+File.separator+"uploadf"+File.separator+"photo";
 		String state="false";
 
-			
-		//dto.setUserId(info.getUserId());//아이디저장.	
 		int result=service.updatePhoto(dto, path);
 		if(result!=0)
 			state="true";
@@ -184,7 +179,7 @@ public class PhotoController {
 		model.put("state", state);
 		return model;
 	}
-	///group/photo/createdGReply
+
 	//개시물의 답글 등록하기
 	@RequestMapping(value="/group/photo/createdGReply", method=RequestMethod.POST)
 	public void createdReply(ReplyGPhoto dto,HttpServletResponse resp, HttpSession session) throws Exception{
@@ -194,8 +189,11 @@ public class PhotoController {
 				
 		String loginChk="true";
 		String state="false";
-		System.out.println(dto.getUserId()+"..........................");
-		//이부분이 아티클 => GReply를 통해 댓글 인설트하는곳.
+		
+		System.out.println(dto.getGallyNum()+"   사진 번호");
+		System.out.println(dto.getContent()+"    리플내용");
+		System.out.println(dto.getReplyAnswer()+"   리플의 답글");
+		System.out.println(dto.getUserId()+"   유저 ID");
 			if(info==null) {
 				loginChk="false";
 			} else {
@@ -203,11 +201,6 @@ public class PhotoController {
 				if(result==1)
 				state="true";
 			}
-			//여기서부터			insertGReply
-			/*int result= service.insertGReply(dto);
-			if(result==1)
-				state="true";*/
-				////여기까지 else 안에 넣어라
 				JSONObject job=new JSONObject();
 				job.put("state", state);
 				job.put("loginChk", loginChk);
@@ -254,22 +247,24 @@ public class PhotoController {
 					dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 					//n++;
 				}
-
-				String paging=myUtil.paging(current_page, total_page);
-
+				
+				
+				String paging=myUtil.paging(current_page, total_page, "listPageAnswer");
+				//System.out.println(paging+"                     ");
 
 				model.addAttribute("listGReply",listGReply);
+				System.out.println();
 				model.addAttribute("pageNo",current_page);
 				model.addAttribute("GReplyCount",dataCount);
 				model.addAttribute("total_page",total_page);
 				model.addAttribute("paging",paging);
 				
-				return "group/listGReply";
+				return "group/listGReply";//위에서 받아온 정보를   listGReply.jsp에 뿌린다.
 			}
 			
 		
 			
-	@RequestMapping(value="/group/photo/deleteReply", method=RequestMethod.POST)
+	@RequestMapping(value="/group/photo/deletePhotoReply", method=RequestMethod.POST)
 	public void deletReply(ReplyGPhoto dto,HttpServletResponse resp,HttpSession session)throws Exception{
 						
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
@@ -279,8 +274,8 @@ public class PhotoController {
 
 		int result=service.deleteReply(dto);
 		if(result!=0)
-		state="true";
-					//여기까지 두번쨰 if문장에 넣기
+			state="true";
+				
 		JSONObject job=new JSONObject();
 		job.put("state", state);
 		job.put("loginChk", loginChk);
@@ -326,7 +321,7 @@ public class PhotoController {
 	}
 	model.addAttribute("listAnswer",listAnswer);
 					
-	return "group/groupAnswerList";		
+	return "group/gallyAnswerList";		
 	}
 	
 	//해당 개시글의 답글에=>> 작성한 답변을 삭제하는곳
@@ -338,15 +333,6 @@ public class PhotoController {
 		
 		String loginChk="true"; 
 		String state="false";
-		
-		/*if(info==null) {
-			loginChk="false";
-		} else if(info.getUserId().equals("admin") || info.getUserId().equals(userId)) {
-			int result=service.deleteReplyAnswer(dto);
-			if(result !=0){
-			state="true";
-		}
-		}*/
 		
 		int result=service.deleteReplyAnswer(dto);
 		if(result !=0){
@@ -362,13 +348,13 @@ public class PhotoController {
 		out.print(job.toString());
 	}
 	
+	//게시물 밑에 답글 밑에 답글의 갯수를 새는곳 
 	@RequestMapping(value="/group/photo/replyCountAnswer", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> replyCountAnswer(@RequestParam int replyAnswer)throws  Exception{
 		
 		int count = 0;
 		count = service.replyGroupCountAnswer(replyAnswer);
-		System.out.println(count+"       -----------ssssssssssssssssssssssssssss--");
 		Map<String, Object> model = new HashMap<>();
 		
 		model.put("count", count);
@@ -377,7 +363,7 @@ public class PhotoController {
 	}
 
 	
-	////group/photo/gallryReplyLike
+	//게시물밑에 답글 좋아요@싫어요 저장하는곳
 	@RequestMapping(value="/group/photo/gallryReplyLike",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> replyLike(ReplyGPhoto dto, HttpSession session)throws Exception{
@@ -400,7 +386,7 @@ public class PhotoController {
 		return model;
 	}
 
-
+	//게시물 밑에 답글 좋아 싫어요 갯수를 세는곳
 	@RequestMapping(value="/group/photo/groupCountLike", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> groupCountLike(@RequestParam int replyNum)throws Exception{
@@ -418,6 +404,44 @@ public class PhotoController {
 		return model;
 	}
 
+	
+	//게시물 좋아요 하는곳
+	@RequestMapping(value="/group/photo/gallyLike",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertGallyLike(GroupGally dto , HttpSession session)throws Exception{
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String state = "true";
+		
+		if(info==null){
+			state="false";
+		}else{ dto.setUserId(info.getUserId());
+			int result = service.insertGallyLike(dto);
+			if(result==0)
+				state="false";
+		}
+		Map<String, Object> model =new HashMap<>();
+		model.put("state", state);	
+		return model;
+	}
+
+	
+	//게시물 좋아요 갯수 세는곳
+	///group/photo/groupGallyLikeCount
+	@RequestMapping(value="/group/photo/groupGallyLikeCount", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> groupGallyLikeCount(@RequestParam int gallyNum)throws Exception{
+		int gallyLikeCount=0;
+		Map<String, Object> map = service.groupGallyLikeCount(gallyNum);
+		if(map!=null){
+			gallyLikeCount=((BigDecimal)map.get("GALLYLIKECOUNT")).intValue();
+			}
+		//gallyLikeCount   gallyLikeCountG
+		Map<String, Object> model = new HashMap<>();
+		model.put("gallyLikeCount", gallyLikeCount);
+		
+		return model;
+	}
+	
 	
 	
 	

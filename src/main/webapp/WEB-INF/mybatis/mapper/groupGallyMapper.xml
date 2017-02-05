@@ -35,20 +35,25 @@
 	     </where>   	
 		</select>
 		
-		<!-- 멤버와 조인을 해서  리스트를 가지고올것이다.  -->
+		<!-- 멤버와 조인을 해서  리스트를 가지고올것이다.    -->
 		<select id="listPhoto" parameterType="map" resultType="com.sp.group.gally.GroupGally">
-			SELECT * FROM (
-				SELECT ROWNUM rnum, tb. * FROM (
-				SELECT gallyNum, p.userId, subject, content,
-					imageFilename, TO_CHAR (p.created, 'YYYY-MM-DD') created, p.groupName
-					FROM groupGally p JOIN ggroup m
-		                          ON p.groupName = m.groupName
+		SELECT * FROM (
+			    SELECT ROWNUM rnum, tb.* FROM (
+                SELECT p.gallyNum, p.userId, subject, content,
+                  imageFilename, TO_CHAR (p.created, 'YYYY-MM-DD') created, p.groupName, NVL (gallyLikeCount, 0) gallyLikeCount
+                         FROM groupGally p JOIN ggroup m  ON p.groupName = m.groupName
+	                     
+	                     LEFT OUTER JOIN
+	                     (
+	                           SELECT gallyNum, NVL(COUNT(DECODE(gallylike,1,1)),0) gallyLikeCount FROM groupGallyLike
+	                          GROUP BY gallyNum
+	                     ) c ON p.gallyNum = c.gallyNum
                    <where>
 				     	<if test="searchValue!=null and searchValue!='' ">
 				     	    <include refid="where-list"/>
 				     	</if>
 				     </where> 
-	                ORDER BY gallyNum DESC
+	                ORDER BY p.gallyNum DESC
 		<![CDATA[
 		        ) tb WHERE ROWNUM <= #{end}
 		    ) WHERE rnum >= #{start}
@@ -57,11 +62,15 @@
 		</select>
 		
 		<select id="readPhoto" parameterType="Integer" resultType="com.sp.group.gally.GroupGally">
-				SELECT gallyNum , p.userId, 
-					subject, content, groupName, created, imageFilename
-				             FROM groupGally p JOIN member m
-				                      ON p.userId = m.userId
-				             WHERE gallyNum= #{gallyNum}
+				 SELECT p.gallyNum , p.userId,	subject, content, groupName, created, imageFilename, NVL (gallyLikeCount, 0) gallyLikeCount
+				             FROM groupGally p JOIN member m ON p.userId = m.userId
+                     LEFT OUTER JOIN
+                       (
+	                           SELECT gallyNum, NVL(COUNT(DECODE(gallylike,1,1)),0) gallyLikeCount FROM groupGallyLike
+	                          GROUP BY gallyNum
+	                     ) c ON p.gallyNum = c.gallyNum
+                     
+				             WHERE p.gallyNum = #{gallyNum}
 		</select>
 		
 		<delete id="deletePhoto" parameterType="Integer">
@@ -166,8 +175,18 @@
 		</select> 
 		
 		
+		<insert id="insertGallyLike" parameterType="com.sp.group.gally.GroupGally">
+			INSERT INTO groupGallyLike(gallyNum, userId, gallyLike ) 
+					VALUES (#{gallyNum}, #{userId}, #{gallyLike})
+		</insert>
+		
+		<select id="groupGallyLikeCount" resultType="map" parameterType="Integer">
+			  SELECT NVL(COUNT(DECODE(gallyLike,1,1)),0) gallyLikeCount
+            		 FROM groupGallyLike WHERE gallyNum= #{gallyNum}
+		</select>
 		
 		
+	
 		
 		
 </mapper>

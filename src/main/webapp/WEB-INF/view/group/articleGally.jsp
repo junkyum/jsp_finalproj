@@ -4,19 +4,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String cp=request.getContextPath();
+//글보그 창 
 %>
 <script type="text/javascript">
 $(function(){
-	listPage(1);
+	listPageAnswer(1);
 });
 
-/* 글보기 할떄 리스트 나오게끔 해주는것   */
-function listPage(pageNo){
+/* 글보기   댓글의!!!  할떄 리스트 나오게끔 해주는것   */
+function listPageAnswer(pageNo){
 	var url="<%=cp%>/group/photo/listGReply";
 	var gallyNum="${dto.gallyNum}";	
+	alert("리스트1번");
 	$.get(url, {gallyNum:gallyNum, pageNo:pageNo}, function(data){
+		alert("리스트2번");
 		$("#listGReply").html(data);
-	
+		//밑에 있는 div에 listGReply.jsp 를 뿌릴것이다.  
 	});
 }
 
@@ -28,10 +31,9 @@ function listReplyAnswer(replyAnswer){
 		$(listReplyAnswerId).html(data);
 	});
 }
-//댓글별 답글 갯수   a작스?  
+//게시물 밑에 답글 밑에 답글의 갯수를 새는곳 
 function countAnswer(replyAnswer) {
 	var url="<%=cp%>/group/photo/replyCountAnswer";
-	alert(replyAnswer);
 	$.post(url, {replyAnswer:replyAnswer}, function(data){
 		var count="("+data.count+")";
 
@@ -46,27 +48,30 @@ function countAnswer(replyAnswer) {
 
 //답글 버튼 누르는 액션
 $(function(){
-
+	
 	$("body").on("click", ".btnGroupAnwerLaout", function(){
-		var $divGReplyAnswer = $(this).parent().parent().next();
+		var $divGroupReplyAnswer = $(this).parent().parent().next();
 		/* 이부분이  listReply안있는  .btnR의 아버지 의 아버지div의 다음 것 을 지칭 한다.
-		div class=GroupReplyAnswer  을 지칭한다.
+		div class=GroupReplyAnswer =   ?GroupReplyAnswer  이전에 이상한 거엿음 외거런지 확인해서. 을 지칭한다.
 		*/
-		var $answerGList = $divGReplyAnswer.children().children().eq(0);
+		var $answerGList = $divGroupReplyAnswer.children().children().eq(0);
 		/* <div id='listReplyAnswer${vo.replyNum}' 을 의미한다 listReply의 */
 		
-		var isVisible = $divGReplyAnswer.is(':visible');
+		var isVisible = $divGroupReplyAnswer.is(':visible');
 		//보여주기위해서
 		var replyNum = $(this).attr("data-replyNum");
 		//해당답글 번호.
-			
+	
 		if(isVisible) {
-			$divGReplyAnswer.hide();
-		} else {
-			$divGReplyAnswer.show();
-			//답변 버튼눌럿을떄도 리스트나오게 하는것
+			$divGroupReplyAnswer.hide();
+			alert("숨긴다");
+		} else if (!isVisible){
+			$divGroupReplyAnswer.show();
+			alert("보인다.");
+			//답변 버튼눌럿을떄도 리스트나오게 하는것 listPageAnswer
 			listReplyAnswer(replyNum);
 			countAnswer(replyNum);
+			listPageAnswer(1);
 		}
 		
 	});
@@ -74,8 +79,7 @@ $(function(){
 
 
 
-//댓글 단것의 답글을 달았을떄  사용하는 것(미완성)//실시간으로 카운트 증가안함@
-//답글의 갯수
+//게시판 밑에 답글 밑에 답글 등록하는 메소드
 function sendGReplyAnswer(replyNum) {
 
 	var userId="${sessionScope.member.userId}";
@@ -111,7 +115,7 @@ function sendGReplyAnswer(replyNum) {
 				//등록해도 리스트 나오게 한는것
 				listReplyAnswer(replyNum);
 				countAnswer(replyNum);
-				
+			
 			}
 		}
 		,error:function(e) {
@@ -120,26 +124,26 @@ function sendGReplyAnswer(replyNum) {
 		
 	});	
 }
-////사진의 댓들을 단것을 삭제하기 위해만든것
-function deleteReply(replyNum, pageNo) {
+////사진의 댓들을 단것을 삭제하기 위해만든것  삭제구간.  deletePhotoReply(
+function deletePhotoReply(replyNum, pageNo) {
 	var userId="${sessionScope.member.userId}";
-
+    	
 	if(confirm("댓글 삭제 하시겟습니까?")){
-		var url="<%=cp%>/group/photo/deleteReply";
+		var url="<%=cp%>/group/photo/deletePhotoReply";
 		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
 				var loginChk= data.loginChk;
 				
 				if(loginChk=="false"){
 					console.log("들어가냐??");
 				} else {
-					listPage(pageNo);
+					listPageAnswer(pageNo);
 				}
 			
 		}, "json");	
 	}
 }
 /////////////////////////////////////////////////////
-//댓글결 답글 삭제 -->
+//댓글별 답글 삭제   
 function deleteReplyAnswerList(replyNum, replyAnswer) {
 	var userId="${sessionScope.member.userId}";
 
@@ -157,7 +161,8 @@ function deleteReplyAnswerList(replyNum, replyAnswer) {
 		}, "json");	
 	}	
 }
-///////////////////////////////////////////// num, tphotoLike
+
+//게시물 답글의 좋아요@싫어요 추가시키는 구간
 function sendReplyLike(replyNum, gallryReplyLike) {
 	var userId="${sessionScope.member.userId}";
 	
@@ -182,7 +187,7 @@ function sendReplyLike(replyNum, gallryReplyLike) {
 			var state=data.state;
 			if(state=="true") {
 				alert("들어감");
-					
+				groupCountLike(replyNum);
 			} else if(state=="false") {
 					alert("한번만 할수있다.");
 			} else if(state=="loginFail") {
@@ -190,13 +195,13 @@ function sendReplyLike(replyNum, gallryReplyLike) {
 			}
 		}
 		,error:function(e) {
-			alert(e.responseText);
+			console.log(e.responseText);
 		}
 		
 	});
 }
 
-//댓글  좋아요 갯수
+//게시물 답글의 좋아요@싫어요 갯수 새는곳
 function groupCountLike (replyNum) {
 	var url="<%=cp%>/group/photo/groupCountLike";
 	$.post(url, {replyNum:replyNum}, function(data){
@@ -209,6 +214,50 @@ function groupCountLike (replyNum) {
 		$(disLikeCountId).html(disLikeCount);
 	}, "JSON");
 	
+}
+
+function groupGallyLike(gallyNum, gallyLike) {
+	var userId="${sessionScope.member.userId}";
+	var msg="사진 괜찬아요???";
+	if(gallyLike==1)
+		msg="게시물에 공감하십니까 ?";
+	if(! confirm(msg))
+		return false;
+	var query="gallyNum="+gallyNum;
+	query+="&gallyLike="+gallyLike;
+	var url= "<%=cp%>/group/photo/gallyLike"
+		
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+				groupGallyLikeCount(gallyNum)
+			} else if(state=="false") {
+				alert("선택은 한번만!!");
+			} 
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+
+
+
+function groupGallyLikeCount(gallyNum) {
+	var url="<%=cp%>/group/photo/groupGallyLikeCount";
+	$.post(url, {gallyNum:gallyNum}, function(data){
+		var gallyLikeCountId="#gallyLikeCount"+gallyNum;
+		var gallyLikeCount=data.gallyLikeCount;
+		
+		$(gallyLikeCountId).html(gallyLikeCount);
+	}, "JSON");
 }
 
 </script>
@@ -242,7 +291,14 @@ function groupCountLike (replyNum) {
 		<div style="width: 570px; height: 100px; border: 1px solid black;">
 		<!-- 재목@내용 -->
 			<div style=" width: 50%;">
-				<span>${dto.content}</span>
+				<span>
+				내용: ${dto.content}<br>
+				재 목: ${dto.subject}<br>
+				올린시간: ${dto.created}<br>
+				작성자 :${dto.userId}<br>
+				그룹 이름:${dto.groupName}<br>
+				사진의 번호:${dto.gallyNum} 
+				</span>
 			</div>
 			<input type="hidden" name="groupNum" value="${dto.gallyNum}">
 				<!-- ,이렇게 타입 히든해서 안하면 컨트롤러에서 dto.groupNum 넘을 받아올수없다. --> 
@@ -262,22 +318,28 @@ function groupCountLike (replyNum) {
 		</div>
 		<textarea rows="5" name="content" id="content" required="required" style="width: 300px; height: 100px;">${dto.content}</textarea>
 		<input type="hidden" name="gallyNum" value="${dto.gallyNum}">
+		
 		<div style="margin-top: 30px; margin-right: 30px;">      
-		        		
-				<button type="button" onclick="updateOK(${dto.gallyNum});">수정완료번튼</button>  	                 
-				<button type="button" onclick="javascript:location.href='<%=cp%>/groupGally/list';">취소</button>			                 
+		      <c:if test="${sessionScope.member.userId==dto.userId}">	 
+				<button type="button" onclick="updateOK(${dto.gallyNum});">수정완료번튼</button>
+			  </c:if>  	                 
+				<button type="button" onclick="updateCancel()">취소</button>			                 
 		</div>
 		
 	</div>	
  
 		<div style="margin-top: 30px; margin-right: 30px;"> 
+		
 			<c:if test="${sessionScope.member.userId==dto.userId}">	  		
 				<button type="button" onclick="updatePhoto();"  class="btn btn-info btn-sm">수정</button>  	
 			</c:if>   
+			
 			<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">            
 				<button type="button"  onclick="deletePhoto(${dto.gallyNum});" class="btn btn-info btn-sm">삭제</button>
 			</c:if>
-			<button type="button" onclick="listPage('1')">리스트가기</button>	
+			<button type="button" onclick="updateCancel();">리스트가기</button>	
+			<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupGallyLike('${dto.gallyNum}', '1')"><span class="glyphicon glyphicon-hand-up"></span> 좋아요 <span id="gallyLikeCount${dto.gallyNum}">${dto.gallyLikeCount}</span></button>
+                        
 	</div>
 		
 		<!--  리플 달려고 해논곳 -->		
