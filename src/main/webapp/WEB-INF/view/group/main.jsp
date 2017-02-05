@@ -10,19 +10,59 @@
 $(function(){
 	$("#tapmenu").tabs();
 });
-
-
+function signin(){
+	var url="<%=cp%>/group/signin";
+	var query="groupName=${dto.groupName}";
+	$.ajax({
+		type:"post",
+		url :url,
+		data : query,
+		dataType:"json",
+		success:function(data){
+			if(data.res=="fail"){
+			 	alert("안들어갔다");	
+			}else {
+				alert("들어갔다");
+			}
+			
+		},error:function(e) {
+	    	  console.log(e.responseText);
+	      }
+	
+});	
+}
+function signout(){
+	var url="<%=cp%>/group/signout";
+	var query="groupName="+${dto.groupName};
+	$.ajax({
+		type:"post",
+		url :url,
+		data : query,
+		dataType:"json",
+		success:function(data){
+			if(data.res=="fail"){
+			   alert("안나가짐");					
+			}else {
+				 alert("나가짐");	
+			}
+			
+		},error:function(e) {
+	    	  console.log(e.responseText);
+	      }
+	
+    });	 
+}
 </script>
 
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
-			${dto.groupName }<br> 
+			${dto.groupName}<br> 
 			그룹정보<br>
 			그룹사진<br>
-			
-			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">가입</button>
-			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signout?groupName=${dto.groupName}';">탈퇴</button>
+			<c:if test=""></c:if>
+			<button type="button" onclick="signin();">가입</button>
+			<button type="button" onclick="signout();">탈퇴</button>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
 			
