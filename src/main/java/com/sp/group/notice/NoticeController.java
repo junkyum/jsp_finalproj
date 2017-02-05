@@ -43,6 +43,7 @@ public class NoticeController {
 			Model model,HttpServletRequest req,
 			@RequestParam(value="num", defaultValue = "1") int num,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
+			@RequestParam String groupName,
 			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue
 			) throws Exception{
@@ -58,7 +59,8 @@ public class NoticeController {
 		
 		GroupNotice dto = service.readNotice(num);		
 /*		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));   //이거 에러남 ! */
-
+		dto.setGroupName(dto.getGroupName());
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
@@ -83,9 +85,10 @@ public class NoticeController {
 		Date endDate = new Date();
 		long gap;
 		int listNum, n = 0;
-		Iterator<GroupNotice> it = noticeList.iterator();
-		while (it.hasNext()) {
-			GroupNotice data = (GroupNotice) it.next();
+		Iterator<GroupNotice> it=noticeList.iterator();
+		while(it.hasNext()) {
+			GroupNotice data=it.next();
+			data.setContent(data.getContent().replaceAll("\n", "<br>"));
 			listNum = dataCount - (start + n - 1);
 			data.setListNum(listNum);
 
@@ -120,7 +123,6 @@ public class NoticeController {
 	    model.addAttribute("total_page", total_page);
 	    model.addAttribute("searchKey", searchKey);
 	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
-        
         model.addAttribute("dto", dto);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("page", current_page);
@@ -144,7 +146,7 @@ public class NoticeController {
 		}
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
-		dto.setGroupName("개발자"); ///////////////////////////// 수정할것!... 
+		dto.setGroupName(dto.getGroupName()); ///////////////////////////// 수정할것!... 
 		dto.setUserId(info.getUserId());
 		int res = service.insertNotice(dto, pathname);
 		
