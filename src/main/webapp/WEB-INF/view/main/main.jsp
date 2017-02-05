@@ -114,7 +114,7 @@ function finder(){
 								listPage(1);
 							}
 							else {
-							
+								alert("여기지롱");
 								listPage(1);
 							}
 							

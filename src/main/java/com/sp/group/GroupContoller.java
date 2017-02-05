@@ -121,6 +121,8 @@ public class GroupContoller {
 			model.addAttribute("list", list);
 			model.addAttribute("page", current_page);
 			model.addAttribute("paging", paging);
+			
+			
 		    return "/main/grouplist";
 	}
 	@RequestMapping(value="/group/myGrouplist")
