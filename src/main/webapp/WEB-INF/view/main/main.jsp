@@ -102,28 +102,12 @@ function finder(){
 		   buttons:{
 				"찾기":function(){
 					var url="<%=cp%>/group/list";
-					var query=$('form[name=findForm]').serialize();
-					$.ajax({
-						type:"post",
-						url :url,
-						data : query,
-						dataType:"json",
-						success:function(data){
-							if(data.res=="false")
-							{
-								listPage(1);
-							}
-							else {
-								alert("여기지롱");
-								listPage(1);
-							}
-							
-						},
-						error:function(e) {
-					    	  console.log(e.responseText);
-					    }
-					
-				});	
+					var searchKey=$('#searchKey').val();
+					var searchValue=$('#searchValue').val();
+					$.get(url,{searchKey:searchKey,searchValue:searchValue}, function(data) {
+						$("#grouplist").html(data);
+						
+					});
 				},"취소":function(){
 					$(this).dialog("close");
 				}
@@ -158,7 +142,14 @@ function option(){
 }
 function listPage(page) {
 	var url="<%=cp%>/group/list";
-
+	var searchKey=$('#searchKey').val();
+	var searchValue=$('#searchValue').val();
+	$.get(url,{page:page,searchKey:searchKey,searchValue:searchValue}, function(data) {
+		$("#grouplist").html(data);
+	});
+}
+function listClear(page) {
+	var url="<%=cp%>/group/list";
 	$.get(url,{page:page}, function(data) {
 		$("#grouplist").html(data);
 		
@@ -381,13 +372,13 @@ div.friendScroll {
 <div>
     <!-- 새로고침  -->
 	<div style="float: left; width: 15%; min-width: 85px;">
-		<button type="button" class="btn btn-default btn wbtn" onclick="listPage(1);" >
+		<button type="button" class="btn btn-default btn wbtn" onclick="listClear(1);" >
 			<span class="glyphicon glyphicon-repeat"></span>
 		</button>
 	</div>
 	<div style="float: left; width: 60%; min-width: 85px;">
 		<form name = "findForm">
-			<select name="searchKey" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
+			<select id= "searchKey" name="searchKey" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
 			<option value="name">이름</option>
 			<option value="place">장소</option>
 			<option value="keyword">키워드</option>

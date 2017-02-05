@@ -77,7 +77,6 @@ public class GroupContoller {
 			HttpServletResponse resp,
 			Model model
 			)throws Exception {
-		    String cp = req.getContextPath();
 	   	    
 			int numPerPage = 5; 
 			int total_page = 0;
@@ -114,8 +113,7 @@ public class GroupContoller {
 				n++;
 			}
 			
-			String urlList = cp + "/group/list";
-			String paging = myUtil.paging(current_page, total_page, urlList);
+			String paging = myUtil.paging(current_page, total_page);
 			
 			
 			model.addAttribute("list", list);
