@@ -4,6 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String cp = request.getContextPath();
+	String groupNameq = request.getParameter("groupName");
+	String userId = request.getParameter("userId");
 %>
 
 <style>
@@ -94,7 +96,6 @@
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <c:forEach var="dto" items="${noticeList }">
 	<div class="bigdiv">
@@ -102,7 +103,7 @@
 			${dto.subject }
 			<div class="overlay">
 				<div class="overtext">${dto.created }<br>
-					<c:if test="${sessionScope.member.userId=='admin'}">
+					<c:if test="${sessionScope.member.userId==dto.userId }">
 						<button type="button" class="btn btn-default" id="kmUpdatebtn"
 							onclick="updateNoG(${dto.num});" data-num="${dto.num }"
 							data-toggle="modal" data-target="#kmModal">
@@ -120,9 +121,9 @@
 		<div id="smsmdiv">
 			<div class="middlediv" id="middlediv${dto.num}" data-num="${dto.num}">
 				<div id="read-more" class="read-more">
-					<c:if test="${dto.content.length() > 180 }">
+					<c:if test="${dto.content.length() > 180 }"> <!-- 인덱스 오프  스플릿으로 잘라서 엔터가 5번 이상이면  -->
 						<button type="button" class="btn btn-default-sm btn-xs" id="readbtn${dto.num }"
-							onclick="layoutview(${dto.num});" >
+							onclick="noticelayoutview(${dto.num});" >
 							<span class="glyphicon glyphicon-resize-full"></span>
 						</button>
 					</c:if>
@@ -141,15 +142,11 @@
 <div style="clear: both;">
 	<div class="paging"
 		style="text-align: center; min-height: 50px; line-height: 50px;">
-		<c:if test="${dataCount==0 }">
-                  등록된 게시물이 없습니다.
-            </c:if>
-		<c:if test="${dataCount!=0 }">
-                ${paging}
-            </c:if>
+		<c:if test="${dataCount==0 }">등록된 게시물이 없습니다.</c:if>
+		<c:if test="${dataCount!=0 }">${paging}</c:if>
 	</div>
 
-	<div style="float: left; width: 20%; min-width: 85px;">
+			<div style="float: left; width: 20%; min-width: 85px;">
 		<button type="button" class="btn btn-default btn wbtn">
 			<span class="glyphicon glyphicon-repeat"></span>
 			<!-- 새로고침  -->
@@ -171,9 +168,10 @@
 	</div>
 	<div
 		style="float: left; width: 20%; min-width: 85px; text-align: right;">
-		<c:if test="${sessionScope.member.userId=='admin'}">
+		<c:if test="${sessionScope.member.userId==dto.userId}">
+			
 			<button type="button" class="btn btn-default btn wbtn" id="btnpen"
-				data-toggle="modal" data-target="#kmModal" data-mode="created">
+				data-toggle="modal" data-target="#kmNoticeModal" >				
 				<span class="glyphicon glyphicon glyphicon-pencil"></span>
 			</button>
 		</c:if>
