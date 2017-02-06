@@ -247,7 +247,7 @@ public class PhotoController {
 
 				while(it.hasNext()){
 					ReplyGPhoto dto=it.next();
-//					listReplyNum=dataCount-(start+n-1);
+//					listReplyNum=dataCount-(start+n-1)ddddd;
 //					dto.setListReplyNum(listReplyNum);
 					dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 					//n++;
