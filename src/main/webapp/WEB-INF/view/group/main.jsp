@@ -67,3 +67,13 @@ $(function(){
 	<div style="clear:both;">
 	</div>
 </div>
+
+<div id="divGroupMaker" style = "display:none;">
+<form name = "createdForm">
+이름:<input type="text" id="groupName" name="groupName" class="form-control"><br>
+소개:<input type="text" id="introduce" name="introduce" class="form-control"><br>
+장소:<input type="text" id="place" name="place" class="form-control"><br>
+키워드:<input type="text" id="keyword" name="keyword" class="form-control"><br>
+프로필 사진:<input type="text" id="profile" name="profile" class="form-control"><br>
+</form>
+</div>

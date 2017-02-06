@@ -18,10 +18,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	noticeListPage(1);
+	listPage(1);
 });
 
-function noticeListPage(page) {
+function listPage(page) {
 	var url="<%=cp%>/group/noticeList";
 	var num="${dto.num}";
 	var groupName = "${groupName}";
@@ -103,13 +103,6 @@ function deleteNoG(num,page){
 	}
 }
 
-
-
-/* function layoutview(num) {
-	var s=$("#middlediv"+num);
-	s.css("max-height", "900px");
-} */ 
-
 function noticelayoutview(num) {
 	var s=$("#middlediv"+num);
 	var aa = 130;
@@ -117,11 +110,9 @@ function noticelayoutview(num) {
 		if(s.height()==aa){
 			s.animate({"max-height" : ma});
 			$("#gradient").fadeOut();
-			/* s.css("max-height", "900px");	 */		
 		}else {
 			s.animate({"max-height" : aa});
 			$("#gradient").fadeIn();
-/* 			s.css("max-height", "130px"); */
 		}
 }
 
@@ -132,12 +123,8 @@ function noticelayoutview(num) {
 </head>
 <body>
 	<div class="bestbig">
-
 		<div style="clear: both; height: 50px; line-height: 30px;"></div>
-
 		<div id="noticeListlayout"></div>
-		
-
 	</div>
 
 

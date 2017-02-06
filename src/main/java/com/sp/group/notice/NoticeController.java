@@ -66,8 +66,6 @@ public class NoticeController {
 
 		GroupNotice dto = service.readNotice(num);		
 		
-		dto.setGroupName(dto.getGroupName());
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("groupName", groupName);
 		map.put("searchKey", searchKey);
