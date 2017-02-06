@@ -377,8 +377,8 @@ $(function(){
 			$divGroupReplyAnswer.show();
 			alert("보인다.");
 			//답변 버튼눌럿을떄도 리스트나오게 하는것 listPageAnswer
-			countAnswer(replyNum);
 			listReplyAnswer(replyNum);//대댓글 리스트
+			countAnswer(replyNum);
 		}
 		
 	});
