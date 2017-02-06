@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.sp.common.MyUtil;
+
 import com.sp.member.SessionInfo;
 
 
@@ -36,32 +37,35 @@ public class PhotoController {
 	
 	@Autowired
 	private PhotoService service;
+	
 	@Autowired
 	private MyUtil myUtil;
 	
 	@RequestMapping(value="/groupGally/gally")
-	public String gally()throws Exception{
+	public String gally(Model model,@RequestParam String groupName)throws Exception{
+		model.addAttribute("groupName",groupName);
 		return "group/gally";
 	}
 	
 	@RequestMapping(value="/groupGally/list")
 	public String list(Model model,HttpServletRequest req,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
-			@RequestParam(value="searchKey", defaultValue="subject") String searchKey,
-			@RequestParam(value="searchValue", defaultValue="") String searchValue
+			@RequestParam(value="searchKeyK", defaultValue="subject") String searchKeyK,
+			@RequestParam(value="searchValueK", defaultValue="") String searchValueK
 			)throws Exception{
-		
+
 		int numPerPage = 6;
 		int total_page;
 		int dataCount;
 		
 		if(req.getMethod().equalsIgnoreCase("GET")) { // GET 방식인 경우
-			searchValue = URLDecoder.decode(searchValue, "utf-8");
+			searchValueK = URLDecoder.decode(searchValueK, "utf-8");
 		}
+
 		//전체 페이지수.
 		Map<String, Object> map= new HashMap<String, Object>();
-		map.put("searchKey", searchKey);
-		map.put("searchValue", searchValue);
+		map.put("searchKeyK", searchKeyK);
+		map.put("searchValueK", searchValueK);
 			    
 		dataCount= service.dataCount(map);
 		total_page= myUtil.pageCount(numPerPage, dataCount);
@@ -87,18 +91,18 @@ public class PhotoController {
 			 data.setListNum(listNum);
 			 n++;
 		}
-	    
-	
-	        
+		  //////////////////////////////////
+
+
 		    String paging = myUtil.paging(current_page, total_page);
-		    
+
 		    model.addAttribute("list",list );
 		    model.addAttribute("dataCount", dataCount);
 		    model.addAttribute("total_page", total_page);
 		    model.addAttribute("page", current_page);
 		    model.addAttribute("paging", paging);
-		    model.addAttribute("searchKey", searchKey);
-		    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
+		    model.addAttribute("searchKeyK", searchKeyK);
+		    model.addAttribute("searchValueK", searchValueK);
 		    
 		    return "group/listGally";
 	}
@@ -116,10 +120,11 @@ public class PhotoController {
 		String state="false";
 
 		dto.setUserId(info.getUserId());//아이디저장.	
-		System.out.println(dto.getUserId()+"  ----------------------등록할떄");
+		System.out.println(dto.getGroupName()+"  sssssssssssssssss");
+	/*	System.out.println(dto.getUserId()+"  ----------------------등록할떄");
 		System.out.println(dto.getGroupName()+"  ---------------------등록할떄");
 		System.out.println(dto.getSubject()+"  ----------------------등록할떄");
-		System.out.println(dto.getContent()+"  ----------------------등록할때");
+		System.out.println(dto.getContent()+"  ----------------------등록할때");*/
 
 		int result=service.insertPhoto(dto, path);
 		
@@ -248,8 +253,8 @@ public class PhotoController {
 					//n++;
 				}
 				
-				
-				String paging=myUtil.paging(current_page, total_page, "listPageAnswer");
+				//pagingMethod => 내가 원하는 페이징 메소드를 따로 만들고 싶을떄 사용합니다.
+				String paging=myUtil.pagingMethod(current_page, total_page, "listPageAnswer");
 				//System.out.println(paging+"                     ");
 
 				model.addAttribute("listGReply",listGReply);
@@ -291,6 +296,7 @@ public class PhotoController {
 	public void insertGReplyAnswer(ReplyGPhoto dto,HttpServletResponse resp)throws Exception{
 
 
+		
 		String loginChk="true";
 		String state="false";
 

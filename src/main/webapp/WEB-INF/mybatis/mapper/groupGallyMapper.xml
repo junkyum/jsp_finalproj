@@ -11,16 +11,16 @@
 			 #{subject}, #{content}, #{imageFilename}, #{userId})
 	</insert> 
 	
-	<!-- 검색할때 쓰는 문구 -->
+	<!-- 검색할때 쓰는 문구    earchValueK    searchKeyK -->
 		<sql id="where-list">
-			  <if test="searchKey=='subject'">
-			       INSTR(subject, #{searchValue}) &gt; 0
+			  <if test="searchKeyK=='subject'">
+			       INSTR(subject, #{searchValueK}) &gt; 0
 			  </if>
-			  <if test="searchKey=='content'">
-			      INSTR(content, #{searchValue}) &gt; 0 
+			  <if test="searchKeyK=='content'">
+			      INSTR(content, #{searchValueK}) &gt; 0 
 			  </if>
-			  <if test="searchKey=='created'">
-			      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValue}
+			  <if test="searchKeyK=='created'">
+			      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValueK}
 			  </if>
 		</sql>
 	
@@ -29,7 +29,7 @@
 			SELECT NVL(COUNT(*), 0) FROM groupGally p
 				JOIN member m ON p.userId =m.userId
 			<where>
-	     	<if test="searchValue!=null and searchValue!='' ">
+	     	<if test="searchValueK!=null and searchValueK!='' ">
 	     	    <include refid="where-list"/>
 	     	</if>
 	     </where>   	
@@ -49,7 +49,7 @@
 	                          GROUP BY gallyNum
 	                     ) c ON p.gallyNum = c.gallyNum
                    <where>
-				     	<if test="searchValue!=null and searchValue!='' ">
+				     	<if test="searchValueK!=null and searchValueK!='' ">
 				     	    <include refid="where-list"/>
 				     	</if>
 				     </where> 
