@@ -13,15 +13,9 @@
 	/* 	border: 1px solid #5D5D5D; */
 }
 </style>
-<link rel="stylesheet"
-	href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet"
-	href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css"
-	type="text/css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" 	href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet"	href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css"type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	listPage(1);
@@ -30,8 +24,10 @@ $(function(){
 function listPage(page) {
 	var url="<%=cp%>/group/noticeList";
 	var num="${dto.num}";
-	$.get(url, {num:num, pageNo:page}, function(data){
-		$("#listlayout").html(data);
+	var groupName = "${groupName}";
+	var userId = "${userId}";
+	$.get(url, {num:num, pageNo:page, groupName:groupName, userId:userId}, function(data){
+		$("#noticeListlayout").html(data);
 	});
 }
 
@@ -40,12 +36,13 @@ function mkmmodalCheck(){
 	var url = "<%=cp%>/group/notice/created";
 	var subject = $("#kmsubject").val().trim();
 	var content = $("#kmcontent").val().trim();
+	var groupName= "${groupName}";
 	if(!subject){
 		$("#kmsubject").focus();
 		return;
 	}
 	
-	var query ="subject="+subject+"&content="+content;
+	var query ="subject="+subject+"&content="+content+"&groupName="+groupName;
 	
 		$.ajax({
 			type:"post",
@@ -55,7 +52,9 @@ function mkmmodalCheck(){
 			success:function(data){
 				var result = data.result;
 				if(data.result=="true"){
-					listPage(1);					
+					$("#kmsubject").val("");
+					$("#kmcontent").val("");
+					noticeListPage(1);					
 				}else {
 					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
 				}
@@ -67,11 +66,14 @@ function mkmmodalCheck(){
 	});	
 }
 
-function updateNoG(num) {	
+<%-- function updateNoG(num) {	
 	var page = "${page}";
-	var query = "num="+num+"&page="+page;
-	var url = "<%=cp%>/notice/update";
+	var url = "<%=cp%>/group/notice/update";
+	var subject = "${dto.subject}";
+	var content = "${dto.content}";
+	var groupName= "${groupName}";
 	
+	var query = "subject="+subject+"&content="+content+"&groupName="+groupName;
 	$.ajax({
 		type:"post",
 		url :url,
@@ -84,7 +86,7 @@ function updateNoG(num) {
 	    	  console.log(e.responseText);
 	      }
 	});
-}
+} --%>
 
 	
 function deleteNoG(num,page){	
@@ -95,31 +97,22 @@ function deleteNoG(num,page){
 			if(state =="loginFail"){
 				alert("로그인화면으로 돌아가는 메소드 ");
 			}else {
-				listPage(page);
+				noticeListPage(page);
 			}
 		}, "json");
 	}
 }
 
-
-
-/* function layoutview(num) {
-	var s=$("#middlediv"+num);
-	s.css("max-height", "900px");
-} */ 
-
-function layoutview(num) {
+function noticelayoutview(num) {
 	var s=$("#middlediv"+num);
 	var aa = 130;
 	var ma = 900;
 		if(s.height()==aa){
 			s.animate({"max-height" : ma});
 			$("#gradient").fadeOut();
-			/* s.css("max-height", "900px");	 */		
 		}else {
 			s.animate({"max-height" : aa});
 			$("#gradient").fadeIn();
-/* 			s.css("max-height", "130px"); */
 		}
 }
 
@@ -130,22 +123,19 @@ function layoutview(num) {
 </head>
 <body>
 	<div class="bestbig">
-
 		<div style="clear: both; height: 50px; line-height: 30px;"></div>
-
-		<div id="listlayout"></div>
+		<div id="noticeListlayout"></div>
 	</div>
 
 
 
-	<div class="modal fade" id="kmModal" role="dialog">
+	<div class="modal fade" id="kmNoticeModal" role="dialog">
 		<form name="gNotice" method="POST" enctype="multipart/form-data">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h4 class="modal-title">
-							<span class="glyphicon glyphicon glyphicon-pencil"></span>&nbsp;
-							공지사항을 작성합니다.
+							<span class="glyphicon glyphicon glyphicon-pencil"></span>&nbsp;공지사항을 작성합니다.
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -156,6 +146,7 @@ function layoutview(num) {
 							rows="15" required="required"></textarea>
 						<br> <input type="file" name="upload" id="file"
 							class="form-control input"><br>
+						<input type="hidden" name="groupName" id="${groupName }">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal"

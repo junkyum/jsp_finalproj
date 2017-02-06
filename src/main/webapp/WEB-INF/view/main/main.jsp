@@ -5,7 +5,6 @@
 <%
     	String cp = request.getContextPath();
 %>
-
 <script src="//code.jquery.com/jquery-1.10.2.js"></script> 
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
@@ -42,12 +41,39 @@ function mk_indiv_friend() {
 	document.getElementById("mk_group").style.width="0";
 	document.getElementById("mk_groupMenu").style.width="0";
 	
-	document.getElementById("mk_indiv_friend").style.width="50%";
+	document.getElementById("mk_indiv_friend").style.width="25%";
 	$("#mk_indiv_friend").delay(1000).animate({
 		left:0
 	},"clip")
 	$("#mk_indiv_friend").show("slide",1000);
+	
+	$(function(){
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			var active=$(this).attr("aria-controls");
+			friend(active);
+		});
+	});
+	function friend(mode) {
+	var url="<%=cp%>/"+mode;
+		$.get(url, {dumi:new Date().getTime()}, function(data){
+			var s=$.trim(data);
+			if(s=="loginFail") {
+				location.href="<%=cp%>/member/login";
+				return;
+			}
+			var id="#tabFriendList";
+			if(mode=="add")
+				id="#tabFriendAdd";
+			else if(mode=="block")
+				id="#tabFriendBlock";
+			$(id).html(data);
+		});
+	}
 }
+
+
+
+
 function maker(){
 	    $("#divGroupMaker").dialog({
 	       title:"그룹만들기",
@@ -158,13 +184,13 @@ function listClear(page) {
 
 <style type="text/css">
 #mk_content {
-	float:left;
+	text-align: center;
+	float : left;
 	width: 100%;
 	height:500px;
 }
 #mk_indiv {
 	text-align: center;
-	width: 49%;
 	height: 100%;
 	float: left;
 	padding-top: 20px;	
@@ -174,7 +200,6 @@ function listClear(page) {
 }
 #mk_group {
 	text-align: center;
-	width: 49%;
 	height: 100%;
 	float: left;	
 	padding-top: 20px;
@@ -184,7 +209,6 @@ function listClear(page) {
 }
 #mk_indivMenu {
 	text-align: center;
-	width: 50%;
 	height: 100%;
 	float: left;	
 	padding-top: 50px;
@@ -192,7 +216,6 @@ function listClear(page) {
 }
 #mk_groupMenu {
 	text-align: center;
-	width: 50%;
 	height: 100%;
 	float: left;
 	padding-top: 50px;
@@ -200,7 +223,6 @@ function listClear(page) {
 }
 #mk_indiv_friend {
 	text-align: center;
-	width : 25%;
 	float: left;
 	padding-top: 50px;
 	display: none;
@@ -308,52 +330,108 @@ div.friendScroll {
 	
 	<!-- 개인 친구 -->
 	<div id="mk_indiv_friend">
-		<table class="friend_table" style="margin: 0px auto; width:500px ;height: 400px; " border="1">
-			<tr style="height: 1px">
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-			</tr>
-			<tr style="height: 20px;">
-				<td colspan="3">친구 검색</td>
-				<td colspan="2">input 예정</td>
-			</tr>
-			<tr>
-				<td colspan="5">
-					<div class="friendScroll" style="height: 400px">
-						<table border="1" style="width:480px; border-style: hidden hidden solid hidden;">
-							<c:set var="friendCount" value="15" />
-							
-							
-							
-							
-							
-							
-							 <c:forEach var="index" begin="0" end="30" step="1">
-								<tr>
-									<td style="width:75%;"> 친구 이름</td>
-									<td style="width:25%;"> 쪽지|수정 |삭제</td>
-								</tr>
-							</c:forEach>
-						</table>
+		<div role="button"  style="width: 100%; height: 40px">
+			<ul class="mk_nav-tabs" role="tablist">
+				<li role="button" class="active" style="width: 61px">
+					<a href="#tabFriendList" aria-controls="list" role="tab" data-toggle="tab">친구목록</a>
+				</li>
+				<li role="button" style="width: 61px">
+					<a href="#tabFriendAdd" aria-controls="add" role="tab" data-toggle="tab">친구추가</a>
+				</li>
+				<li role="button" style="width: 61px">
+					<a href="#tabFriendBlock" aria-controls="block" role="tab" data-toggle="tab">차단관리</a>
+				</li>
+			</ul>
+		</div>
+		<div class="tab-content" style="padding: 5px; margin-top: 15px;">
+				<!--  친구 목록 ///  신청받은 목록 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+				<div role="tabpanel" class="tab-pane active" id="tabFriendList">
+					<!--  친구 목록 -->
+					<div style="float: left; width: 49%; height: 400px;">
+						<div class="listFriend" style="height: 380px;">
+								
+						</div>
+						<div style="clear: both; padding-top: 10px;">
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="">쪽지</button>
+						</div>
 					</div>
-				</td>
-			</tr>
-			<tr style="height: 1px">
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 20%"></td>
-			</tr>
-		</table>
-	</div>
+					<!-- 신청받은 목록 -->
+					<div style="float: right; width: 49%; height: 400px;">
+						<div class="listFriend" style="height: 380px;">
+							
+						</div>
+						<div style="clear: both; padding-top: 10px;">
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendAccept();">수락</button>
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendDenial();">거절</button>
+						</div>
+					</div>
+				</div>
+				<!-- 친구 검색  ////  신청 목록  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+				<div role="tabpanel" class="tab-pane" id="tabFriendAdd">
+					<!-- 친구 검색 -->
+					<div style="float: left; width: 49%; height: 400px;">
+						<select id="friendKey" class="form-control"
+							style="float: left; width: 40%; height: 30px; font-size: 13px">
+							<option value="userId">ID</option>
+							<option value="userName">이름</option>
+						</select>
+						<div class="input-group" style="float: right; width: 60%">
+							<input type="text" id="friendValue" class="form-control input-sm"
+								placeholder=""> <span class="input-group-btn">
+								<button type="button" class="btn btn-default btn-sm wbtn"
+									id="friendSearchButton" onclick="friendSearch();">검색</button>
+							</span>
+						</div>
+						<div id="friendSearchList" class="listFriend" style="clear: both; height: 166px;">
+							
+						</div>
+					</div>
+					<!-- 신청 목록 -->
+					<div id="friendAskList" class="listFriend">
+						
+					</div>
+				</div>
+				<!-- 친구 목록   ///  차단 목록  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+				<div role="tabpanel" class="tab-pane" id="tabFriendBlock">
+					<!--  친구 목록 -->
+					<div style="float: left; width: 49%; height: 400px;">
+						<div class="listFriend" style="height: 380px;">
+							
+						</div>
+						<div style="clear: both; padding-top: 10px;">
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendBlock();">차단</button>
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendDelete()';">삭제</button>
+						</div>
+					</div>
+					<div style="float: right; width: 49%; height: 400px;">
+						<div class="listFriend" style="height: 380px;">
+							
+						</div>
+						<div style="clear: both; padding-top: 10px;">
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendBlockAccept()';">차단 해제</button>
+							<button type="button" class="btn btn-default btn-sm wbtn"
+								onclick="friendBlockDelete()';">삭제</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
 	
 	
 	
 </div><!-- 전체  div -->
+
+
+
+
+
 
 <div id="divGroupMaker" style = "display:none;">
 <form name = "createdForm">

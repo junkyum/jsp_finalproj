@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
-@Service("notice.noticeService")
+@Service("tnotice.tnoticeService")
 public class TNoticeServiceImpl implements TNoticeService {
 
 	@Autowired
@@ -25,10 +25,10 @@ public class TNoticeServiceImpl implements TNoticeService {
 	public int insertTNotice(TNotice dto, String pathname) {
 		int result=0;
 		try {
-			int maxNum=dao.getIntValue("notice.maxNum", dto);
+			int maxNum=dao.getIntValue("tnotice.maxNum", dto);
 			dto.setNum(maxNum+1);
 			
-			dao.insertData("notice.insertNotice", dto);
+			dao.insertData("tnotice.insertTNotice", dto);
 			
 			if(dto.getUpload()!=null && ! dto.getUpload().isEmpty()) {
 				for(MultipartFile mf : dto.getUpload()) {
@@ -43,7 +43,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 						long fileSize=mf.getSize();
 						dto.setFileSize(fileSize);
 						
-						dao.insertData("notice.insertNoticeFile", dto);
+						dao.insertData("tnotice.insertTNoticeFile", dto);
 						
 					}
 				}
@@ -105,7 +105,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 		int result =0;
 		
 		try {
-			result=dao.updateData("notice.updateHitCount", num);
+			result=dao.updateData("tnotice.updateHitCount", num);
 		} 
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -117,7 +117,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 	public TNotice readTNotice(int num) {
 		TNotice dto=null;
 		try {
-			dto=dao.getReadData("notice.readNotice",num);
+			dto=dao.getReadData("tnotice.readTNotice",num);
 		} 
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -130,7 +130,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 	public TNotice preReadTNotice(Map<String, Object> map) {
 		TNotice dto=null;
 		try {
-			dto=dao.getReadData("notice.preReadNotice", map);
+			dto=dao.getReadData("tnotice.preReadTNotice", map);
 		} 
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -142,7 +142,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 	public TNotice nextReadTNotice(Map<String, Object> map) {
 		TNotice dto=null;
 		try {
-			dto=dao.getReadData("notice.nextReadNotice", map);
+			dto=dao.getReadData("tnotice.nextReadTNotice", map);
 		} 
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -155,7 +155,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 		int result=0;
 		
 		try {
-			result=dao.updateData("notice.updateNotice", dto);
+			result=dao.updateData("tnotice.updateTNotice", dto);
 			
 			if(! dto.getUpload().isEmpty()) {
 				for(MultipartFile mf:dto.getUpload()) {
@@ -169,7 +169,7 @@ public class TNoticeServiceImpl implements TNoticeService {
 						long fileSize=mf.getSize();
 						dto.setFileSize(fileSize);
 						
-						dao.insertData("notice.insertNoticeFile", dto);
+						dao.insertData("tnotice.insertTNoticeFile", dto);
 					}
 				}
 			}

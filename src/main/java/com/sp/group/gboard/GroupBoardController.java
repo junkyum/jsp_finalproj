@@ -41,11 +41,11 @@ public class GroupBoardController {
 	@RequestMapping(value="/group/groupBoardList")
 	public void groupBoardList(
 			@RequestParam(value ="page",defaultValue="1") int current_page,
+			@RequestParam String groupName,
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
 			HttpServletRequest req, Model model) throws Exception{
 
-		String cp= req.getContextPath();
 		
 		if(req.getMethod().equalsIgnoreCase("GET")){
 			searchValue =URLDecoder.decode(searchValue,"UTF-8");
@@ -118,6 +118,7 @@ public class GroupBoardController {
 		model.addAttribute("page",current_page);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("total_page",total_page);
+		model.addAttribute("groupName", groupName);
 /*
 		model.addAttribute("articleUrl",articleUrl);*/
 		model.addAttribute("paging",paging);
@@ -127,12 +128,13 @@ public class GroupBoardController {
 	 
 	}
 
-	/*@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
+	@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> createdForm( 
 			GroupBoard dto, HttpSession session,
 			HttpServletResponse resp, HttpServletRequest req
 			) throws Exception {
+		
 		String cp = req.getContextPath();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null){
@@ -140,7 +142,7 @@ public class GroupBoardController {
 		}
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
-		dto.setGroupName("개발자"); ///////////////////////////// 수정할것!... 
+		dto.setGroupName(dto.getGroupName()); ///////////////////////////// 수정할것!... 
 		dto.setUserId(info.getUserId());
 		
 		int res = service.insertGroupBoard(dto, pathname);
@@ -154,7 +156,7 @@ public class GroupBoardController {
 		return model;		
 		
 	}
-*/
+
 	
 	/*@RequestMapping(value="/gboard/boardArticle")
 	public String article(

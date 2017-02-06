@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-   String cp=request.getContextPath();
+	String cp=request.getContextPath();
+	String groupName = request.getParameter("groupName");
+	String userId = request.getParameter("userId");
 %>
 <style>
 .gbbestbig {
@@ -15,7 +17,6 @@
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 $(function(){
@@ -23,11 +24,13 @@ $(function(){
 });
 
 function gboardlistPage(page) {
+	var groupName = "<%=groupName%>";
 	var url="<%=cp%>/group/groupBoardList";
-	$.get(url, {page:page}, function(data){
+	$.get(url, {page:page,}, function(data){
 		$("#gblistlayout").html(data);
 	});
 }
+
 
 </script>
 

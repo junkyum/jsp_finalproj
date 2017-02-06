@@ -134,7 +134,7 @@ $(function(){
 							<td class="td2 col-md-5 col-sm-5">
 								<div class="checkbox">
 									<label> 
-										<input type="checkbox" name="tnotice" value="1" ${dto.notice==1 ? "checked='checked' ":"" }> 공지
+										<input type="checkbox" name="notice" value="1" ${dto.notice==1 ? "checked='checked' ":"" }> 공지
 									</label>
 								</div>
 							</td>
@@ -152,8 +152,7 @@ $(function(){
 						</tr>
 						<tr>
 							<td colspan="4" class="td4">
-								<textarea name="content" class="form-control" rows="15" required="required">
-									${dto.content}
+								<textarea name="content" class="form-control" rows="15" required="required">${dto.content}
 								</textarea>
 							</td>
 						</tr>

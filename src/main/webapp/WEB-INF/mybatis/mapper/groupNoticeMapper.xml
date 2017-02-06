@@ -33,30 +33,35 @@
 <select id="dataCount" parameterType="map" resultType="Integer">
  select NVL(count(*),0) from groupNotice n JOIN member m ON n.userId = m.userId
 		<where>
+				groupName =#{groupName}
+                
 			<if test="searchValue != null and searchValue!=''">
+			and 
 				<include refid="where-list"/>
 			</if>
 		</where>
 </select>
 
 <select id="listNotice" resultType="com.sp.group.notice.GroupNotice" parameterType="map">
-   
-        SELECT * FROM (
-        SELECT ROWNUM rnum, tb.* FROM (
-         SELECT num, userId, subject, content, created
-          FROM groupNotice 
-                  <where>
-                           <if test="searchValue != null and searchValue !='' ">
-                              <include refid="where-list"/><!-- 위에서 만든 sql문 -->
-                           </if>
-                      </where>  
-                   ORDER BY num DESC
-                   <![CDATA[
-                         ) tb WHERE ROWNUM <= #{end}
-                     ) WHERE rnum >= #{start}   
-                   ]]>
-                          
-                          
+
+	SELECT * FROM (
+		SELECT ROWNUM rnum, tb.* FROM (
+			SELECT num, userId, subject, content, created
+			FROM groupNotice
+				<where>
+					groupName =#{groupName}
+					
+					<if test="searchValue != null and searchValue !='' ">
+					and
+						<include refid="where-list" /><!-- 위에서 만든 sql문 -->
+					</if>
+				</where>
+			ORDER BY num DESC
+ <![CDATA[
+       ) tb WHERE ROWNUM <= #{end}
+   ) WHERE rnum >= #{start}   
+ ]]>
+     
    </select>
 
    <select id="readNotice" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
