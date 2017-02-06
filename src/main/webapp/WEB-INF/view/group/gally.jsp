@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
+
 %>
 <!-- groupGally/gally   이게 맨처음 겔러리 페이지 -->
 <style type="text/css">
@@ -75,6 +76,7 @@ function listPage(page) {
 		$("#gallyLayout").html(data);
 	});
 }
+
 
 //사진삭제하는곳
 function deletePhoto(gallyNum) {
@@ -166,6 +168,8 @@ function send(){
 		$("#span2").show();
 		return;
 	}
+<%-- 	var groupName= "<%=kGroupName%>";
+	alert(groupName+"          dddddddddddd"); --%>
 	
 	var f = document.photoForm;
 	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
@@ -175,8 +179,10 @@ function send(){
 	}
 	
 	//var f=$("form")[0];
-    var f=document.photoForm;
+    //var f=document.photoForm;
     var formData = new FormData(f);
+    
+    alert($.trim($("#content").val())+"ddddddddd");
 	alert(formData+"dd");
 	  $.ajax({
 			 type:"post"
@@ -209,10 +215,11 @@ function send(){
 
 //글보기후 모달띠이우는곳
 function updateDialog(gallyNum) {
-	var url="<%=cp%>/group/photo/article?gallyNum="+gallyNum;
+     var url="<%=cp%>/group/photo/article?gallyNum="+gallyNum;
+     $('#gallyMyModal .modal-body').empty();
 
 	$('#gallyMyModal .modal-body').load(url, function() {
-	    $('#gallyMyModal .modal-title').html('정보');
+		$('#gallyMyModal .modal-title').html('정보');
 		$('#gallyMyModal').modal('show');
 		$("input[name='name']").focus();
 	});
@@ -265,26 +272,307 @@ function GReply(gallyNum) {
 		}
 	});
 }
-
-$(function () {
-	$("#findGallyKButtn").click(function () {
-		alert("눌력음1");
-		var searchValueK=$.trim($("#searchValueK").val());
-		alert(searchValueK);
-		if(!searchValueK){
-			alert("검색할 값을 입력 하세요 !!!");
-			$("#searchValueK").focus();
-			return;
+////////////////////////////
+//찾기를 위한거 근대 키@벨류 는 가지고오는데 어찌 해야 하는 걸까/?
+function findGally(){
+	var dlg;
+    dlg=$("#findGroupGally").dialog({// 모달 뜬다.
+       title:"그룹찾기",// 모달 뜬후 나오는 창.
+       modal:true,
+		width:500,
+	    height:200,
+	    show:"clip",
+		hide:"clip",
+	    buttons:{
+			"찾기":function(){
+				var url="<%=cp%>/groupGally/list";
+				
+				var searchKeyK=$('#searchKeyK').val();
+				var searchValueK=$('#searchValueK').val();
+				alert(searchKeyK+"  키값| "+searchValueK );
+				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK}, function(data) {
+					$(dlg).dialog("close");
+					$("#gallyLayout").html(data);
+					
+				});
+				
+				
+			}, "취소":function() {
+				$(this).dialog("close");
+			}
+			
+			
 		}
+    });
+}
+
+<%-- $(function(){
+	searchListK(1,searchKeyK, searchValueK);
+});
+/* 이게 listGally.jsp를 출력하게 해주는 곳 */
+function searchListK(page,searchKeyK, searchValueK ) {
+	var url="<%=cp%>/groupGally/list";
+
+	$.get(url,{pageNo:page , searchValueK:searchValueK ,searchKeyK:searchKeyK}, function(data) {
+		$("#gallyLayout").html(data);
+	});
+}
+$.get(url,{pageNo:page,searchKeyK:searchKeyK, searchValueK:searchValueK}, function(data) {
+		$("#gallyLayout").html(data);
+	});
+
+
+ --%>
+</script>
+
+
+<script type="text/javascript">
+
+/* 글보기   댓글의!!!  할떄 리스트 나오게끔 해주는것   */
+
+//대댓글 리스트 뿌려주기위해서.
+function listReplyAnswer(replyAnswer){
+	var listReplyAnswerId="#listReplyAnswer"+replyAnswer;	
+	var url="<%=cp%>/group/photo/listReplyAnswer";
+	alert("대댓글 리스트 보는거 2번");
+	$.get(url, {replyAnswer:replyAnswer}, function(data){
+		$(listReplyAnswerId).html(data);
+	});
+}
+//게시물 밑에 답글 밑에 답글의 갯수를 새는곳 
+function countAnswer(replyAnswer) {
+	var url="<%=cp%>/group/photo/replyCountAnswer";
+	$.post(url, {replyAnswer:replyAnswer}, function(data){
+		var count="("+data.count+")";
+
+		var answerCountId="#answerCount"+replyAnswer;
+		var answerGlyphiconId="#answerGlyphicon"+replyAnswer;
 		
+		$(answerCountId).html(count);
+		$(answerGlyphiconId).removeClass("glyphicon-triangle-bottom");
+
+	}, "JSON");
+}
+
+//답글 버튼 누르는 액션
+$(function(){
+	
+	$("body").on("click", ".btnGroupAnwerLaout", function(){
+		var $divGroupReplyAnswer = $(this).parent().parent().next();
+		/* 이부분이  listReply안있는  .btnR의 아버지 의 아버지div의 다음 것 을 지칭 한다.
+		div class=GroupReplyAnswer =   ?GroupReplyAnswer  이전에 이상한 거엿음 외거런지 확인해서. 을 지칭한다.
+		*/
+		var $answerGList = $divGroupReplyAnswer.children().children().eq(0);
+		/* <div id='listReplyAnswer${vo.replyNum}' 을 의미한다 listReply의 */
 		
+		var isVisible = $divGroupReplyAnswer.is(':visible');
+		//보여주기위해서
+		var replyNum = $(this).attr("data-replyNum");
+		//해당답글 번호.
+	
+		if(isVisible) {
+			$divGroupReplyAnswer.hide();
+			alert("숨긴다");
+		} else if (!isVisible){
+			$divGroupReplyAnswer.show();
+			alert("보인다.");
+			//답변 버튼눌럿을떄도 리스트나오게 하는것 listPageAnswer
+			countAnswer(replyNum);
+			listReplyAnswer(replyNum);//대댓글 리스트
+		}
 		
 	});
 });
 
 
 
+//게시판 밑에 답글 밑에 답글 등록하는 메소드
+function sendGReplyAnswer(replyNum, gallyNum) {
+
+	var userId="${sessionScope.member.userId}";
+
+
+	var content=$("#answerContent"+replyNum).val().trim();
+
+	
+	if(! content){
+		$("#answerContent"+replyNum).focus();
+		return;
+	}
+	var query="gallyNum="+gallyNum;
+	query+="&userId="+userId;
+	query+="&content="+content;
+	query+="&replyAnswer="+replyNum;
+	
+	console.log(query);
+	
+	var url="<%=cp%>/group/photo/insertGReplyAnswer";
+
+	$.ajax({
+		type:"post"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			$("#answerContent"+replyNum).val("");
+			
+			var loginChk=data.loginChk;
+			if(loginChk=="false") {
+				console.log("안들어감");
+				
+			} else {
+				console.log("들어감");
+				//등록해도 리스트 나오게 한는것
+				listReplyAnswer(replyNum);
+				countAnswer(replyNum);
+			
+			}
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+		
+	});	
+}
+////사진의 댓들을 단것을 삭제하기 위해만든것  삭제구간.  deletePhotoReply(
+function deletePhotoReply(replyNum, pageNo) {
+	var userId="${sessionScope.member.userId}";
+    	
+	if(confirm("댓글 삭제 하시겟습니까?")){
+		var url="<%=cp%>/group/photo/deletePhotoReply";
+		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
+				var loginChk= data.loginChk;
+				
+				if(loginChk=="false"){
+					console.log("들어가냐??");
+				} else {
+					listPageAnswer(pageNo);
+				}
+			
+		}, "json");	
+	}
+}
+/////////////////////////////////////////////////////
+//댓글별 답글 삭제   
+function deleteReplyAnswerList(replyNum, replyAnswer) {
+	var userId="${sessionScope.member.userId}";
+
+	
+	if(confirm("게시물을 삭제하시겠습니까 ??????????? ")) {	
+		var url="<%=cp%>/group/photo/deleteReplyAnswer";
+		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
+			var loginChk=data.loginChk;
+			if(loginChk=="false"){
+				alert("실패임...");
+			}else {
+				listReplyAnswer(replyAnswer);
+				countAnswer(replyAnswer);
+			}
+		}, "json");	
+	}	
+}
+
+//게시물 답글의 좋아요@싫어요 추가시키는 구간
+function sendReplyLike(replyNum, gallryReplyLike) {
+	var userId="${sessionScope.member.userId}";
+	
+	var msg="게시물이 마음에 들지 않으십니까 ?";
+	if(gallryReplyLike==1)
+		msg="게시물에 공감하십니까 ?";
+	if(! confirm(msg))
+		return false;
+	
+	var query="replyNum="+replyNum;
+	query+="&gallryReplyLike="+gallryReplyLike;
+	
+	var url="<%=cp%>/group/photo/gallryReplyLike";
+	
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+				groupCountLike(replyNum);
+			} else if(state=="false") {
+					alert("한번만 할수있다.");
+			} else if(state=="loginFail") {
+					login();
+			}
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+		
+	});
+}
+
+//게시물 답글의 좋아요@싫어요 갯수 새는곳
+function groupCountLike (replyNum) {
+	var url="<%=cp%>/group/photo/groupCountLike";
+	$.post(url, {replyNum:replyNum}, function(data){
+		var likeCountId="#likeCount"+replyNum;
+		var disLikeCountId="#disLikeCount"+replyNum;
+		var likeCount=data.likeCount;
+		var disLikeCount=data.disLikeCount;
+		  
+		$(likeCountId).html(likeCount);
+		$(disLikeCountId).html(disLikeCount);
+	}, "JSON");
+	
+}
+
+function groupGallyLike(gallyNum, gallyLike) {
+	var userId="${sessionScope.member.userId}";
+	var msg="사진 괜찬아요???";
+	if(gallyLike==1)
+		msg="게시물에 공감하십니까 ?";
+	if(! confirm(msg))
+		return false;
+	var query="gallyNum="+gallyNum;
+	query+="&gallyLike="+gallyLike;
+	var url= "<%=cp%>/group/photo/gallyLike"
+		
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+				groupGallyLikeCount(gallyNum)
+			} else if(state=="false") {
+				alert("선택은 한번만!!");
+			} 
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+
+
+
+function groupGallyLikeCount(gallyNum) {
+	var url="<%=cp%>/group/photo/groupGallyLikeCount";
+	$.post(url, {gallyNum:gallyNum}, function(data){
+		var gallyLikeCountId="#gallyLikeCount"+gallyNum;
+		var gallyLikeCount=data.gallyLikeCount;
+		
+		$(gallyLikeCountId).html(gallyLikeCount);
+	}, "JSON");
+}
+
 </script>
+
+
 <div style="margin:0px; padding:0px; width: 1200px; height: 600px; ">
 	
 	 	<div>
@@ -300,7 +588,6 @@ $(function () {
 					</div>
 			</div>
 		</div> 
-		
 		<div id="gallyLayout"> </div>
 </div>		
 
@@ -309,10 +596,9 @@ $(function () {
 		<div class="chk2" id="chk2" style="display: none; padding:0px; margin: 0px; width: 500px; height: 500px;">
 		    <form method="post" name="photoForm" id="photoForm" enctype="multipart/form-data" >
 				<div style="height: 300px; width: 480px; border: 1px solid black;">
-					<h3 style="margin-top: 10px; margin-left: 220px;">그룹명</h3>
-					<div style="width: 200px; height: 50px; margin-left: 30px; background: red;">
-					 그릅명: <input type="text" id="groupName" name="groupName">
-					</div>
+					<h3 style="margin-top: 10px; margin-left: 150px;">그룹 명 : ${groupName} </h3>
+					 <input type="hidden" name="groupName" value="${groupName}">
+		
 						<div style="margin-top: 10px;">
 							<h4 style="float: left; margin: 0px;">재 목 :&nbsp;</h4>
 							<input type="text" name="subject" id="subject" value="" placeholder="내용을 입력하세요" style="clear: both;">

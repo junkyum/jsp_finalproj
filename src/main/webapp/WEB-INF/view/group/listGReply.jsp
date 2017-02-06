@@ -68,9 +68,9 @@
 					<textarea id="answerContent${GRP.replyNum}" cols='72' rows='10' class='boxTA' style='width:500px; height: 70px;'></textarea>
 		                 </div>
 		            </div>
-		            
+		        
 		             <div style='padding: 0px 10px 10px; text-align: right;'>
-			                <button type='button' class='btn' onclick='sendGReplyAnswer(${GRP.replyNum});'>답  변</button>
+			                <button type='button' class='btn' onclick="sendGReplyAnswer('${GRP.replyNum}','${GRP.gallyNum}');">답  변</button>
 			         </div>
 			         
 	        	</div>

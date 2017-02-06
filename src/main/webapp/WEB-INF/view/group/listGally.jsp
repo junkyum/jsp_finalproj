@@ -6,11 +6,10 @@
    String cp=request.getContextPath();
 //글등록후 리스트 뽑는곳
 %>
-
+	${urlArticle}
 	<c:if test="${dataCount !=0}">
 	 &nbsp;&nbsp;총${dataCount}개&nbsp;(${page}현제/${total_page}전체페이지) 
-		<c:forEach var="dto" items="${list}" varStatus="status">
-		
+		<c:forEach var="dto" items="${list}" varStatus="status"> 	
 				<c:if test="${status.index==0}">
                  <c:out value="<div style='clear: both; max-width:1000px; margin: 0px auto; margin-right: 50px;'>" escapeXml="false"/>
                  </c:if>
@@ -43,37 +42,41 @@
 		    </c:if>
 	</c:if> 
 
-	<div style="clear: both; margin: auto;"></div>
+	<div style="clear: both;"></div>
 		<!-- 페이징 처리 -->
-		 	<div style="margin: 15px auto; text-align: center; margin-top: 0px;">
+		 	<div style="margin:  auto; text-align: center; margin-top: 0px; height: 40px; " >
 			   <c:if test="${dataCount==0 }"> 등록된 게시물이 없습니다.</c:if>
 	            <c:if test="${dataCount!=0 }"> ${paging} </c:if>
-	</div> 
+			</div> 
 	
 	
-			
-	<!-- 여기서부턴 검색   ckear  초기화-->
-		<div style="clear: both;">
-		<!-- 페이징 처리 밑단 검색 부분 -->
 			<div style="float: left; width: 20%; min-width: 85px; margin-left: 40px;">
 				<button type="button" class="btn btn-default btn-sm wbtn" onclick="listPage(1)">새로고침</button>
+				<button type="button" onclick="findGally();">찾기</button>
 			</div>
 			
-			<div style="float: left; width: 60%; text-align: center;">
-				
-				
-					<select name="searchKeyK" id="searchKeyK">
+
+		<div style="margin-top: 14px; display: none;" id="findGroupGally" >	
+			<div style="float: left; width: 60%; min-width: 85px;">	
+			<form name = "findGallyForm">
+					<select id= "searchKeyK" name="searchKeyK" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
 						<option value="subject">제목</option>
 						<option value="userId">작성자</option>
 						<option value="content">내용</option>
 						<option value="created">등록일</option>
 					</select>
-					
-					 <input type="text" name="searchValueK" id="searchValueK" style="width: 40%;">
-					 <button type="button" id="findGallyKButtn"> 검색</button>
-				
+					<input type="text" name="searchValueK" id="searchValueK" class="form-control" style = "width: 60%;float: left;"><br>
+				</form>
 			</div>
-			
-	</div>
+		</div>
+		
+
+		
+		
+		
+		
+		
+		
+		
 	
 	
