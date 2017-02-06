@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tphoto">
+
+<insert id="insertPhoto">
+
+		INSERT INTO tPhoto (num,userId,subject,content,imageFilename)
+		VALUES(tPhoto_seq.NEXTVAL, #{userId},#{subject},#{content},#{imageFilename})
+
+</insert>
+    <sql id="where-list">
+	  <if test="searchKey=='userName'">
+	      userName=#{searchValue}
+	  </if>
+	  <if test="searchKey=='subject'">
+	       INSTR(subject, #{searchValue}) &gt; 0
+	  </if>
+	  <if test="searchKey=='content'">
+	      INSTR(content, #{searchValue}) &gt; 0 
+	  </if>
+	  <if test="searchKey=='created'">
+	      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValue}
+	  </if>
+	</sql>
+	
+	<select id="dataCount" resultType="Integer" parameterType="map">
+		SELECT NVL(COUNT(*), 0) FROM tPhoto p
+	        JOIN member m
+	        ON p.userId=m.userId
+	     <where>
+	     	<if test="searchValue!=null and searchValue!='' ">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     </where>		
+	</select>
+	
+	<select id="listPhoto" parameterType="map" resultType="com.sp.tphoto.Photo">
+			SELECT * FROM (
+			    SELECT ROWNUM rnum, tb.* FROM (
+				     SELECT p.num, p.userId, userName, subject, imageFilename, 
+	                    TO_CHAR(created, 'YYYY-MM-DD') created , hitCount ,  NVL(tlikeCount, 0) tlikeCount
+	                     FROM tphoto p
+	                     JOIN member m  ON p.userId = m.userId 
+	                     LEFT OUTER JOIN
+	                     (
+	                           SELECT num, NVL(COUNT(DECODE(tphotoLike,1,1)),0) tlikeCount FROM tphotoLike
+	                          GROUP BY num
+	                     ) c ON p.num = c.num
+	                <where>
+                         <if test="searchValue != null and searchValue != ''">
+			                  <include refid="where-list"/>
+		                 </if>
+	                </where>
+		                ORDER BY p.num DESC
+		<![CDATA[
+		        ) tb WHERE ROWNUM <= #{end}
+		    ) WHERE rnum >= #{start}
+		]]>
+	</select> 
+	
+	<select id="readPhoto" parameterType="Integer"
+	      resultType="com.sp.tphoto.Photo">
+	SELECT p.num, p.userId, userName, subject, imageFilename, content,
+	            created , hitCount, NVL(tlikeCount, 0) tlikeCount
+	             FROM tphoto p
+	             JOIN member m ON p.userId = m.userId
+	             LEFT OUTER JOIN
+	             (
+	                SELECT num, NVL(COUNT(DECODE(tphotoLike,1,1)),0) tlikeCount FROM tphotoLike
+	                GROUP BY num
+	             ) c ON p.num = c.num
+	             
+	             WHERE p.num=#{num}
+	</select> 
+	
+	 
+	<select id="preReadPhoto" resultType="com.sp.tphoto.Photo" 
+				parameterType="map">
+		SELECT tb.* FROM (
+			SELECT num, subject
+			      FROM tphoto p
+			      JOIN member m ON p.userId=m.userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND (num > #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num ASC
+			) tb WHERE ROWNUM=1
+	</select>
+
+	<!-- 다음글 -->
+	<select id="nextReadPhoto" resultType="com.sp.tphoto.Photo" 
+				parameterType="map">
+		SELECT tb.* FROM (
+			SELECT num, subject
+			       FROM tphoto p
+			       JOIN member m ON p.userId=m.userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND (num < #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num DESC
+			) tb WHERE ROWNUM=1
+	</select>
+	
+	<update id="updatePhoto" parameterType="com.sp.tphoto.Photo">
+		UPDATE tphoto SET subject=#{subject}, imageFilename=#{imageFilename},content=#{content}
+		WHERE num=#{num}
+	
+	</update>
+	
+	<delete id="deletePhoto" parameterType="Integer">
+		DELETE FROM tphoto WHERE num=#{num}
+	</delete>
+	
+	<update id="updateHitCount" parameterType="Integer">
+	
+	UPDATE tphoto SET hitCount =hitCount+1 WHERE num=#{num}
+	
+	</update>
+	<!-- rrr -->
+	
+	<insert id="insertReply" parameterType="com.sp.tphoto.Reply">
+	  INSERT INTO tphotoReple(repleNum,num,userId,content,answer)
+	  VALUES (tPhotoReple_seq.NEXTVAL, #{num},#{userId},#{content},#{answer})
+	</insert>
+	
+	<select id="replyDateCount" resultType="Integer" parameterType="map">
+	 SELECT NVL(COUNT(*),0) FROM tphotoReple WHERE num=#{num} AND answer =0
+	</select>
+	
+	<select id="listReply" parameterType="map" resultType="com.sp.tphoto.Reply">
+	
+	SELECT * FROM (
+	 SELECT ROWNUM rnum, tb. * FROM(
+	   SELECT tbreple.repleNum, num, userId, userName, content, created, tbreple.answer
+	        ,NVL(answerCount, 0) answerCount,NVL(likeCount,0) likeCount, NVL(disLikeCount,0) disLikeCount
+	        FROM
+	        (
+	        		(
+	        			SELECT repleNum, r.num, r.userId, userName, r.content, r.created, answer
+	        				FROM tphotoReple r
+	        				JOIN tphoto p ON r.num=p.num
+	        				JOIN member m ON r.userId= m.userId
+	        				WHERE r.num=#{num} AND answer=0
+	        		)tbreple
+	        		LEFT OUTER JOIN
+	        		(
+	        				SELECT answer, COUNT(*) answerCount
+	        		FROM tphotoreple GROUP BY answer
+	        		) tbanswer ON tbreple.repleNum = tbanswer.answer
+	        		LEFT OUTER JOIN
+	        		(
+	        			SELECT repleNum,
+	        			  COUNT(DECODE(repleLike,1,1)) likeCount,
+	        			  COUNT(DECODE(repleLike,0,1)) disLikeCount
+	        		FROM tPhotoRepleLike GROUP BY repleNum	  
+	        		) tblike ON tbreple.repleNum = tblike.repleNum
+	        		
+	        )
+			ORDER BY repleNum DESC
+			<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+	    ) WHERE rnum >= #{start}
+			]]>
+	
+	</select>
+	
+	<select id="listReplyAnswer" resultType="com.sp.tphoto.Reply" parameterType="Integer">
+	SELECT repleNum, num, tbreple.userId, userName,content,created, answer
+	FROM tphotoReple tbreple
+	JOIN member m ON tbreple.userId= m.userId
+	WHERE answer=#{answer}
+	ORDER BY repleNum DESC
+	</select>
+	 
+	 <select id="replyCountAnswer" parameterType="Integer" resultType="Integer">
+	  SELECT NVL(COUNT(*), 0)
+	        FROM tphotoReple WHERE answer=#{answer}
+	</select>
+	
+	
+	
+	 <delete id="deleteReply" parameterType="map">
+	DELETE tphotoReple WHERE
+	    <if test="mode == 'num' ">
+			 num=#{num}
+		</if>
+	    <if test="mode == 'reply' ">
+			 repleNum IN 
+               (SELECT repleNum FROM tphotoReple START WITH  repleNum = #{repleNum}
+	            CONNECT BY PRIOR repleNum = answer)
+		</if>
+	    <if test="mode == 'answer' ">
+			 repleNum=#{repleNum}
+		</if>
+	</delete>
+	 
+	<insert id="insertReplyLike" parameterType="com.sp.tphoto.Reply">
+	INSERT INTO tphotoRepleLike(repleNum, userId, repleLike)
+	   VALUES (#{repleNum}, #{userId}, #{repleLike})
+	</insert>
+
+	<select id="replyCountLike" resultType="map" 
+	           parameterType="Integer">
+	   SELECT  NVL(COUNT(DECODE(repleLike, 1, 1)), 0) likeCount,
+			        NVL(COUNT(DECODE(repleLike, 0, 1)), 0) disLikeCount
+	        FROM tphotoRepleLike WHERE repleNum=#{repleNum}
+	</select> 
+	
+	<insert id="insertPhotoLike" parameterType="com.sp.tphoto.Photo">
+	INSERT INTO tPhotoLike(num,userId,tPhotoLike)
+	VALUES (#{num},#{userId},#{tphotoLike})
+	</insert>
+	
+	<select id="countLike" resultType="map" parameterType="Integer">
+	 SELECT NVL(COUNT(DECODE(tphotoLike,1,1)),0) tlikeCount,
+	 NVL(COUNT(DECODE(tphotoLike,0,1)),0) tdisLikeCount
+	 FROM tphotoLike WHERE num=#{num}
+	
+	</select>
+	
+	
+	
+</mapper>
