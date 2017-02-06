@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-   String cp=request.getContextPath();
+	String cp=request.getContextPath();
+	String groupName = request.getParameter("groupName");
+	String userId = request.getParameter("userId");
 %>
 <style>
 .gbbestbig {
@@ -22,8 +24,9 @@ $(function(){
 });
 
 function gboardlistPage(page) {
+	var groupName = "<%=groupName%>";
 	var url="<%=cp%>/group/groupBoardList";
-	$.get(url, {page:page}, function(data){
+	$.get(url, {page:page,}, function(data){
 		$("#gblistlayout").html(data);
 	});
 }

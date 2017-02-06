@@ -41,6 +41,7 @@ public class GroupBoardController {
 	@RequestMapping(value="/group/groupBoardList")
 	public void groupBoardList(
 			@RequestParam(value ="page",defaultValue="1") int current_page,
+			@RequestParam String groupName,
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
 			HttpServletRequest req, Model model) throws Exception{
@@ -117,6 +118,7 @@ public class GroupBoardController {
 		model.addAttribute("page",current_page);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("total_page",total_page);
+		model.addAttribute("groupName", groupName);
 /*
 		model.addAttribute("articleUrl",articleUrl);*/
 		model.addAttribute("paging",paging);

@@ -4,8 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String cp = request.getContextPath();
-	String groupName = request.getParameter("groupName");
-
 %>
 <style>
 .bestbig {
@@ -27,7 +25,8 @@ function noticeListPage(page) {
 	var url="<%=cp%>/group/noticeList";
 	var num="${dto.num}";
 	var groupName = "${groupName}";
-	$.get(url, {num:num, pageNo:page, groupName:groupName}, function(data){
+	var userId = "${userId}";
+	$.get(url, {num:num, pageNo:page, groupName:groupName, userId:userId}, function(data){
 		$("#noticeListlayout").html(data);
 	});
 }
@@ -37,7 +36,7 @@ function mkmmodalCheck(){
 	var url = "<%=cp%>/group/notice/created";
 	var subject = $("#kmsubject").val().trim();
 	var content = $("#kmcontent").val().trim();
-	var groupName= "<%=groupName%>";
+	var groupName= "${groupName}";
 	if(!subject){
 		$("#kmsubject").focus();
 		return;
@@ -69,9 +68,12 @@ function mkmmodalCheck(){
 
 <%-- function updateNoG(num) {	
 	var page = "${page}";
-	var query = "num="+num+"&page="+page;
-	var url = "<%=cp%>/notice/update";
+	var url = "<%=cp%>/group/notice/update";
+	var subject = "${dto.subject}";
+	var content = "${dto.content}";
+	var groupName= "${groupName}";
 	
+	var query = "subject="+subject+"&content="+content+"&groupName="+groupName;
 	$.ajax({
 		type:"post",
 		url :url,
@@ -157,7 +159,7 @@ function noticelayoutview(num) {
 							rows="15" required="required"></textarea>
 						<br> <input type="file" name="upload" id="file"
 							class="form-control input"><br>
-						<input type="hidden" name="groupName" id="<%=groupName%>">
+						<input type="hidden" name="groupName" id="${groupName }">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal"

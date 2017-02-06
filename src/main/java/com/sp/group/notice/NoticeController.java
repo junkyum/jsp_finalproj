@@ -34,16 +34,23 @@ public class NoticeController {
 
 	
 	@RequestMapping(value="/group/notice")
-	public String notice() throws Exception{
+	public String notice(
+			@RequestParam String groupName,
+			@RequestParam String userId,
+			Model model
+			) throws Exception{
+		System.out.println(userId);
+		model.addAttribute("groupName",groupName);
+		model.addAttribute("userId",userId);
 		return "group/notice";
 	}
 	
 	@RequestMapping(value="/group/noticeList")
 	public void noticeList(
-			Model model,HttpServletRequest req,
+			Model model,HttpServletRequest req, HttpSession session,
 			@RequestParam(value="num", defaultValue = "1") int num,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
-			@RequestParam String groupName,
+			@RequestParam String groupName, @RequestParam String userId, 
 			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue
 			) throws Exception{
@@ -56,12 +63,13 @@ public class NoticeController {
 		if (req.getMethod().equalsIgnoreCase("GET")) { // GET 방식인 경우
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
 		}
-		
+
 		GroupNotice dto = service.readNotice(num);		
-/*		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));   //이거 에러남 ! */
+		
 		dto.setGroupName(dto.getGroupName());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("groupName", groupName);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 
@@ -81,7 +89,6 @@ public class NoticeController {
 
 		// 글 리스트
 		List<GroupNotice> noticeList = service.listNotice(map);
-		
 		Date endDate = new Date();
 		long gap;
 		int listNum, n = 0;
@@ -91,6 +98,7 @@ public class NoticeController {
 			data.setContent(data.getContent().replaceAll("\n", "<br>"));
 			listNum = dataCount - (start + n - 1);
 			data.setListNum(listNum);
+			data.setGroupName(dto.getGroupName());
 
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date beginDate = formatter.parse(data.getCreated());
@@ -119,11 +127,12 @@ public class NoticeController {
         }
         */
         String paging = myUtil.paging(current_page, total_page);
-		
 	    model.addAttribute("total_page", total_page);
 	    model.addAttribute("searchKey", searchKey);
 	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
         model.addAttribute("dto", dto);
+        model.addAttribute("groupName", groupName);
+        model.addAttribute("userId",userId);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("page", current_page);
 		model.addAttribute("dataCount", dataCount);
