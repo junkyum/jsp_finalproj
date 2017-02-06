@@ -28,9 +28,29 @@ $(function(){
 			탈퇴
 			</button>
 			</c:if>
+			<c:if test="${res=='owner' }">
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/update?groupName=${dto.groupName}';">
+			그룹정보수정
+			</button>
+			<button type="button" onclick="javascript:location.href='<%=cp%>/group/delete?groupName=${dto.groupName}';">
+			그룹탈퇴
+			</button>
+			</c:if>
+			<div class="dropdown">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			    내 그룹 목록
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<c:forEach var="vo" items="${myList}">
+			    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:location.href='<%=cp%>/group?groupName=${vo.groupName}';">
+			    ${vo.groupName }</a></li>
+			</c:forEach>
+			  </ul>
+			</div>
 		</div>
 		<div style="height: 480px; border: 1px solid black;">
-			
+		
 		</div>
 		
 	</div>

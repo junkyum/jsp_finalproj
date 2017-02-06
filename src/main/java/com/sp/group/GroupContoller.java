@@ -47,6 +47,13 @@ public class GroupContoller {
 				if(data.getUserId().equals(info.getUserId()))
 				res="already";
 			}
+			if(dto.getUserId().equals(info.getUserId()))
+				res="owner";
+			String userId=info.getUserId();
+			List<Group> myList = service.listMyGroup(userId);
+			
+			
+			model.addAttribute("myList",myList);
 			model.addAttribute("res",res);
 			model.addAttribute("dto",dto);
 			return ".group.main";
@@ -140,7 +147,6 @@ public class GroupContoller {
 			SessionInfo info=(SessionInfo)session.getAttribute("member");
 			String userId=info.getUserId();
 	        List<Group> list = service.listMyGroup(userId);
-	   
 			model.addAttribute("list", list);
 			model.addAttribute("distinction","my");
 			
