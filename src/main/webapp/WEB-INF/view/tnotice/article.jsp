@@ -52,7 +52,7 @@ function deleteTNotice() {
 </c:if>
 }
 
-function updatetTNotice() {
+function updateTNotice() {
 <c:if test="${sessionScope.member.userId==dto.userId}">
   var num = "${dto.num}";
   var page = "${page}";
