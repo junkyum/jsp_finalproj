@@ -9,6 +9,7 @@ public class Photo {
 	private String created, hitCount;
 	
 	private MultipartFile upload;
+	/////
 
 
 	private int tPhotoLike;
