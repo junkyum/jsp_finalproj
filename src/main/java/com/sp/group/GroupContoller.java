@@ -158,8 +158,6 @@ public class GroupContoller {
 			HttpServletResponse resp,
 			Group dto
 			)throws Exception {
-			
-		 
 		 int res = service.updateGroup(dto);
 		 JSONObject job = new JSONObject();
 		 if(res == 0){
