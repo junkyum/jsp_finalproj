@@ -29,9 +29,11 @@
 			SELECT NVL(COUNT(*), 0) FROM groupGally p
 				JOIN member m ON p.userId =m.userId
 			<where>
+			
 	     	<if test="searchValueK!=null and searchValueK!='' ">
 	     	    <include refid="where-list"/>
 	     	</if>
+	     	AND p.groupName=#{groupName} 
 	     </where>   	
 		</select>
 		
@@ -49,9 +51,11 @@
 	                          GROUP BY gallyNum
 	                     ) c ON p.gallyNum = c.gallyNum
                    <where>
+
 				     	<if test="searchValueK!=null and searchValueK!='' ">
 				     	    <include refid="where-list"/>
 				     	</if>
+				     	AND p.groupName=#{groupName}  
 				     </where> 
 	                ORDER BY p.gallyNum DESC
 		<![CDATA[

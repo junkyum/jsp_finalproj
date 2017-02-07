@@ -65,46 +65,49 @@ function updatePhoto(){
 		document.getElementById("kim_update").style.display="block";	
 }
 
+/* 이게 listGally.jsp를 출력하게 해주는 곳 */
 $(function(){
 	listPage(1);
 });
-/* 이게 listGally.jsp를 출력하게 해주는 곳 */
 function listPage(page) {
 	var url="<%=cp%>/groupGally/list";
-
-	$.get(url,{pageNo:page}, function(data) {
+    var groupName="${groupName}";
+	$.get(url,{pageNo:page, groupName:groupName}, function(data) {
 		$("#gallyLayout").html(data);
+		$('#searchKeyK').val("");
+		$('#searchValueK').val("");
 	});
 }
-
+/*  -------------------------------*/
 
 //사진삭제하는곳
 function deletePhoto(gallyNum) {
 	
 	var url="<%=cp%>/group/photo/delete";	
 	var query="gallyNum="+gallyNum;
-	alert(query);
-
-	$.ajax({
-		type:"post"
-		,url:url
-		,data:query
-		,dataType:"json"
-		,success:function(data) {
-
-			var state=data.state;
 	
-			if(state=="false") {
-				$('#gallyMyModal').modal('hide');
-				listPage(1);
-			} else{
-				listPage(1);
-			}			
-		}
-		,error:function(e) {
-			console.log(e.responseText);
-		}
-	});
+	if(confirm("게시물 삭제 하시겟습니까?")){
+			$.ajax({
+				type:"post"
+				,url:url
+				,data:query
+				,dataType:"json"
+				,success:function(data) {
+		
+					var state=data.state;
+			
+					if(state=="false") {
+						$('#gallyMyModal').modal('hide');
+						listPage(1);
+					} else{
+						listPage(1);
+					}			
+				}
+				,error:function(e) {
+					console.log(e.responseText);
+				}
+			});
+	}
 }
 
 ///수정 하는곳
@@ -168,8 +171,7 @@ function send(){
 		$("#span2").show();
 		return;
 	}
-<%-- 	var groupName= "<%=kGroupName%>";
-	alert(groupName+"          dddddddddddd"); --%>
+
 	
 	var f = document.photoForm;
 	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
@@ -178,12 +180,10 @@ function send(){
 		return false;
 	}
 	
-	//var f=$("form")[0];
-    //var f=document.photoForm;
+
     var formData = new FormData(f);
     
-    alert($.trim($("#content").val())+"ddddddddd");
-	alert(formData+"dd");
+	alert(formData);
 	  $.ajax({
 			 type:"post"
 			 ,url:"<%=cp%>/group/photo/created"
@@ -243,7 +243,6 @@ function GReply(gallyNum) {
 		return;
 	}
 
-	
 	var query="gallyNum="+gallyNum;
 	query+="&content="+content;
 	query+="&replyAnswer=0";
@@ -261,7 +260,7 @@ function GReply(gallyNum) {
 			var loginChk=data.loginChk;
 	
 			if(loginChk=="false") {
-				alert("들어왔당");
+				alert("리플등록 실패");
 			} else{
 				listPageAnswer(1);
 
@@ -273,8 +272,9 @@ function GReply(gallyNum) {
 	});
 }
 ////////////////////////////
-//찾기를 위한거 근대 키@벨류 는 가지고오는데 어찌 해야 하는 걸까/?
+//원하는 개시물을 찾을떄 사용
 function findGally(){
+
 	var dlg;
     dlg=$("#findGroupGally").dialog({// 모달 뜬다.
        title:"그룹찾기",// 모달 뜬후 나오는 창.
@@ -289,10 +289,11 @@ function findGally(){
 				
 				var searchKeyK=$('#searchKeyK').val();
 				var searchValueK=$('#searchValueK').val();
-				alert(searchKeyK+"  키값| "+searchValueK );
-				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK}, function(data) {
+				var groupName="${groupName}";
+				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
 					$(dlg).dialog("close");
 					$("#gallyLayout").html(data);
+					$("#searchValueK").val("");
 					
 				});
 				
@@ -304,28 +305,12 @@ function findGally(){
 			
 		}
     });
+   
 }
 
-<%-- $(function(){
-	searchListK(1,searchKeyK, searchValueK);
-});
-/* 이게 listGally.jsp를 출력하게 해주는 곳 */
-function searchListK(page,searchKeyK, searchValueK ) {
-	var url="<%=cp%>/groupGally/list";
-
-	$.get(url,{pageNo:page , searchValueK:searchValueK ,searchKeyK:searchKeyK}, function(data) {
-		$("#gallyLayout").html(data);
-	});
-}
-$.get(url,{pageNo:page,searchKeyK:searchKeyK, searchValueK:searchValueK}, function(data) {
-		$("#gallyLayout").html(data);
-	});
-
-
- --%>
 </script>
 
-
+<!-- 댓글@대댓글에 관련된것 -->
 <script type="text/javascript">
 
 /* 글보기   댓글의!!!  할떄 리스트 나오게끔 해주는것   */
@@ -334,7 +319,6 @@ $.get(url,{pageNo:page,searchKeyK:searchKeyK, searchValueK:searchValueK}, functi
 function listReplyAnswer(replyAnswer){
 	var listReplyAnswerId="#listReplyAnswer"+replyAnswer;	
 	var url="<%=cp%>/group/photo/listReplyAnswer";
-	alert("대댓글 리스트 보는거 2번");
 	$.get(url, {replyAnswer:replyAnswer}, function(data){
 		$(listReplyAnswerId).html(data);
 	});
@@ -372,10 +356,10 @@ $(function(){
 	
 		if(isVisible) {
 			$divGroupReplyAnswer.hide();
-			alert("숨긴다");
+			
 		} else if (!isVisible){
 			$divGroupReplyAnswer.show();
-			alert("보인다.");
+		
 			//답변 버튼눌럿을떄도 리스트나오게 하는것 listPageAnswer
 			listReplyAnswer(replyNum);//대댓글 리스트
 			countAnswer(replyNum);
@@ -434,11 +418,12 @@ function sendGReplyAnswer(replyNum, gallyNum) {
 		
 	});	
 }
-////사진의 댓들을 단것을 삭제하기 위해만든것  삭제구간.  deletePhotoReply(
+
+////사진의 댓들을 단것을 삭제하기 위해 만든곳
 function deletePhotoReply(replyNum, pageNo) {
 	var userId="${sessionScope.member.userId}";
     	
-	if(confirm("댓글 삭제 하시겟습니까?")){
+	if(confirm("댓글을  삭제 하시겟습니까?")){
 		var url="<%=cp%>/group/photo/deletePhotoReply";
 		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
 				var loginChk= data.loginChk;
@@ -458,12 +443,12 @@ function deleteReplyAnswerList(replyNum, replyAnswer) {
 	var userId="${sessionScope.member.userId}";
 
 	
-	if(confirm("게시물을 삭제하시겠습니까 ??????????? ")) {	
+	if(confirm("댓글별 답글을 삭제하시겠습니까 ??????????? ")) {	
 		var url="<%=cp%>/group/photo/deleteReplyAnswer";
 		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
 			var loginChk=data.loginChk;
 			if(loginChk=="false"){
-				alert("실패임...");
+				alert("댓글별답글 삭제 실패");
 			}else {
 				listReplyAnswer(replyAnswer);
 				countAnswer(replyAnswer);
@@ -472,7 +457,7 @@ function deleteReplyAnswerList(replyNum, replyAnswer) {
 	}	
 }
 
-//게시물 답글의 좋아요@싫어요 추가시키는 구간
+//게시물 답글의 좋아요@싫어요 추가시키는 곳
 function sendReplyLike(replyNum, gallryReplyLike) {
 	var userId="${sessionScope.member.userId}";
 	
@@ -519,6 +504,7 @@ function groupCountLike (replyNum) {
 		var disLikeCountId="#disLikeCount"+replyNum;
 		var likeCount=data.likeCount;
 		var disLikeCount=data.disLikeCount;
+		  alert(disLikeCount+"       "+likeCount);
 		  
 		$(likeCountId).html(likeCount);
 		$(disLikeCountId).html(disLikeCount);
@@ -526,13 +512,17 @@ function groupCountLike (replyNum) {
 	
 }
 
+/* 사진의 좋아요를 추가 시키는곳 */
 function groupGallyLike(gallyNum, gallyLike) {
 	var userId="${sessionScope.member.userId}";
+	
 	var msg="사진 괜찬아요???";
 	if(gallyLike==1)
 		msg="게시물에 공감하십니까 ?";
+	
 	if(! confirm(msg))
 		return false;
+	
 	var query="gallyNum="+gallyNum;
 	query+="&gallyLike="+gallyLike;
 	var url= "<%=cp%>/group/photo/gallyLike"
@@ -559,7 +549,7 @@ function groupGallyLike(gallyNum, gallyLike) {
 }
 
 
-
+/* 사진의 좋아요의 갯수 세는곳 */
 function groupGallyLikeCount(gallyNum) {
 	var url="<%=cp%>/group/photo/groupGallyLikeCount";
 	$.post(url, {gallyNum:gallyNum}, function(data){
@@ -588,6 +578,10 @@ function groupGallyLikeCount(gallyNum) {
 					</div>
 			</div>
 		</div> 
+		<!-- 맨처음 main.jsp에서 컨트롤러에있는 gally 메소드로 가서 가지고올꺼 가지고오고 그룹/겔러리 로가서  위쪽에 있는  groupGrally/lisy 로가서
+		맨처음 패이지를 뿌려준다.  난 맨처음 시작하는 동시에 메인 바꾸고@컨트롤러 가서 조작 하고@ 리스트 페이지 펀션 만들고@  리턴으로 listGally 만들고 뿌려주면 됨
+		리스트G겔러리에 그냥 대충 끄적 거려노면 될듯  일단 등록먼저 만들고..-->
+		${groupName}
 		<div id="gallyLayout"> </div>
 </div>		
 
@@ -623,11 +617,9 @@ function groupGallyLikeCount(gallyNum) {
 		    </form>	
 		</div>
 	
+
 	
-	
-	
-	
-	<!-- 글보기 눌럿을떄 팝업 창을 띠우기 위해서 만들어논거. -->
+	<!-- 글보기 눌럿을떄 팝업 창을 띠우기 위해서 만든 것. -->
 		<div class="modal fade" id="gallyMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -639,13 +631,3 @@ function groupGallyLikeCount(gallyNum) {
 		    </div>
 		  </div>
 		</div>
-		<!-- ----------------------------------- -->
-	
-
-	
-	
-	
-	
-	
-	
-	
