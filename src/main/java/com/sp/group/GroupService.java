@@ -7,7 +7,7 @@ public interface GroupService {
 	//그룹관련
 	public int insertGroup(Group dto);
 	public Group readGroup(String groupName);
-	public int updateGroup(Map<String, Object> map);
+	public int updateGroup(Group dto);
 	public int deleteGroup(String groupName);
 	public int dataCount(Map<String, Object> map);
 	public List <Group> listGroup(Map<String, Object> map);

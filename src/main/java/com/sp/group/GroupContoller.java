@@ -159,18 +159,15 @@ public class GroupContoller {
 			Group dto
 			)throws Exception {
 			
-		 Map<String, Object> map = new HashMap<String, Object>();
-		 map.put("groupName", dto.getGroupName());
-		 map.put("introduce", dto.getIntroduce());
-		 map.put("profile",dto.getProfile());
 		 
-		 int res = service.updateGroup(map);
+		 int res = service.updateGroup(dto);
 		 JSONObject job = new JSONObject();
 		 if(res == 0){
 			 job.put("res", "fail");
 		 }
 		 else{
 			 job.put("res", "ok");
+			 
 		 }
 		 PrintWriter out = resp.getWriter();
 		 out.println(job.toString());

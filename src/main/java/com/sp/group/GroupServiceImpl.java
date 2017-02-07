@@ -69,10 +69,10 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public int updateGroup(Map<String, Object> map) {
+	public int updateGroup(Group dto) {
 		int res = 0;
 		try {
-			res = dao.updateData("group.updateGroup", map);
+			res = dao.updateData("group.updateGroup", dto);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}

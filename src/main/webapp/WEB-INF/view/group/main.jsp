@@ -13,7 +13,27 @@ $(function(){
 </script>
 <script type="text/javascript">
 function update(){
+	var url="<%=cp%>/group/update";
+	var query=$('form[name=updateForm]').serialize();
+	$.ajax({
+		type:"post",
+		url :url,
+		data : query,
+		dataType:"json",
+		success:function(data){
+			if(data.res=="fail"){
+			   alert("안만들어짐");					
+			}else {
+				$('#introduce').val(data.result.introduce);
+				$('#place').val(data.result.place);
+				$('#keyword').val(data.result.keyword);
+				$('#profile').val(data.result.profile);
+			}
+		},error:function(e) {
+	    	  console.log(e.responseText);
+	      }
 	
+});
 }
 </script>
 
@@ -35,11 +55,11 @@ function update(){
 			</button>
 			</c:if>
 			<c:if test="${res=='owner' }">
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
  			그룹수정
 			</button>
 			<button type="button" onclick="javascript:location.href='<%=cp%>/group/delete?groupName=${dto.groupName}';">
-			그룹탈퇴
+			그룹삭제
 			</button>
 			</c:if>
 			<div class="dropdown">
@@ -75,11 +95,7 @@ function update(){
 	</div>
 </div>
 
-<div id="update" style = "display:none;">
 <form name = "updateForm">
-
-</form>
-</div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -92,11 +108,15 @@ function update(){
 		장소:<input type="text" id="place" name="place" value ="${dto.place }" class="form-control"><br>
 		키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" class="form-control"><br>
 		프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" class="form-control"><br>
+      	<input type = "hidden" id="groupName" name = "groupName" value="${dto.groupName}">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="update();" data-dismiss="modal">업데이트하기</button>
       </div>
     </div>
   </div>
 </div>
+
+</form>
+
