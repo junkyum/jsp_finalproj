@@ -24,8 +24,8 @@
 						</a>
 						</div>
 					<div class="file-name">
-						<span class="file-name" style="margin-left: 50px;">재  목  : ${dto.subject}</span>
-						 <br> <small style="margin-left: 50px;">리스트번호  : ${dto.listNum}</small>
+						<span class="file-name" style="margin: auto;">재  목  : ${dto.subject}</span>
+						 <br> <small style="margin: auto;">리스트번호  : ${dto.listNum}</small>
 					</div>
 			   </div>
 		</c:forEach>
@@ -61,7 +61,6 @@
 			<form name = "findGallyForm">
 					<select id= "searchKeyK" name="searchKeyK" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
 						<option value="subject">제목</option>
-						<option value="userId">작성자</option>
 						<option value="content">내용</option>
 						<option value="created">등록일</option>
 					</select>

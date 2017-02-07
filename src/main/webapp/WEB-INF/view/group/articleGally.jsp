@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String cp=request.getContextPath();
-//글보그 창 
+ 
 %>
 <script type="text/javascript">
 $(function(){
@@ -15,7 +15,7 @@ $(function(){
 function listPageAnswer(pageNo){
 	var url="<%=cp%>/group/photo/listGReply";
 	var gallyNum="${dto.gallyNum}";	
-	alert("글보기 하고 등록된 게시글 보기 시작1번");
+
 	$.get(url, {gallyNum:gallyNum, pageNo:pageNo}, function(data){
 		$("#listGReply").html(data);
 		//밑에 있는 div에 listGReply.jsp 를 뿌릴것이다.  
@@ -45,7 +45,7 @@ function listPageAnswer(pageNo){
 		</div> 
 		<!-- 그룹이른@ 올린시간  -->
 		<div style="clear: both; margin-top: 0px; height: 30px; margin-top: 15px;">
-			<div style="float: left; margin-left:50px; width: 50%; min-width: 85px; margin-top: 30px; margin: auto;"> 그룹 이름:${dto.groupName} </div>
+			<div style="float: left; margin-left:50px; width: 50%; min-width: 85px; margin-top: 30px; margin: auto;"> 그룹 명:${dto.groupName} </div>
 		</div> 
 	
 			<h3 style="margin:auto; margin-top: 0px;">재 목: ${dto.subject}</h3>
@@ -54,15 +54,10 @@ function listPageAnswer(pageNo){
 			<div style=" width: 50%;">
 				<span>
 				내용: ${dto.content}<br>
-				재 목: ${dto.subject}<br>
-				올린시간: ${dto.created}<br>
-				작성자 :${dto.userId}<br>
-				그룹 이름:${dto.groupName}<br>
-				사진의 번호:${dto.gallyNum} 
 				</span>
 			</div>
 			<input type="hidden" name="groupNum" value="${dto.gallyNum}">
-				<!-- ,이렇게 타입 히든해서 안하면 컨트롤러에서 dto.groupNum 넘을 받아올수없다. --> 
+				
 		</div>
  </div>
  
@@ -103,7 +98,7 @@ function listPageAnswer(pageNo){
                         
 	</div>
 		
-		<!--  리플 달려고 해논곳 -->		
+		<!--  해당 개시물의 댓글을 적는곳 -->		
 	<div style="width: 570px; height: 200px; border: 1px solid black; margin-top: 10px; clear: both;">
 	 
 			<div>
@@ -118,6 +113,6 @@ function listPageAnswer(pageNo){
 		           	
 		    </div>
 	</div>
-
+			<!--  댓글의 댓글을 적고 뿌려주는곳-->
 		<div id="listGReply"></div>
 </form>
