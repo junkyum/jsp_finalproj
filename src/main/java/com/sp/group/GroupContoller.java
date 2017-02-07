@@ -173,21 +173,19 @@ public class GroupContoller {
 	}
 	//그룹딜레이트
 	@RequestMapping(value="/group/delete")
-	public void deleteGroup(
+	public String deleteGroup(
 			HttpServletResponse resp,
 			@RequestParam String groupName
 			)throws Exception {
 		
 		 int res = service.deleteGroup(groupName);
-		 JSONObject job = new JSONObject();
-		 if(res == 0){
-			 job.put("res", "fail");
+		 if(res==0){
+			 return "redirect:/group?groupName="+groupName;
 		 }
-		 else{
-			 job.put("res", "ok");
+		 else
+		 {
+			return ".mainLayout";
 		 }
-		 PrintWriter out = resp.getWriter();
-		 out.println(job.toString());
 	}
 	
 	@RequestMapping(value="/group/signin")
