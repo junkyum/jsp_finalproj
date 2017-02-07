@@ -15,10 +15,11 @@
                 <div style='float: right;'>
                     <span>${vo.created}</span> |
                     
-                    <a onclick='deleteReplyAnswerList("${vo.replyNum}", "${vo.replyAnswer}");'>삭제</a>
-<%--  <c:if test="${sessionScope.member.userId==vo.userId || sessionScope.member.userId=='admin'}">   
-                    <a onclick='deleteReplyAnswer("${vo.replyNum}", "${vo.answer}");'>삭제</a>
+                  <%--   <a onclick='deleteReplyAnswerList("${vo.replyNum}", "${vo.replyAnswer}");'>삭제</a> --%>
+  <c:if test="${sessionScope.member.userId==vo.userId || sessionScope.member.userId=='admin'}">   
+                   <a onclick='deleteReplyAnswerList("${vo.replyNum}", "${vo.replyAnswer}");'>삭제</a>
 </c:if>
+<%--
 <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">   
                     <a href='#'>신고</a>
 </c:if>      --%>                

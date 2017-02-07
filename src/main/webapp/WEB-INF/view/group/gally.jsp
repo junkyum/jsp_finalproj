@@ -71,12 +71,11 @@ $(function(){
 });
 function listPage(page) {
 	var url="<%=cp%>/groupGally/list";
-
-	$.get(url,{pageNo:page}, function(data) {
+    var groupName="${groupName}";
+	$.get(url,{pageNo:page, groupName:groupName}, function(data) {
 		$("#gallyLayout").html(data);
-		var searchKeyK=$('#searchKeyK').val();
-		var searchValueK=$('#searchValueK').val();
-		alert(searchKeyK+"   ,  "+searchValueK+"처음리스트");
+		$('#searchKeyK').val("");
+		$('#searchValueK').val("");
 	});
 }
 /*  -------------------------------*/
@@ -290,8 +289,8 @@ function findGally(){
 				
 				var searchKeyK=$('#searchKeyK').val();
 				var searchValueK=$('#searchValueK').val();
-				
-				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK}, function(data) {
+				var groupName="${groupName}";
+				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
 					$(dlg).dialog("close");
 					$("#gallyLayout").html(data);
 					$("#searchValueK").val("");
@@ -582,6 +581,7 @@ function groupGallyLikeCount(gallyNum) {
 		<!-- 맨처음 main.jsp에서 컨트롤러에있는 gally 메소드로 가서 가지고올꺼 가지고오고 그룹/겔러리 로가서  위쪽에 있는  groupGrally/lisy 로가서
 		맨처음 패이지를 뿌려준다.  난 맨처음 시작하는 동시에 메인 바꾸고@컨트롤러 가서 조작 하고@ 리스트 페이지 펀션 만들고@  리턴으로 listGally 만들고 뿌려주면 됨
 		리스트G겔러리에 그냥 대충 끄적 거려노면 될듯  일단 등록먼저 만들고..-->
+		${groupName}
 		<div id="gallyLayout"> </div>
 </div>		
 

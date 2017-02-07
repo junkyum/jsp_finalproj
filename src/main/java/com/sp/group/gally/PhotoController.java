@@ -50,6 +50,7 @@ public class PhotoController {
 	@RequestMapping(value="/groupGally/list")
 	public String list(Model model,HttpServletRequest req,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
+			@RequestParam(value="groupName") String groupName,
 			@RequestParam(value="searchKeyK", defaultValue="subject") String searchKeyK,
 			@RequestParam(value="searchValueK", defaultValue="") String searchValueK
 			)throws Exception{
@@ -66,6 +67,7 @@ public class PhotoController {
 		Map<String, Object> map= new HashMap<String, Object>();
 		map.put("searchKeyK", searchKeyK);
 		map.put("searchValueK", searchValueK);
+		map.put("groupName", groupName);
 			    
 		dataCount= service.dataCount(map);
 		total_page= myUtil.pageCount(numPerPage, dataCount);

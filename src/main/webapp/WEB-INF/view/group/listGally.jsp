@@ -6,7 +6,7 @@
    String cp=request.getContextPath();
 //글등록후 리스트 뽑는곳
 %>
-	${urlArticle}
+	
 	<c:if test="${dataCount !=0}">
 	 &nbsp;&nbsp;총${dataCount}개&nbsp;(${page}현제/${total_page}전체페이지) 
 		<c:forEach var="dto" items="${list}" varStatus="status"> 	
