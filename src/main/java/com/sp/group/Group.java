@@ -9,6 +9,14 @@ public class Group {
 	
 	private MultipartFile upload;
 	
+	public MultipartFile getUpload() {
+		return upload;
+	}
+
+	public void setUpload(MultipartFile upload) {
+		this.upload = upload;
+	}
+
 	private int listNum;
 	public int getListNum() {
 		return listNum;
