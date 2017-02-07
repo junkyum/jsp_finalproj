@@ -158,19 +158,14 @@ public class GroupContoller {
 			HttpServletResponse resp,
 			Group dto
 			)throws Exception {
-			
-		 Map<String, Object> map = new HashMap<String, Object>();
-		 map.put("groupName", dto.getGroupName());
-		 map.put("introduce", dto.getIntroduce());
-		 map.put("profile",dto.getProfile());
-		 
-		 int res = service.updateGroup(map);
+		 int res = service.updateGroup(dto);
 		 JSONObject job = new JSONObject();
 		 if(res == 0){
 			 job.put("res", "fail");
 		 }
 		 else{
 			 job.put("res", "ok");
+			 
 		 }
 		 PrintWriter out = resp.getWriter();
 		 out.println(job.toString());
@@ -178,21 +173,19 @@ public class GroupContoller {
 	}
 	//그룹딜레이트
 	@RequestMapping(value="/group/delete")
-	public void deleteGroup(
+	public String deleteGroup(
 			HttpServletResponse resp,
 			@RequestParam String groupName
 			)throws Exception {
 		
 		 int res = service.deleteGroup(groupName);
-		 JSONObject job = new JSONObject();
-		 if(res == 0){
-			 job.put("res", "fail");
+		 if(res==0){
+			 return "redirect:/group?groupName="+groupName;
 		 }
-		 else{
-			 job.put("res", "ok");
+		 else
+		 {
+			return ".mainLayout";
 		 }
-		 PrintWriter out = resp.getWriter();
-		 out.println(job.toString());
 	}
 	
 	@RequestMapping(value="/group/signin")
