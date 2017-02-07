@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 $(function(){
-	$("#tapmenu").tabs();
+	$("#groupTap").tabs();
 });
 </script>
 <script type="text/javascript">
@@ -50,7 +50,9 @@ function groupDelete(){
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
 			${dto.groupName}<br> 
-			그룹정보<br>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
+ 			그룹정보
+			</button>
 			그룹사진<br>
 			
 			<c:if test="${res=='notyet' }">
@@ -66,7 +68,7 @@ function groupDelete(){
 			</c:if>
 			
 			<c:if test="${res=='owner' }">
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">
  			그룹수정
 			</button>
 			<button type="button" onclick="groupDelete();">
@@ -93,13 +95,13 @@ function groupDelete(){
 		
 	</div>
 	
-	<div id = "tapmenu" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
-	  	<ul>
-		<li><a href="<%=cp%>/group/notice?userId=${dto.userId}&groupName=${dto.groupName}"><span>공지사항</span></a></li>
-		<li><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
-		<li><a href="<%=cp%>/groupGally/gally?groupName=${dto.groupName}"><span>그룹갤러리</span></a></li>
-		<li><a href="<%=cp%>/group/groupBoard?userId=${dto.userId}&groupName=${dto.groupName}"><span>게시판</span></a></li>
-		<li><a href="<%=cp%>/group/board"><span>답변형게시판</span></a></li>
+	<div  id="groupTap" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
+	  	<ul >
+		<li ><a href="<%=cp%>/group/notice?userId=${dto.userId}&groupName=${dto.groupName}"><span>공지사항</span></a></li>
+		<li ><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
+		<li ><a href="<%=cp%>/groupGally/gally?groupName=${dto.groupName}"><span>그룹갤러리</span></a></li>
+		<li ><a href="<%=cp%>/group/groupBoard?userId=${dto.userId}&groupName=${dto.groupName}"><span>게시판</span></a></li>
+		<li ><a href="<%=cp%>/group/bbs?groupName=${dto.groupName}"><span>답변형게시판</span></a></li>
 		</ul>
 	</div>
 	
@@ -108,27 +110,46 @@ function groupDelete(){
 </div>
 
 <form name = "updateForm">
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">그룹업데이트</h4>
-      </div>
-      <div class="modal-body">
-		소개:<input type="text" id="introduce" name="introduce" value ="${dto.introduce }" class="form-control"><br>
-		장소:<input type="text" id="place" name="place" value ="${dto.place }" class="form-control"><br>
-		키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" class="form-control"><br>
-		프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" class="form-control"><br>
-      	<input type = "hidden" id="groupName" name = "groupName" value="${dto.groupName}">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="groupUpdate();" data-dismiss="modal">업데이트하기</button>
-      </div>
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">그룹업데이트</h4>
+	      </div>
+	      <div class="modal-body">
+			소개:<input type="text" id="introduce" name="introduce" value ="${dto.introduce }" class="form-control"><br>
+			장소:<input type="text" id="place" name="place" value ="${dto.place }" class="form-control"><br>
+			키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" class="form-control"><br>
+			프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" class="form-control"><br>
+	      	<input type = "hidden" id="groupName" name = "groupName" value="${dto.groupName}">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary" onclick="groupUpdate();" data-dismiss="modal">업데이트하기</button>
+	      </div>
     </div>
   </div>
 </div>
-
 </form>
 
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">그룹정보</h4>
+	      </div>
+	      <div class="modal-body">
+	      	이름:<input type="text" id="groupName" name ="groupName" value="${dto.groupName}" readonly="readonly" class="form-control"><br>
+			소개:<input type="text" id="introduce" name="introduce" value ="${dto.introduce }" readonly="readonly" class="form-control"><br>
+			장소:<input type="text" id="place" name="place" value ="${dto.place }" readonly="readonly"class="form-control"><br>
+			키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" readonly="readonly" class="form-control"><br>
+			프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" readonly="readonly" class="form-control"><br>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+	      </div>
+    </div>
+  </div>
+</div>

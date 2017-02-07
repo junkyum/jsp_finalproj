@@ -1,9 +1,14 @@
 package com.sp.group;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Group {
 	private String groupName,userId,introduce,place,created,keyword;
 	private String joindate,condition;
 	private String profile;
+	
+	private MultipartFile upload;
+	
 	private int listNum;
 	public int getListNum() {
 		return listNum;
