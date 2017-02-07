@@ -56,18 +56,7 @@
 			</div>
 			
 
-		<div style="margin-top: 14px; display: none;" id="findGroupGally" >	
-			<div style="float: left; width: 60%; min-width: 85px;">	
-			<form name = "findGallyForm">
-					<select id= "searchKeyK" name="searchKeyK" class="form-control" style = "width: 35% ; float: left; margin-right: 5%;">
-						<option value="subject">제목</option>
-						<option value="content">내용</option>
-						<option value="created">등록일</option>
-					</select>
-					<input type="text" name="searchValueK" id="searchValueK" class="form-control" style = "width: 60%;float: left;"><br>
-				</form>
-			</div>
-		</div>
+
 		
 
 		
