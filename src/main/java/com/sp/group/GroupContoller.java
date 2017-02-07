@@ -1,5 +1,6 @@
 package com.sp.group;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -68,7 +69,9 @@ public class GroupContoller {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		dto.setUserId(info.getUserId());
 		dto.setCondition("1");
-		int result = service.insertGroup(dto);
+		String root=session.getServletContext().getRealPath("/");
+		String path=root+File.separator+"uploads"+File.separator+"photo";
+		int result = service.insertGroup(dto,path);
 		JSONObject job = new JSONObject();
 		if(result==0)
 		{
@@ -156,9 +159,12 @@ public class GroupContoller {
 	@RequestMapping(value="/group/update")
 	public void updateGroup(
 			HttpServletResponse resp,
+			HttpSession session,
 			Group dto
 			)throws Exception {
-		 int res = service.updateGroup(dto);
+		String root=session.getServletContext().getRealPath("/");
+		String path=root+File.separator+"uploads"+File.separator+"photo";
+		 int res = service.updateGroup(dto,path);
 		 JSONObject job = new JSONObject();
 		 if(res == 0){
 			 job.put("res", "fail");

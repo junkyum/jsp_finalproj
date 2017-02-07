@@ -6,21 +6,30 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
 @Service("group.groupServiceImpl")
 public class GroupServiceImpl implements GroupService {
 	@Autowired 
 	private CommonDAO dao;
+	@Autowired
+	private FileManager fileManager;
 	@Override
-	public int insertGroup(Group dto) {
+	public int insertGroup(Group dto,String path) {
 		int result = 0;
+
 		try {
+			if(dto.getUpload()!=null && ! dto.getUpload().isEmpty()) {
+				// 파일 업로드
+				String newFilename=fileManager.doFileUpload(dto.getUpload(), path);
+				dto.setProfile(newFilename);
 			result = dao.insertData("group.insertGroup", dto);
-			System.out.println(result);
+			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+		
 		return result;
 	}
 
@@ -69,9 +78,22 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public int updateGroup(Group dto) {
+	public int updateGroup(Group dto,String path) {
 		int res = 0;
 		try {
+			if(dto.getUpload()!=null && !dto.getUpload().isEmpty()) {
+				String newFilename = fileManager.doFileUpload(dto.getUpload(), path);
+		
+				if (newFilename != null) {
+					// 이전 파일 지우기
+					Group vo = readGroup(dto.getGroupName());
+					if(vo!=null && vo.getProfile()!=null) {
+						fileManager.doFileDelete(vo.getProfile(), path);
+					}
+					
+					dto.setProfile(newFilename);
+				}
+			}
 			res = dao.updateData("group.updateGroup", dto);
 		} catch (Exception e) {
 			System.out.println(e.toString());
