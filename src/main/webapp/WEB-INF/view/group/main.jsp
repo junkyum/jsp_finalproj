@@ -67,7 +67,7 @@ function update(){
 		<li><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
 		<li><a href="<%=cp%>/groupGally/gally?groupName=${dto.groupName}"><span>그룹갤러리</span></a></li>
 		<li><a href="<%=cp%>/group/groupBoard?userId=${dto.userId}&groupName=${dto.groupName}"><span>게시판</span></a></li>
-		<li><a href="#"><span>답변형게시판</span></a></li>
+		<li><a href="<%=cp%>/group/board"><span>답변형게시판</span></a></li>
 		</ul>
 	</div>
 	
