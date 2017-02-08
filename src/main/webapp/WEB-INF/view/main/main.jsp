@@ -84,13 +84,16 @@ function maker(){
 		   hide:"clip",
 		   buttons:{
 				"만들기":function(){
-					var url="<%=cp%>/group/created";
-					var query=$('form[name=createdForm]').serialize();
+					var f = document.createdForm;
+				    var formData = new FormData(f);
 					$.ajax({
 						type:"post",
-						url :url,
-						data : query,
+						url :"<%=cp%>/group/created",
+						processData: false,
+						contentType: false,
+						data : formData,
 						dataType:"json",
+						beforeSend:jkcheck,
 						success:function(data){
 							if(data.res=="false"){
 							   alert("안만들어짐");					
@@ -99,7 +102,7 @@ function maker(){
 								$('#introduce').val("");
 								$('#place').val("");
 								$('#keyword').val("");
-								$('#profile').val("");
+								$('#upload').val("");
 								$("#divGroupMaker").dialog("close");
 								listPage(1);
 							}
@@ -178,6 +181,35 @@ function listClear(page) {
 		$("#grouplist").html(data);
 		
 	});
+}
+function jkcheck(){
+	var f = document.createdForm;
+	if(!f.groupName.value) {
+		alert('이름을 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(!f.introduce.value) {
+		alert('소개를 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(!f.place.value) {
+		alert('장소를 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(!f.keyword.value) {
+		alert('키워드를 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
+		alert('이미지 파일만 가능합니다. !!!');
+		f.upload.focus();
+		return false;
+	}
+	return true;
 }
 </script>
 
@@ -434,12 +466,12 @@ div.friendScroll {
 
 
 <div id="divGroupMaker" style = "display:none;">
-<form name = "createdForm">
+<form name = "createdForm" enctype="multipart/form-data">
 이름:<input type="text" id="groupName" name="groupName" class="form-control"><br>
 소개:<input type="text" id="introduce" name="introduce" class="form-control"><br>
 장소:<input type="text" id="place" name="place" class="form-control"><br>
 키워드:<input type="text" id="keyword" name="keyword" class="form-control"><br>
-프로필 사진:<input type="text" id="profile" name="profile" class="form-control"><br>
+프로필 사진:<input type="file" id="upload" name="upload" class="form-control"><br>
 </form>
 </div>
 

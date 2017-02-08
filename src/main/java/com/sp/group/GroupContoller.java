@@ -69,9 +69,11 @@ public class GroupContoller {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		dto.setUserId(info.getUserId());
 		dto.setCondition("1");
+
 		String root=session.getServletContext().getRealPath("/");
 		String path=root+File.separator+"uploads"+File.separator+"photo";
 		int result = service.insertGroup(dto,path);
+		
 		JSONObject job = new JSONObject();
 		if(result==0)
 		{
@@ -181,10 +183,12 @@ public class GroupContoller {
 	@RequestMapping(value="/group/delete")
 	public String deleteGroup(
 			HttpServletResponse resp,
+			HttpSession session,
 			@RequestParam String groupName
 			)throws Exception {
-		
-		 int res = service.deleteGroup(groupName);
+		String root=session.getServletContext().getRealPath("/");
+		String path=root+File.separator+"uploads"+File.separator+"photo";
+		 int res = service.deleteGroup(groupName,path);
 		 if(res==0){
 			 return "redirect:/group?groupName="+groupName;
 		 }

@@ -24,8 +24,8 @@ public class GroupServiceImpl implements GroupService {
 				// 파일 업로드
 				String newFilename=fileManager.doFileUpload(dto.getUpload(), path);
 				dto.setProfile(newFilename);
-			result = dao.insertData("group.insertGroup", dto);
 			}
+			result = dao.insertData("group.insertGroup", dto);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -45,9 +45,14 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public int deleteGroup(String groupName) {
+	public int deleteGroup(String groupName,String path) {
 		int result = 0;
 		try {
+			Group dto= readGroup(groupName);
+			
+			if(dto.getProfile()!=null)
+				fileManager.doFileDelete(dto.getProfile(), path);
+			
 			result = dao.deleteData("group.deleteGroup", groupName);
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -118,7 +123,7 @@ public class GroupServiceImpl implements GroupService {
 		try {
 			res=dao.getIntValue("group.dataCountMember", map);
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println(e.toString());
 		}
 		return res;
 	}

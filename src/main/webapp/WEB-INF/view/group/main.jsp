@@ -13,21 +13,22 @@ $(function(){
 </script>
 <script type="text/javascript">
 function groupUpdate(){
-	var url="<%=cp%>/group/update";
-	var query=$('form[name=updateForm]').serialize();
+	var f = document.updateForm;
+    var jkformData = new FormData(f);
 	$.ajax({
 		type:"post",
-		url :url,
-		data : query,
+		url :"<%=cp%>/group/update",
+		processData: false,
+		contentType: false,
+		data : jkformData,
+		beforeSend:check,
 		dataType:"json",
 		success:function(data){
 			if(data.res=="fail"){
 			   alert("안만들어짐");					
 			}else {
-				$('#introduce').val(data.result.introduce);
-				$('#place').val(data.result.place);
-				$('#keyword').val(data.result.keyword);
-				$('#profile').val(data.result.profile);
+				url="<%=cp%>/group?groupName=${dto.groupName}";
+				location.href=url;
 			}
 		},error:function(e) {
 	    	  console.log(e.responseText);
@@ -43,17 +44,39 @@ function groupDelete(){
 	}
 	
 }
+function check(){
+	var f = document.updateForm;
+	if(!f.introduce.value) {
+		alert('내용을 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(!f.place.value) {
+		alert('내용을 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(!f.keyword.value) {
+		alert('내용을 입력하세요');
+		f.upload.focus();
+		return false;
+	}
+	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
+		alert('이미지 파일만 가능합니다. !!!');
+		f.upload.focus();
+		return false;
+	}
+}
 </script>
 
 
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
-		<div style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
-			${dto.groupName}<br> 
+		<div id="groupInfo" style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
- 			그룹정보
+ 			${dto.groupName}
 			</button>
-			그룹사진<br>
+			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}"><br>
 			
 			<c:if test="${res=='notyet' }">
 			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">
@@ -109,7 +132,7 @@ function groupDelete(){
 	</div>
 </div>
 
-<form name = "updateForm">
+<form name = "updateForm" enctype="multipart/form-data">
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -121,12 +144,14 @@ function groupDelete(){
 			소개:<input type="text" id="introduce" name="introduce" value ="${dto.introduce }" class="form-control"><br>
 			장소:<input type="text" id="place" name="place" value ="${dto.place }" class="form-control"><br>
 			키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" class="form-control"><br>
-			프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" class="form-control"><br>
+			프로필 사진:<input type="file" id="upload" name="upload" value ="${dto.profile }" class="form-control"><br>
+			현재 프로필<br>
+			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}"><br>
 	      	<input type = "hidden" id="groupName" name = "groupName" value="${dto.groupName}">
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-	        <button type="button" class="btn btn-primary" onclick="groupUpdate();" data-dismiss="modal">업데이트하기</button>
+	        <button type="button" class="btn btn-primary" onclick="groupUpdate();">업데이트하기</button>
 	      </div>
     </div>
   </div>
@@ -145,7 +170,7 @@ function groupDelete(){
 			소개:<input type="text" id="introduce" name="introduce" value ="${dto.introduce }" readonly="readonly" class="form-control"><br>
 			장소:<input type="text" id="place" name="place" value ="${dto.place }" readonly="readonly"class="form-control"><br>
 			키워드:<input type="text" id="keyword" name="keyword"  value ="${dto.keyword }" readonly="readonly" class="form-control"><br>
-			프로필 사진:<input type="text" id="profile" name="profile" value ="${dto.profile }" readonly="readonly" class="form-control"><br>
+			프로필 사진:<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}"><br>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
