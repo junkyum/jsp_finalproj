@@ -115,9 +115,7 @@ public class NoticeController {
 			n++;
 		}
 		
-		
-		
-        String paging = myUtil.paging(current_page, total_page);
+        String paging = myUtil.pagingMethod(current_page, total_page,"noticeListpage");
 	    model.addAttribute("total_page", total_page);
 	    model.addAttribute("searchKey", searchKey);
 	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));

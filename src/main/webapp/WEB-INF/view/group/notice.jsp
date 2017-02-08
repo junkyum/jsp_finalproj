@@ -13,16 +13,15 @@
 	/* 	border: 1px solid #5D5D5D; */
 }
 </style>
-<link rel="stylesheet" 	href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet"	href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css"type="text/css" />
+
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript">
 $(function(){
-	listPage(1);
+	noticeListpage(1);
 	$('[data-toggle="tooltip"]').tooltip();
 });
 
-function listPage(page) {
+function noticeListpage(page) {
 	var url="<%=cp%>/group/noticeList";
 	var num="${dto.num}";
 	var groupName = "${groupName}";
@@ -62,7 +61,7 @@ function mkmmodalCheck(){
 					$("#kmsubject").val("");
 					$("#kmcontent").val("");
 					$("#kmgnfile").val("");				
-					listPage(1);					
+					noticeListpage(1);					
 				}else {
 					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
 				}
@@ -98,7 +97,7 @@ function deleteNoG(num,page,fileNum){
 		$.post(url, {num:num, page:page, fileNum:fileNum}, function(data){
 			var state = data.state;
 			if(state =="true"){
-				listPage(page);
+				noticeListpage(page);
 			}else {
 				alert("파일 삭제 실패했당 다시 확인해보시용  ");
 			}

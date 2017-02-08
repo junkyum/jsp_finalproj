@@ -72,23 +72,13 @@ function mkmgroupBoardCheck(){
 </script>
 
 <div class="gbbestbig">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th style="width: 70px;">번호</th>
-					<th>제목</th>
-					<th class="text-center" style="width: 100px;">작성자</th>
-					<th class="text-center" style="width: 100px;">등록일</th>
-					<th class="text-center" style="width: 70px;">조회수</th>
-				</tr>
-			</thead>
-		</table>
-		<div id="gblistlayout"></div>
-		
-</div>
 
-
-<div class="modal fade" id="myModalGboard" role="dialog">
+	 <div id="gblistlayout"></div>
+	
+	
+	
+	
+	<div class="modal fade" id="myModalGboard" role="dialog">
 	<form name="gBoard" method="POST" enctype="multipart/form-data">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -121,3 +111,8 @@ function mkmgroupBoardCheck(){
 			</div>
 		</form>
 	</div>
+	
+</div>
+
+
+
