@@ -5,18 +5,18 @@ import java.util.Map;
 
 public interface ReplyBoardService {
 	
-	public int insertResponse(ReplyBoard dto, String mode);
+	public int insertReplyBoard(ReplyBoard dto, String mode);
 	public int dataCount(Map<String, Object> map);
-	public List<ReplyBoard> listResponse(Map<String, Object> map);
+	public List<ReplyBoard> listReplyBoard(Map<String, Object> map);
 	
 	// 게시물 보기
-	public ReplyBoard readResponse(int boardNum);
+	public ReplyBoard readReplyBoard(int replyBoardNum);
 	
-	public ReplyBoard preReadResponse(Map<String, Object> map);
-	public ReplyBoard nextReadResponse(Map<String, Object> map);
+	public ReplyBoard preReadReplyBoard(Map<String, Object> map);
+	public ReplyBoard nextReadReplyBoard(Map<String, Object> map);
 	
-	public int updateHitCount(int responseNum);
+	public int updateHitCount(int replyBoardNum);
 	
-	public int updateResponse(ReplyBoard dto);
-	public int deleteResponse(int responseNum);
+	public int updateReplyBoard(ReplyBoard dto);
+	public int deleteReplyBoard(int replyBoardNum);
 }

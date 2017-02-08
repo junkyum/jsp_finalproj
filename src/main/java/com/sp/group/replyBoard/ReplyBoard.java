@@ -2,27 +2,42 @@ package com.sp.group.replyBoard;
 
 public class ReplyBoard {
 	
-	private int listNum, responseNum, groupNumber;
+	private int listNum, replyBoardNum, groupNumber;
 	private String userId, groupName, created;
 	private	String subject,content;
-	
+
 	private int depth;
 	private int orderNo;
 	private int parent;
 	private int hitcount;
+
+
 	
+	public int getHitcount() {
+		return hitcount;
+	}
+	public void setHitcount(int hitcount) {
+		this.hitcount = hitcount;
+	}
+	public int getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
+	}
+	public int getReplyBoardNum() {
+		return replyBoardNum;
+	}
+	public void setReplyBoardNum(int replyBoardNum) {
+		this.replyBoardNum = replyBoardNum;
+	}
 	public int getListNum() {
 		return listNum;
 	}
 	public void setListNum(int listNum) {
 		this.listNum = listNum;
 	}
-	public int getResponseNum() {
-		return responseNum;
-	}
-	public void setResponseNum(int responseNum) {
-		this.responseNum = responseNum;
-	}
+
 	public int getGroupNumber() {
 		return groupNumber;
 	}
@@ -65,24 +80,13 @@ public class ReplyBoard {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	public int getOrderNo() {
-		return orderNo;
-	}
-	public void setOrderNo(int orderNo) {
-		this.orderNo = orderNo;
-	}
+
 	public int getParent() {
 		return parent;
 	}
 	public void setParent(int parent) {
 		this.parent = parent;
 	}
-	public int getHitcount() {
-		return hitcount;
-	}
-	public void setHitcount(int hitcount) {
-		this.hitcount = hitcount;
-	}
-	
-	
+
+
 }
