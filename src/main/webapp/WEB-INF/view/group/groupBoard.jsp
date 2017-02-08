@@ -4,8 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String cp=request.getContextPath();
-	String groupName = request.getParameter("groupName");
-	String userId = request.getParameter("userId");
 %>
 <style>
 .gbbestbig {
@@ -16,22 +14,61 @@
 </style>
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
+<script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript">
 $(function(){
-	gboardlistPage(1);
+	listPage(1);
 });
 
-function gboardlistPage(page) {
-	var groupName = "<%=groupName%>";
+function listPage(page) {	
 	var url="<%=cp%>/group/groupBoardList";
-	$.get(url, {page:page,}, function(data){
+	var boardNum = "${dto.boardNum}";
+	var groupName = "${groupName}";
+	var userId = "${userId}";
+	$.get(url, {boardNum:boardNum, page:page, groupName:groupName, userId:userId}, function(data){
 		$("#gblistlayout").html(data);
 	});
 }
 
-
+function mkmgroupBoardCheck(){
+	var page = "${page}";
+	var url = "<%=cp%>/group/gboard/created";
+	var subject = $("#gbsubjectkm").val().trim();
+	var content = $("#gbcontentkm").val().trim();
+	var keyword = $("#gbkeywordkm").val();
+	var groupName= "${groupName}";
+	if(!subject){
+		$("#gbsubjectkm").focus();
+		return;
+	}
+	
+	var groupBodF = document.gBoard;
+	var gbformData = new FormData(groupBodF);
+		$.ajax({
+			type:"post",
+			url :url,
+			processData: false,
+			contentType: false,
+			data : gbformData,
+			dataType:"json",
+			success:function(data){
+				var result = data.result;
+				if(data.result=="true"){
+					$("#gbsubjectkm").val("");
+					$("#gbcontentkm").val("");
+					$("#gbfilekm").val("");
+					$("#gbkeywordkm").val("");				
+					listPage(1);					
+				}else {
+					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+				}
+				
+			},error:function(e) {
+		    	  console.log(e.responseText);
+		      }
+		
+	});	
+}
 </script>
 
 <div class="gbbestbig">
@@ -51,13 +88,9 @@ function gboardlistPage(page) {
 </div>
 
 
-
-
-
 <div class="modal fade" id="myModalGboard" role="dialog">
-		<!-- 모달 Div 이걸 따로 빼야하는지 그냥 둬도 되는건지 내일 물어보기!  -->
+	<form name="gBoard" method="POST" enctype="multipart/form-data">
 		<div class="modal-dialog">
-
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title">
@@ -66,16 +99,18 @@ function gboardlistPage(page) {
 					</h4>
 				</div>
 				<div class="modal-body">
-					<input type="text" name="subject" class="form-control input"
+					<input type="text" name="subject" id="gbsubjectkm" class="form-control input"
 						placeholder="제목을 입력해주세요." required="required"><br>
-					<textarea name="content" class="form-control" rows="15"
+					<textarea name="content" id="gbcontentkm" class="form-control" rows="15"
 						required="required"></textarea>
-					<br> <input type="file" name="upload"
-						class="form-control input"><br> <input type="text"
-						name="subject" class="form-control input" placeholder="태그를 입력해주세요.">
+					<br> <input type="file" name="upload" id="gbfilekm"
+						class="form-control input"><br> 
+					<input type="text" name="keywork" id="gbkeyworkkm" class="form-control input" placeholder="태그를 입력해주세요.">
+					<input type="hidden" name="groupName" value="${groupName }">
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+							id="kmgroupBoardCheck" onclick="mkmgroupBoardCheck();">
 						<span class="glyphicon glyphicon-ok"></span>
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -83,5 +118,6 @@ function gboardlistPage(page) {
 					</button>
 				</div>
 			</div>
-		</div>
+			</div>
+		</form>
 	</div>

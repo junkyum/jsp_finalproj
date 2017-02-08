@@ -34,19 +34,24 @@ public class GroupBoardController {
 	@Autowired private FileManager fileManager;
 	
 	@RequestMapping(value="/group/groupBoard")
-	public String groupBoard() throws Exception{
+	public String groupBoard(
+			@RequestParam String groupName,
+			@RequestParam String userId,
+			Model model
+			) throws Exception{
+		model.addAttribute("groupName",groupName);
+		model.addAttribute("userId",userId);
 		return "group/groupBoard";
 	}
 	
 	@RequestMapping(value="/group/groupBoardList")
 	public void groupBoardList(
 			@RequestParam(value ="page",defaultValue="1") int current_page,
-			@RequestParam String groupName,
+			@RequestParam String groupName,  @RequestParam String userId, 
 			@RequestParam(value="searchKey", defaultValue ="subject") String searchKey,
 			@RequestParam(value="searchValue",defaultValue="") String searchValue,
-			HttpServletRequest req, Model model) throws Exception{
+			HttpServletRequest req, Model model, HttpSession session) throws Exception{
 
-		
 		if(req.getMethod().equalsIgnoreCase("GET")){
 			searchValue =URLDecoder.decode(searchValue,"UTF-8");
 		}
@@ -54,7 +59,9 @@ public class GroupBoardController {
 		int numPerPage=10;
 		int dataCount=0, total_page=0;
 		
+		/**/
 		Map<String, Object> map= new HashMap<String, Object>();
+		map.put("groupName", groupName);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 
@@ -79,9 +86,10 @@ public class GroupBoardController {
 		Iterator<GroupBoard> it = boardList.iterator();
 		while(it.hasNext()){
 			GroupBoard data = it.next();
+			data.setContent(data.getContent().replaceAll("\n", "<br>"));
 			listNum = dataCount-(start+n-1);
 			data.setListNum(listNum);
-
+			
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 			Date beginDate = formatter.parse(data.getCreated());
 
@@ -97,35 +105,17 @@ public class GroupBoardController {
 
 			n++;
 		}
-		
-		/*String cp= req.getContextPath();
-		String listUrl= cp+"/group/groupBoardList";
-		String articleUrl=cp+"/group/boardArticle?page="+current_page;
-
-		String params="";
-		if(searchValue.length()!=0){
-			params="searchKey="+searchKey+"&searchValue"+URLEncoder.encode(searchValue,"UTF-8");
-
-		}
-		if(params.length()!=0){
-			listUrl=listUrl+"?"+params;
-			articleUrl=articleUrl+"&"+params;
-		}*/
-
 		String paging =util.paging(current_page, total_page);
-
 		model.addAttribute("boardList",boardList);
 		model.addAttribute("page",current_page);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("total_page",total_page);
 		model.addAttribute("groupName", groupName);
-/*
-		model.addAttribute("articleUrl",articleUrl);*/
+		model.addAttribute("userId",userId);
 		model.addAttribute("paging",paging);
 		model.addAttribute("searchKey", searchKey);
 	    model.addAttribute("searchValue", URLDecoder.decode(searchValue, "utf-8"));
         
-	 
 	}
 
 	@RequestMapping(value="/group/gboard/created", method=RequestMethod.POST)
@@ -138,11 +128,10 @@ public class GroupBoardController {
 		String cp = req.getContextPath();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null){
-			resp.sendRedirect(cp+"/member/login.do");
+			resp.sendRedirect(cp+"/member/login");
 		}
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + File.separator + "uploads" + File.separator + "notice";
-		dto.setGroupName(dto.getGroupName()); ///////////////////////////// 수정할것!... 
+		String pathname = root + File.separator + "uploads" + File.separator + "groupBoard";
 		dto.setUserId(info.getUserId());
 		
 		int res = service.insertGroupBoard(dto, pathname);

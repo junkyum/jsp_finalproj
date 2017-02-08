@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 import com.sp.member.SessionInfo;
 
@@ -31,6 +32,7 @@ import net.sf.json.JSONObject;
 public class NoticeController {
 	@Autowired private NoticeService service;
 	@Autowired private MyUtil myUtil;
+	@Autowired private FileManager fileManager;
 
 	
 	@RequestMapping(value="/group/notice")
@@ -65,8 +67,8 @@ public class NoticeController {
 		}
 
 		GroupNotice dto = service.readNotice(num);		
-		
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		map.put("groupName", groupName);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
@@ -113,17 +115,8 @@ public class NoticeController {
 			n++;
 		}
 		
-		/*String params = "";
-        String urlList = cp+"/group/notice";
-        if(searchValue.length()!=0) {
-        	params = "searchKey=" +searchKey + 
-        	             "&searchValue=" + URLEncoder.encode(searchValue, "utf-8");	
-        }
-        
-        if(params.length()!=0) {
-            urlList = cp+"/group/notice?" + params;
-        }
-        */
+		
+		
         String paging = myUtil.paging(current_page, total_page);
 	    model.addAttribute("total_page", total_page);
 	    model.addAttribute("searchKey", searchKey);
@@ -149,11 +142,11 @@ public class NoticeController {
 		String cp = req.getContextPath();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		if(info==null){
-			resp.sendRedirect(cp+"/member/login.do");
+			resp.sendRedirect(cp+"/member/login");
 		}
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
-		dto.setGroupName(dto.getGroupName()); ///////////////////////////// 수정할것!... 
+		/*dto.setGroupName(dto.getGroupName()); */
 		dto.setUserId(info.getUserId());
 		int res = service.insertNotice(dto, pathname);
 		
@@ -168,9 +161,9 @@ public class NoticeController {
 
 	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
 	public String updateSubmit(
-			@RequestParam int num, HttpServletResponse resp,
+			@RequestParam int num, 
 			@RequestParam String page,
-			HttpSession session ) throws Exception {
+			HttpServletResponse resp, HttpSession session ) throws Exception {
 		
 		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
@@ -181,7 +174,10 @@ public class NoticeController {
 			return "redirect:/notice/list?page="+page;*/
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";		
+		
 		GroupNotice dto = service.readNotice(num);
+		service.updateNotice(dto, pathname);
+
 		JSONObject job = new JSONObject();		
 		job.put("subject", dto.getSubject());
 		job.put("content", dto.getContent());
@@ -190,33 +186,93 @@ public class NoticeController {
 		out.print(job.toString());
 		
 		//dto.setUserId(info.getUserId());
-		service.updateNotice(dto, pathname);
 		
 		return "group/notice";
 	}
 	
-	@RequestMapping(value="/group/notice/delete",method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> delete(
-			@RequestParam(value="num") int num, HttpSession session ) throws Exception {
+	@RequestMapping(value="/group/notice/delete")
+	public void delete(
+			@RequestParam(value="num") int num,
+			@RequestParam(value="page") String page, 
+			@RequestParam(value="fileNum") int fileNum, 
+			HttpServletResponse resp, HttpSession session ) throws Exception {
 		
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
 		
-		SessionInfo info=(SessionInfo) session.getAttribute("member");
-		
-		String state="false";
-		if(info==null) {
-			state="loginFail";
-		}else if(info.getUserId().equals("admin")) {
-			service.deleteNotice(num, pathname);
-			state="true";
+		service.deleteNotice(num, pathname);
+		GroupNotice dto = service.readFile(fileNum);
+		if(dto!=null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
 		}
 		
-		// 작업 결과를 json으로 전송
-		Map<String, Object> model = new HashMap<>();
-		model.put("state", state);
-		return model;
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("field", "fileNum");
+		map.put("num", fileNum);
+		service.deleteFile(map);
+		
+		JSONObject ob=new JSONObject();
+		ob.put("state", "true");
+		
+		resp.setContentType("text/html; charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		
+		out.print(ob.toString());	
+		
 	}
-
+	
+	@RequestMapping(value="/group/notice/deleteFile", method=RequestMethod.POST)
+	public void deleteFile(
+			HttpServletResponse resp, HttpSession session,
+			@RequestParam(value="fileNum") int fileNum ) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "notice";
+		
+		GroupNotice dto=service.readFile(fileNum);
+		if(dto!=null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+		}
+		
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("field", "fileNum");
+		map.put("num", fileNum);
+		service.deleteFile(map);
+		
+		JSONObject ob=new JSONObject();
+		ob.put("state", "true");
+		
+		resp.setContentType("text/html; charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		
+		out.print(ob.toString());			
+	}
+	
+	
+	@RequestMapping(value="/group/notice/download")
+	public void download(
+			HttpServletResponse resp, HttpSession session,
+			@RequestParam(value="num") int num
+			) throws Exception{
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+File.separator+"uploads"+File.separator+"notice";
+		
+		List<GroupNotice> fileList = service.listFile(num);
+		GroupNotice dto = null;
+		if(fileList.size()>0){
+			dto = fileList.get(0); //노티
+		}
+		boolean flag = false;
+		
+		if(dto!=null){
+			flag = fileManager.doFileDownload(dto.getSaveFilename(), dto.getOriginalFilename(), pathname, resp);
+		}
+				
+		if(! flag) {
+			resp.setContentType("text/html;charset=utf-8");
+			PrintWriter out=resp.getWriter();
+			out.print("<script>alert('파일 다운로드가 실패했습니다.');history.back();</script>");
+		}
+	}
 }

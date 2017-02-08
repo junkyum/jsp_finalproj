@@ -24,7 +24,7 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 		try {
 			int maxNum = dao.getIntValue("gboard.maxNum", dto);
 			dto.setBoardNum(maxNum + 1);
-			res = dao.insertData("gboard.insertGorupBoard", dto);
+			res = dao.insertData("gboard.insertGroupBoard", dto);
 			
 			if (dto.getUpload() != null && !dto.getUpload().isEmpty()) {
 				for (MultipartFile mf : dto.getUpload()) {
