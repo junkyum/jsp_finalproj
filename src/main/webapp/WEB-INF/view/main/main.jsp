@@ -106,11 +106,9 @@ function maker(){
 								$("#divGroupMaker").dialog("close");
 								listPage(1);
 							}
-							
 						},error:function(e) {
 					    	  console.log(e.responseText);
-					      }
-					
+					    }
 				});	
 				},"취소":function(){
 					$(this).dialog("close");
