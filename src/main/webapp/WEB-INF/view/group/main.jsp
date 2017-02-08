@@ -73,10 +73,10 @@ function check(){
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div id="groupInfo" style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
+			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}" style = "margin-bottom: 0px;"><br>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
  			${dto.groupName}
-			</button>
-			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}"><br>
+			</button><br>
 			
 			<c:if test="${res=='notyet' }">
 			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">
@@ -91,7 +91,7 @@ function check(){
 			</c:if>
 			
 			<c:if test="${res=='owner' }">
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">
+			<button type="button" data-toggle="modal" data-target="#updateModal">
  			그룹수정
 			</button>
 			<button type="button" onclick="groupDelete();">
@@ -105,10 +105,22 @@ function check(){
 			    <span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			<c:forEach var="vo" items="${myList}">
+				<c:forEach var="vo" items="${myList}">
 			    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:location.href='<%=cp%>/group?groupName=${vo.groupName}';">
 			    ${vo.groupName }</a></li>
-			</c:forEach>
+				</c:forEach>
+			  </ul>
+			</div>
+				<div class="dropdown">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			  그룹 회원 목록
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<c:forEach var="list" items="${memberlist}">
+			    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:location.href='<%=cp%>/?userId=${list.userId}';">
+			    ${list.userId }</a></li>
+				</c:forEach>
 			  </ul>
 			</div>
 		</div>

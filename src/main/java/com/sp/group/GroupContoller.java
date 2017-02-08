@@ -2,7 +2,9 @@ package com.sp.group;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +55,7 @@ public class GroupContoller {
 			String userId=info.getUserId();
 			List<Group> myList = service.listMyGroup(userId);
 			
-			
+			model.addAttribute("memberlist", list);
 			model.addAttribute("myList",myList);
 			model.addAttribute("res",res);
 			model.addAttribute("dto",dto);
@@ -211,6 +213,7 @@ public class GroupContoller {
 			dto.setGroupName(groupName);
 			dto.setCondition("2");
 		    service.insertGroupMember(dto);
+		    groupName = URLEncoder.encode(groupName, "utf-8");
 			
 			return "redirect:/group?groupName="+groupName;
 		}
@@ -228,6 +231,8 @@ public class GroupContoller {
 			map.put("userId", info.getUserId());
 			map.put("groupName", groupName);
 		    service.deleteGroupMember(map);
+		    groupName = URLEncoder.encode(groupName, "utf-8");
+		    
 			return "redirect:/group?groupName="+groupName;
 	}
 	
