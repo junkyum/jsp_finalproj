@@ -13,23 +13,24 @@
 	/* 	border: 1px solid #5D5D5D; */
 }
 </style>
-<link rel="stylesheet" 	href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet"	href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css"type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript">
 $(function(){
-	listPage(1);
+	noticeListpage(1);
+	$('[data-toggle="tooltip"]').tooltip();
 });
 
-function listPage(page) {
+function noticeListpage(page) {
 	var url="<%=cp%>/group/noticeList";
 	var num="${dto.num}";
 	var groupName = "${groupName}";
 	var userId = "${userId}";
-	$.get(url, {num:num, pageNo:page, groupName:groupName, userId:userId}, function(data){
+	$.post(url, {num:num, pageNo:page, groupName:groupName, userId:userId}, function(data){
 		$("#noticeListlayout").html(data);
 	});
 }
+
 
 function mkmmodalCheck(){
 	var page = "${page}";
@@ -44,17 +45,23 @@ function mkmmodalCheck(){
 	
 	var query ="subject="+subject+"&content="+content+"&groupName="+groupName;
 	
+	var groupNotiF = document.gNotice;
+	var gnformDate = new FormData(groupNotiF);
+	alert(gnformDate);
 		$.ajax({
 			type:"post",
 			url :url,
-			data : query,
+			processData: false,
+			contentType: false,
+			data : gnformDate,
 			dataType:"json",
 			success:function(data){
 				var result = data.result;
 				if(data.result=="true"){
 					$("#kmsubject").val("");
 					$("#kmcontent").val("");
-					noticeListPage(1);					
+					$("#kmgnfile").val("");				
+					noticeListpage(1);					
 				}else {
 					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
 				}
@@ -66,38 +73,33 @@ function mkmmodalCheck(){
 	});	
 }
 
-<%-- function updateNoG(num) {	
-	var page = "${page}";
+<%-- function updateNoG(numm,page) {
 	var url = "<%=cp%>/group/notice/update";
-	var subject = "${dto.subject}";
-	var content = "${dto.content}";
-	var groupName= "${groupName}";
 	
-	var query = "subject="+subject+"&content="+content+"&groupName="+groupName;
-	$.ajax({
-		type:"post",
-		url :url,
-		data: query,
-		dataType:"json",
-		success:function(data){
-			$("#kmsubject").val("나는");
-			$("#kmcontent").val("경미");
-		},error:function(e) {
-	    	  console.log(e.responseText);
-	      }
-	});
+	$.post(url, {num:num, page:page}, function(data){
+		var state = data.state;
+		if(state =="true"){
+			$("#kmsubject").val(data.subject);
+			$("#kmcontent").val(data.content);
+			listPage(page);
+		}else {
+			alert("오잉 ");
+		}
+	}, "json");
+	
+
 } --%>
 
 	
-function deleteNoG(num,page){	
+function deleteNoG(num,page,fileNum){	
 	if(confirm("공지사항을 삭제 하시겠습니까 ? ")){
 		var url ="<%=cp%>/group/notice/delete";
-		$.post(url, {num:num}, function(data){
+		$.post(url, {num:num, page:page, fileNum:fileNum}, function(data){
 			var state = data.state;
-			if(state =="loginFail"){
-				alert("로그인화면으로 돌아가는 메소드 ");
+			if(state =="true"){
+				noticeListpage(page);
 			}else {
-				noticeListPage(page);
+				alert("파일 삭제 실패했당 다시 확인해보시용  ");
 			}
 		}, "json");
 	}
@@ -144,9 +146,9 @@ function noticelayoutview(num) {
 							required="required"><br>
 						<textarea name="content" id="kmcontent" class="form-control"
 							rows="15" required="required"></textarea>
-						<br> <input type="file" name="upload" id="file"
+						<br> <input type="file" name="upload" id="kmgnfile"
 							class="form-control input"><br>
-						<input type="hidden" name="groupName" id="${groupName }">
+						<input type="hidden" name="groupName" value="${groupName }">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal"

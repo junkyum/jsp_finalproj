@@ -8,8 +8,8 @@
 
 <!-- 게시글 생성 -->
 <insert id="insertGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
-	insert into groupboard (boardNum, userId, subject, content)  
-         values ( #{boardNum}, #{userId}, #{subject}, #{content})
+	insert into groupboard (boardNum, userId, groupName, subject, content)  
+         values ( #{boardNum}, #{userId}, #{groupName}, #{subject}, #{content})
 </insert>
 
 
@@ -35,7 +35,9 @@
 		join member m 
 		ON b.userId = m.userId
 	<where>
+		groupName =#{groupName}
 		<if test="searchValue != null and searchValue !='' ">
+		and
 			<include refid="where-list" />
 		</if>
 	</where>
@@ -45,11 +47,13 @@
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
- 				select boardNum, b.userId, m.userName, subject, hitCount, created
+ 				select boardNum, b.userId, m.userName, subject, content,hitCount, created
   					from groupboard b
   					join member m on b.userId = m.userId
 	<where>
+			groupName =#{groupName}
 		<if test="searchValue != null and searchValue !='' ">
+		and
 			<include refid="where-list" />
 		</if>
 	</where>

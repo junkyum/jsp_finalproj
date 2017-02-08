@@ -3,66 +3,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="groupNotice">
 
-<select id="maxNum" resultType="Integer"> 
-   SELECT NVL(MAX(NUM),0) FROM groupNotice
-</select>
+	<select id="maxNum" resultType="Integer"> 
+	   SELECT NVL(MAX(NUM),0) FROM groupNotice
+	</select>
 
-<!-- UserId 빼놈!!!!!!!!  -->
-<insert id="insertNotice" parameterType="com.sp.group.notice.GroupNotice">
-   INSERT INTO groupNotice(num, userId, groupName, subject, content) 
-			VALUES (#{num}, #{userId}, #{groupName}, #{subject}, #{content})
-</insert>
+	<insert id="insertNotice" parameterType="com.sp.group.notice.GroupNotice">
+	   INSERT INTO groupNotice(num, userId, groupName, subject, content) 
+				VALUES (#{num}, #{userId}, #{groupName}, #{subject}, #{content})
+	</insert>
 
-<!-- <insert id="insertNoticeFile" parameterType="com.sp.main.Notice">
-   INSERT INTO NOTICEFILE(FILENUM, NUM, USERID, saveFilename, ORIGINALFILENAME, FILESIZE) 
-         VALUES (noticeFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename},#{originalFilename},#{fileSize} )
-</insert> -->
+	<insert id="insertNoticeFile" parameterType="com.sp.group.notice.GroupNotice">
+	   INSERT INTO groupNoticeFILE(FILENUM, NUM, userId, saveFilename, ORIGINALFILENAME, FILESIZE) 
+	         VALUES (noticeFile_seq.NEXTVAL, #{num}, #{userId}, #{saveFilename},#{originalFilename},#{fileSize} )
+	</insert>
 
-<sql id="where-list">
-      <if test="searchKey=='subject'">
-         instr(subject, #{searchValue}) >= 1
-      </if>
-      <if test="searchKey=='content'">
-         dbms_lob.instr(content, #{searchValue}) >= 1
-      </if>
-      <if test="searchKey=='created'">
-         TO_CHAR(created, 'YYYY-MM-DD') =#{searchValue}
-      </if>
-</sql>
+	<sql id="where-list">
+	      <if test="searchKey=='subject'">
+	         instr(subject, #{searchValue}) >= 1
+	      </if>
+	      <if test="searchKey=='content'">
+	         dbms_lob.instr(content, #{searchValue}) >= 1
+	      </if>
+	      <if test="searchKey=='created'">
+	         TO_CHAR(created, 'YYYY-MM-DD') =#{searchValue}
+	      </if>
+	</sql>
 
-<select id="dataCount" parameterType="map" resultType="Integer">
- select NVL(count(*),0) from groupNotice n JOIN member m ON n.userId = m.userId
-		<where>
-				groupName =#{groupName}
-                
-			<if test="searchValue != null and searchValue!=''">
-			and 
-				<include refid="where-list"/>
-			</if>
-		</where>
-</select>
-
-<select id="listNotice" resultType="com.sp.group.notice.GroupNotice" parameterType="map">
-
-	SELECT * FROM (
-		SELECT ROWNUM rnum, tb.* FROM (
-			SELECT num, userId, subject, content, created
-			FROM groupNotice
-				<where>
+	<select id="dataCount" parameterType="map" resultType="Integer">
+	 select NVL(count(*),0) from groupNotice n JOIN member m ON n.userId = m.userId
+			<where>
 					groupName =#{groupName}
-					
-					<if test="searchValue != null and searchValue !='' ">
-					and
-						<include refid="where-list" /><!-- 위에서 만든 sql문 -->
-					</if>
-				</where>
-			ORDER BY num DESC
- <![CDATA[
-       ) tb WHERE ROWNUM <= #{end}
-   ) WHERE rnum >= #{start}   
- ]]>
-     
-   </select>
+	                
+				<if test="searchValue != null and searchValue!=''">
+				and 
+					<include refid="where-list"/>
+				</if>
+			</where>
+	</select>
+
+	<select id="listNotice" resultType="com.sp.group.notice.GroupNotice" parameterType="map">
+	
+	SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT n.num, n.userId, subject, content, created, nvl(fileCount, 0) fileCount , 
+              nvl(g.fileSize,0) fileSize, g.ORIGINALFILENAME
+				FROM groupNotice n 
+        
+				left OUTER join 
+		          (
+			          select num, nvl(count(*),0) fileCount from groupNoticeFile 
+			          group by num 
+		          ) f on n.num = f.num 
+              left outer join 
+              groupNoticeFile g on n.num = g.num 
+					<where>
+						groupName =#{groupName} 
+						
+						<if test="searchValue != null and searchValue !='' ">
+						and
+							<include refid="where-list" /><!-- 위에서 만든 sql문 -->
+						</if>
+					</where>
+				ORDER BY num DESC
+	 <![CDATA[
+	       ) tb WHERE ROWNUM <= #{end}
+	   ) WHERE rnum >= #{start}   
+	 ]]>
+
+
+	</select>
 
    <select id="readNotice" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
      select num, m.userId, m.userName, subject, content, created
@@ -70,11 +79,11 @@
 				join member m on n.userId = m.userId where num =#{num}
    </select>
    
-<!--    <select id="listFile" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
+   <select id="listFile" parameterType="Integer" resultType="com.sp.group.notice.GroupNotice">
          select fileNum, saveFilename ,originalFilename, fileSize
-				from noticeFile 
+				from groupNoticeFile 
 					where num=#{num}
-   </select>  -->
+   </select> 
    
       
     <update id="updateNotice" 
@@ -85,11 +94,11 @@
     </update>
     
    <delete id="deleteNotice" parameterType="Integer">
-     DELETE FROM groupNotice WHERE num=#{num}
+     	DELETE FROM groupNotice WHERE num=#{num}
    </delete>
    
-<!--    <delete id="deleteFile" parameterType="map">
-        DELETE FROM gnoticeFile WHERE ${field} = #{num}
-   </delete> -->
+   <delete id="deleteFile" parameterType="map">
+        DELETE FROM groupNoticeFile WHERE ${field} = #{num}
+   </delete>
    
 </mapper>

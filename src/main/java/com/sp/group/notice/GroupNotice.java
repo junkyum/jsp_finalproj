@@ -11,8 +11,17 @@ public class GroupNotice {
 	   private    String userId, groupName, subject,userName;
 	   private    String created,content;
 	   private    String saveFilename,originalFilename;
+	   private int fileCount;
 	   
-	   //스프링에서 파일 받기
+	   public int getFileCount() {
+		return fileCount;
+	}
+
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
+	}
+
+	//스프링에서 파일 받기
 	   private List<MultipartFile> upload;
 	   
 	   private  long gap;
