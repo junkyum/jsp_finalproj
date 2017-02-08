@@ -7,10 +7,7 @@ public interface NoticeService {
 	public int insertNotice(GroupNotice dto, String pathname);
 	public int dataCount(Map<String, Object> map);
 	public List <GroupNotice> listNotice(Map<String, Object> map);
-	//public int updateHitCount(int num);
 	public GroupNotice readNotice(int num);
-	/*public Notice preReadNotice(Map<String, Object> map);
-	public Notice nextReadNotice(Map<String, Object> map);*/
 	public int updateNotice(GroupNotice dto, String pathname);
 	public int deleteNotice(int num, String pathname);
 	public int insertFile(GroupNotice dto);

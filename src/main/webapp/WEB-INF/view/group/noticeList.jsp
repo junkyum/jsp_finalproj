@@ -100,7 +100,6 @@
 </script> -->
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <c:forEach var="dto" items="${noticeList }">
 	<div class="bigdiv">
@@ -110,13 +109,13 @@
 				<div class="overtext">${dto.created }<br>
 					<c:if test="${userId==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default" id="kmUpdatebtn"
-							onclick="updateNoG(${dto.num});" data-num="${dto.num }"
-							data-toggle="modal" data-target="#kmModal">
+							onclick="updateNoG(${dto.num},${page });" data-num="${dto.num }"
+							data-toggle="modal" data-target="#kmNoticeModal">
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					
 						<button type="button" class="btn btn-default" id="kmDeleteBtn"
-							onclick="deleteNoG(${dto.num},${page });">
+							onclick="deleteNoG(${dto.num},${page },${dto.fileNum });">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</c:if>
@@ -131,7 +130,15 @@
 							onclick="noticelayoutview(${dto.num});" >
 							<span class="glyphicon glyphicon-resize-full"></span>
 						</button>
-					</c:if>					
+					</c:if>
+					<c:if test="${dto.fileCount > 0}">
+						<a href="<%=cp%>/group/notice/download?num=${dto.num}">
+							<button type="button" class="btn btn-default-sm btn-xs" 
+										data-toggle="tooltip" data-placement="right" title="${dto.originalFilename },${dto.fileSize /1024}byte" id="fileNotice">							
+									<span class="glyphicon glyphicon-floppy-save"></span>														
+							</button>	
+						</a>
+					</c:if>			
 				</div>
 				${dto.content }
 				
@@ -170,8 +177,7 @@
 			</button>
 		</form>
 	</div>
-	<div
-		style="float: left; width: 20%; min-width: 85px; text-align: right;">
+	<div style="float: left; width: 20%; min-width: 85px; text-align: right;">
 		<c:if test="${userId==sessionScope.member.userId}">
 			
 			<button type="button" class="btn btn-default btn wbtn" id="btnpen"

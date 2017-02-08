@@ -2,10 +2,95 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="groupReply">
-					
- 	
+				
+		<select id="maxReplyBoardNum" resultType="Integer">
+			SELECT NVL(MAX(replyBoardNum),0) FROM groupReply
+		</select>	
+ 		
+ 		<insert id="insertReplyBoard" parameterType="com.sp.group.replyBoard.ReplyBoard">
+ 			INSERT INTO groupReply (replyBoardNum, groupName, userId, subject, content,
+ 			 groupNumber, depth, orderNo, parent) VALUES (#{replyBoardNum}, #{groupName}, 
+ 			 #{userId}, #{subject}, #{content}, #{groupNumber}, #{depth}, #{orderNo}, #{parent})
+ 		</insert>
 		
+			<!-- 검색할때 쓰는 문구  searchKeyC   searchValueC -->
+		<sql id="where-list">
+			  <if test="searchKeyC=='subject'">
+			       INSTR(subject, #{searchValueC}) &gt; 0
+			  </if>
+			  <if test="searchKeyC='content'">
+			      INSTR(content, #{searchValueC}) &gt; 0 
+			  </if>
+			  <if test="searchKeyC=='created'">
+			      TO_CHAR(r.created, 'YYYY-MM-DD') = #{searchValueC}
+			  </if>
+		</sql>
 		
+		<select id="dataCount" resultType="Integer" parameterType="map">
+			SELECT NVL(COUNT(*),0) FROM groupReply r
+					JOIN member m ON r.userId= m.userId
+		 <where>
+			
+	     	<if test="searchValueC!=null and searchValueC!='' ">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     	AND r.groupName=#{groupName}
+	     </where> 
+		</select>
+	
+	
+	<select id="listReplyBoard" parameterType="map" resultType="com.sp.group.replyBoard.ReplyBoard">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+			     SELECT replyBoardNum, r.userId, 
+			     r.subject, TO_CHAR(r.created, 'YYYY-MM-DD')  created , r.groupName, groupNumber, orderNo, depth
+			        FROM groupReply r
+			        JOIN member m ON r.userId = m.userId
+             		JOIN ggroup g ON r.groupName = g.groupName   
+          			  <where>
+				     	<if test="searchValueC!=null and searchValueC!='' ">
+				     	    <include refid="where-list"/>
+				     	</if> 
+				     	AND r.groupName=#{groupName}
+				     </where> 
+	                ORDER BY groupNumber DESC , orderNo ASC
+	 <![CDATA[
+		        ) tb WHERE ROWNUM <= #{end}
+		    ) WHERE rnum >= #{start}
+		]]> 
+		
+	
+	</select> 
+	
+
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE groupReply SET hitcount= hitcount+1 WHERE replyBoardNum = #{replyBoardNum}
+	</update>
+	
+	
+	<!--  readReplyBoard  -->
+	<select id="readReplyBoard" resultType="com.sp.group.replyBoard.ReplyBoard" parameterType="Integer">
+	 SELECT replyBoardNum, r.userId, r.subject, r.content, groupNumber, 
+	 	depth, orderNo, parent, hitcount, r.created,r.groupName 
+				 FROM groupReply r
+				 JOIN member m ON r.userId = m.userId
+                 WHERE replyBoardNum = #{replyBoardNum}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 		
 		

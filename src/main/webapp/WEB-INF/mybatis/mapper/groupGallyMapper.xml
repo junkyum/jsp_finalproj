@@ -50,8 +50,7 @@
 	                           SELECT gallyNum, NVL(COUNT(DECODE(gallylike,1,1)),0) gallyLikeCount FROM groupGallyLike
 	                          GROUP BY gallyNum
 	                     ) c ON p.gallyNum = c.gallyNum
-                   <where>
-
+                  	 <where>
 				     	<if test="searchValueK!=null and searchValueK!='' ">
 				     	    <include refid="where-list"/>
 				     	</if>

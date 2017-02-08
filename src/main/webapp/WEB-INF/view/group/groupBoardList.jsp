@@ -15,23 +15,32 @@
 <head>
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
 </head>
-
-<c:forEach var="dto" items="${boardList}">
-	<tr>
-		<td class="text-center">${dto.listNum}</td>
-	<%-- 	<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.subject}</a>
-			<c:if test="${dto.gap < 1}">
-			
-            </c:if></td> --%>
-        <td class="text-center">${dto.subject}</td>    
-		<td class="text-center">${dto.userName}</td>
-		<td class="text-center">${dto.created}</td>
-		<td class="text-center">${dto.hitCount}</td>
-	</tr>
-</c:forEach>
+<div class="table-responsive" style="clear: both;"> <!-- 테이블 반응형 -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th style="width: 70px;">번호</th>
+					<th>제목</th>
+					<th class="text-center" style="width: 100px;">작성자</th>
+					<th class="text-center" style="width: 130px;">등록일</th>
+					<th class="text-center" style="width: 70px;">조회수</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="dto" items="${boardList}">
+					<tr>
+						<td style="width: 70px;">${dto.listNum}</td>
+				        <td >${dto.subject}</td>    
+						<td class="text-center" >${dto.userId}</td>
+						<td class="text-center">${dto.created}</td>
+						<td class="text-center" >${dto.hitCount}</td>
+					</tr>
+				</c:forEach>				
+			</tbody>
+		</table>
+	</div>
+	
 
 <div style="clear: both;">
 	<div class="paging"	style="text-align: center; min-height: 50px; line-height: 50px;">
