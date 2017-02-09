@@ -14,6 +14,6 @@
 <div class="bodyFrame">
    <p class="lead text-center">${message}</p>
    <p style="max-width: 400px; margin: 0 auto;">
-      <button type="button" class="btn btn-primary btn-lg btn-block" onclick="javascript:location.href='<%=cp%>/';"> 메인화면으로 이동 &raquo; </button>
+      <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';"> 메인화면으로 이동 &raquo; </button>
    </p>
 </div>

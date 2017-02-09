@@ -89,7 +89,7 @@ function sendOk() {
             <input type="password" id="userPW" name="userPW" class="form-control loginTF" autofocus="autofocus"
                   onfocus="document.getElementById('lblUserPwd').style.display='none';"
 	              onblur="bgLabel(this, 'lblUserPwd');">
-            <button class="btn btn-lg btn-primary btn-block" type="button" onclick="sendOk();">확인 <span class="glyphicon glyphicon-ok"></span></button>
+            <button class="btn btn-default btn-sm wbtn" type="button" onclick="sendOk();">확인 <span class="glyphicon glyphicon-ok"></span></button>
             <input type="hidden" name="mode" value="${mode}">
         </div>
         <div style="margin-top:10px; text-align: center;">${message}</div>

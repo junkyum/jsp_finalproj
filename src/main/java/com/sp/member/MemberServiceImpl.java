@@ -176,4 +176,42 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
+
+	@Override
+	public String findId(String email) {
+
+		String result=null;
+		try {
+			result = dao.getReadData("member.findId",email);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public String findPW(String email) {
+		
+		String result= null;
+		try {
+			result = dao.getReadData("member.findPW",email);
+		} catch (Exception e) {
+	
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public int updatePW(Member mb) {
+
+		int result = 0;
+		try {
+			result = dao.updateData("member.updatePW", mb);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
 }
