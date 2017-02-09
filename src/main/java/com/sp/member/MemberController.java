@@ -95,7 +95,7 @@ public class MemberController {
 		
 		} else {
 			
-			model.addAttribute("message", "아이디 중복으로 회원가입이 실패했습니다.");
+			model.addAttribute("message", "아이디 / 이메일 중복으로 회원가입이 실패했습니다.");
 			model.addAttribute("mode", "created");
 		
 
@@ -238,9 +238,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/userIdCheck")
 	@ResponseBody
-	public Map<String, Object> userIdCheck(
-			@RequestParam String userId
-			) throws Exception {
+	public Map<String, Object> userIdCheck(@RequestParam String userId) throws Exception {
 		String passed="false";
 		Member dto=service.readMember(userId);
 		if(dto==null)
@@ -250,4 +248,19 @@ public class MemberController {
 		model.put("passed", passed);
 		return model;
 	}
+	
+	@RequestMapping(value="/member/emailCheck")
+	@ResponseBody
+	public Map<String, Object> emailCheck(@RequestParam String email) throws Exception{
+		
+		String passed="false";
+		Member dto = service.readEmail(email);
+		
+		if(dto==null)
+			passed="true";
+		Map<String, Object>	model = new HashMap<>();
+		model.put("passed", passed);
+		return model;
+	}
+	
 }

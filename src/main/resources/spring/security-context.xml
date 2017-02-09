@@ -21,6 +21,7 @@
 		<intercept-url pattern="/member/login" access="permitAll" />
 		<intercept-url pattern="/member/member" access="permitAll" />
 		<intercept-url pattern="/member/userIdCheck" access="permitAll" />
+		<intercept-url pattern="/member/emailCheck" access="permitAll" />
 		<intercept-url pattern="/res/**" access="permitAll" />
 		<intercept-url pattern="/assets/**" access="permitAll"/>
 		<intercept-url pattern="/mail/**" access="permitAll"/>

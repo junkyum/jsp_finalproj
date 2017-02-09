@@ -34,7 +34,39 @@
 <script type="text/javascript">
 
 
-
+function emailCheck() {
+	 var email=$("#email").val();
+	   if(!/^[0-9a-zA-Z_\-]+@[.0-9a-zA-Z_\-]+$/i.test(email)) { 
+	      var str="이메일은 aaa@aaa.com 형식으로 입력합니다.";
+	      $("#email").focus();
+	      $("#email + .help-block").html(str);
+	      return false;
+	   }
+	  
+	var url = "<%=cp%>/member/emailCheck";
+	var params ="email="+email;
+	
+	$.ajax({
+		type:"POST",
+		url:url,
+		data:params,
+		dataType:"JSON",
+		success:function(data){
+			var passed= data.passed;
+			if(passed== "true"){
+				 var str="<span style='color:blue;font-weight: bold;'>"+email+"</span> 이메일은 사용가능 합니다.";
+		        $("#email + .help-block").html(str);
+			}else {
+				   var str="<span style='color:red;font-weight: bold;'>"+email+"</span> 이메일은 사용할수 없습니다.";
+		            $("#email + .help-block").html(str);
+		       		$("#email").val("");
+		       		$("#email").focus();
+		       		
+			}
+		}
+		
+	});
+}
 // 아이디 중복 검사
 function userIdCheck() {
    var userId=$("#userId").val();
@@ -203,8 +235,11 @@ function check() {
 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="email">이메일</label>
+        
         <div class="col-sm-7">
-            <input class="form-control" id="email" name="email" type="email" placeholder="이메일" value="${dto.email}">
+            <input class="form-control" id="email" name="email" type="email" placeholder="이메일" onchange="emailCheck();" value="${dto.email}"  >
+              <p class="help-block">이메일은 aaa@aaa.com 형식으로 입력합니다.</p>
+        
         </div>
     </div>
     
