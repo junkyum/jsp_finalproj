@@ -256,7 +256,7 @@ div.friendScroll {
 	<div id="mk_indiv">
 		<div class="mk_indiv_in">
 			<button type="button" onclick="mk_main_indiv();"  class="btn_mk"  style="background-color:#FFFFFF; border: 0px;">
-				<img src="<%=cp%>/res/images/indiv.png" style="width: 80%">
+				<img src="<%=cp%>/res/images/indiv.png" style="width: 60%; height: 240px;">
 			</button>
 		</div>
 	</div>
@@ -266,7 +266,7 @@ div.friendScroll {
 	<div id="mk_group">
 		<div class="mk_group_in">
 			<button type="button" onclick="mk_main_group();"  class="btn_mk" style="background-color:#FFFFFF; border: 0px;" >
-				<img src="<%=cp%>/res/images/group.png" style="width: 80%;">
+				<img src="<%=cp%>/res/images/group.jpg" style="width: 80%;">
 			</button>
 		</div>
 	</div>
