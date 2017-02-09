@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tfaq">
+
+
+
+
+	<insert id="insertCategory" parameterType="com.sp.tfaq.Faq">
+		INSERT INTO tfaqCategory (categoryNum , classify) VALUES (tfaqCategory_seq.NEXTVAL, #{classify})	
+		
+    </insert>
+     
+     <select id="dataCountCategory" resultType="Integer" parameterType="String">
+        SELECT NVL(COUNT(categoryNum),0) FROM tfaqCategory
+     </select>
+    
+    <select id="listCategory" resultType="com.sp.tfaq.Faq" parameterType="String">
+    	SELECT categoryNum, classify FROM tfaqCategory ORDER BY categoryNum DESC
+    </select>
+    
+    <delete id="deleteCategory" parameterType="Integer">
+    	DELETE FROM tfaqCategory WHERE categoryNum = #{categoryNum}
+    </delete>
+    
+    
+    <insert id="insertFaq" parameterType="com.sp.tfaq.Faq">
+    INSERT INTO tfaqBoard (num,categoryNum,userId, subject, content, hitCount) VALUES(tfaqBoard_seq.NEXTVAL, #{categoryNum},#{userId},#{subject},#{content},0)
+    
+    </insert>
+    
+    <select id="dataCountFaq" resultType="Integer" parameterType="map">
+    SELECT NVL(COUNT(*),0) FROM  tfaqBoard
+     JOIN tfaqCategory ON tfaqBoard.categoryNum= tfaqCategory.categoryNum
+     <where>
+	     	<if test="categoryNum!=0 ">
+	     	    tfaqBoard.categoryNum = #{categoryNum}
+	     	</if>
+	     	<if test="searchValue!=null and searchValue!='' ">
+	     	    AND (subject LIKE '%' || #{searchValue} || '%' OR
+	     	    content LIKE '%' || #{searchValue} || '%')
+	     	</if>
+	     </where>     
+    </select>
+   	
+   	<select id="listFaq" parameterType="map"
+	            resultType="com.sp.tfaq.Faq">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+			     SELECT num, tfaqBoard.categoryNum, classify, userId, subject, 
+	                 content, hitCount
+				  FROM tfaqBoard
+	              JOIN tfaqCategory ON tfaqBoard.categoryNum=tfaqCategory.categoryNum
+                    <where>
+	     	           <if test="categoryNum!=0 ">
+	     	               tfaqBoard.categoryNum = #{categoryNum}
+	     	           </if>
+	     	           <if test="searchValue!=null and searchValue!='' ">
+	     	               AND (subject LIKE '%' || #{searchValue} || '%' OR
+	     	               content LIKE '%' || #{searchValue} || '%')
+	     	           </if>
+	                </where>
+	                ORDER BY num DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+   	<select id="listFaqCategory" resultType="com.sp.tfaq.Faq">
+   		SELECT DISTINCT tfaqBoard.categoryNum, classify FROM tfaqBoard
+   		JOIN tfaqCategory ON tfaqBoard.categoryNum = tfaqCategory.categoryNum
+   		ORDER BY categoryNum DESC
+   	
+   	</select>
+   	
+   	<update id="updateHitCount" parameterType="Integer">
+   	UPDATE tfaqBoard SET hitCount = hitCount+1 WHERE num={num}
+   		
+   	</update>
+   	
+   	<select id="readFaq" resultType="com.sp.tfaq.Faq" parameterType="Integer">
+   		SELECT num, tfaqCategory.categoryNum, content, subject, hitCount, classify,userId
+   		FROM tfaqBoard JOIN tfaqCategory ON tfaqBoard.categoryNum = tfaqCategory.categoryNum WHERE num=#{num}
+   	
+   	</select>
+   	
+   	<delete id="deleteFaq" parameterType="Integer">
+   		DELETE FROM tfaqBoard WHERE num=#{num}
+   	
+   	</delete>
+   	
+   	<update id="updateFaq" parameterType="com.sp.tfaq.Faq">
+    	UPDATE tfaqBoard SET subject=#{subject}, content=#{content}, categoryNum=#{categoryNum} WHERE num=#{num}
+    </update>
+</mapper>
