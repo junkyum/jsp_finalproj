@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sch">
+
+    <insert id="insertSchedule" parameterType="com.sp.sch.Schedule">
+       INSERT INTO sch (num, userId, title, color, content, allDay, startDay, endDay, startTime, endTime)
+          VALUES (sch_seq.NEXTVAL, #{userId}, #{title} 
+                ,#{color, jdbcType=VARCHAR}
+                ,#{content, jdbcType=VARCHAR}
+                ,#{allDay, jdbcType=VARCHAR}
+                ,#{startDay, jdbcType=VARCHAR}
+                ,#{endDay, jdbcType=VARCHAR}
+                ,#{startTime, jdbcType=VARCHAR}
+                ,#{endTime, jdbcType=VARCHAR}
+           )
+    </insert>
+
+    <!-- 월별 일정 -->
+    <select id="listMonthSchedule" resultType="com.sp.sch.Schedule" parameterType="map">
+        SELECT num, s.userId, userName, title, color, content, allDay, startDay, endDay, startTime, endTime, created 
+             FROM sch s JOIN member m ON s.userId=m.userId
+     <where>
+        s.userId = #{userId}
+		<if test="group !='all' ">
+		    AND color=#{group}
+		</if>
+        <![CDATA[
+             AND ((startDay>=#{start} AND startDay<=#{end})
+                OR (endDay>=#{start} AND endDay<=#{end}))
+        ]]>             
+   	  </where>
+             ORDER BY startDay ASC, num DESC
+    </select>
+
+    <!-- 일정 상세 정보 -->
+    <select id="readSchedule" resultType="com.sp.sch.Schedule" parameterType="Integer">
+        SELECT num, s.userId, userName, title, color, content, allDay, startDay, endDay, startTime, endTime, created
+            FROM sch s JOIN member m ON s.userId=m.userId
+            WHERE num=#{num}
+    </select>
+
+    <!-- 일정 수정 -->
+    <update id="updateSchedule" parameterType="com.sp.sch.Schedule">
+       UPDATE sch SET 
+            title=#{title}
+            ,color=#{color, jdbcType=VARCHAR}
+            ,content=#{content, jdbcType=VARCHAR}
+            ,allDay=#{allDay, jdbcType=VARCHAR}
+            ,startDay=#{startDay, jdbcType=VARCHAR}
+            ,endDay=#{endDay, jdbcType=VARCHAR}
+            ,startTime=#{startTime, jdbcType=VARCHAR}
+            ,endTime=#{endTime, jdbcType=VARCHAR}
+            WHERE num=#{num}
+    </update>
+    
+    <!-- 일정 삭제 -->
+    <delete id="deleteSchedule" parameterType="Integer">
+       DELETE FROM sch WHERE num=#{num}
+    </delete>
+</mapper>
