@@ -31,17 +31,13 @@
 </table>
 
 
-<div style="clear: both; height: 30px; line-height: 30px;">
-            <div style="float: left;">${dataCount}개(${page}/${total_page} 페이지)</div>
-            <div style="float: right;">&nbsp;</div>
-   	</div>
 <table style="width: 1000px; margin: 0px auto; border-spacing: 0px;">
   <tr align="center" bgcolor="#507CD1" height="30"> 
       <td width="60" style="color: #ffffff;">번호 </td>
       <td width="350" style="color: #ffffff;">제목</td>
       <td width="100" style="color: #ffffff;">작성자</td>
       <td width="80" style="color: #ffffff;">작성일</td>
-      <!-- <td width="60" style="color: #ffffff;">조회수</td> -->
+      <td width="60" style="color: #ffffff;">조회수</td>
   </tr>
  
 </table>
@@ -50,19 +46,19 @@
  <c:forEach var="dto" items="${leplyLlist}">
 	<table style="width: 1000px; margin: 0px auto; border-spacing: 0px; border: 1px solid;">
 	   <tr align="left"  height="30"> 
-	      <td width="60" style="border: 1px solid;">${dto.listNum} </td>
+	      <td width="60" style="border: 1px solid;" align="center">${dto.listNum} </td>
 	      <td width="350" style="border: 1px solid;">
   				<c:forEach var="n" begin="1" end="${dto.depth}">
-  					&nbsp;
+  					&nbsp;&nbsp;
   				</c:forEach>
   				<c:if test="${dto.depth!=0}">
                      <img src="<%=cp%>/res/images/re.gif">
                 </c:if>
                <a href="javascript:articleReplyBoard('${dto.replyBoardNum}');">${dto.subject}</a> 
   		  </td>
-	      <td width="100" style="border: 1px solid;">${dto.userId} </td>
-	      <td width="80" style="border: 1px solid;">${dto.created}</td>
-	 <%--      <td width="60" style="border: 1px solid;">${dto.hitcount}</td> --%>
+	      <td width="100" style="border: 1px solid;" align="center">${dto.userId} </td>
+	      <td width="80" style="border: 1px solid;" align="center">${dto.created}</td>
+	  <td width="60" style="border: 1px solid;" align="center">${dto.hitcount}</td>
 	  </tr>
 	</table>
 	</c:forEach>

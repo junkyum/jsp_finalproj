@@ -82,8 +82,6 @@ public class PhotoController {
 	    map.put("end", end);
 	    List<GroupGally> list =service.listPhoto(map);
 	    
-	  
-	  
 		 int listNum, n=0;
 	
 		 Iterator<GroupGally> it= list.iterator();
@@ -93,7 +91,6 @@ public class PhotoController {
 			 data.setListNum(listNum);
 			 n++;
 		}
-		  //////////////////////////////////
 
 
 		    String paging = myUtil.paging(current_page, total_page);
@@ -122,11 +119,6 @@ public class PhotoController {
 		String state="false";
 
 		dto.setUserId(info.getUserId());//아이디저장.	
-		System.out.println(dto.getGroupName()+"  sssssssssssssssss");
-	/*	System.out.println(dto.getUserId()+"  ----------------------등록할떄");
-		System.out.println(dto.getGroupName()+"  ---------------------등록할떄");
-		System.out.println(dto.getSubject()+"  ----------------------등록할떄");
-		System.out.println(dto.getContent()+"  ----------------------등록할때");*/
 
 		int result=service.insertPhoto(dto, path);
 		
@@ -407,7 +399,7 @@ public class PhotoController {
 		
 		Map<String, Object> model = new HashMap<>();
 		model.put("likeCount", likeCount);
-		model.put("dislikeCount", disLikeCount);
+		model.put("disLikeCount", disLikeCount);
 		
 		return model;
 	}

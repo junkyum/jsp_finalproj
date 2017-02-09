@@ -16,7 +16,7 @@ function updateReplyBoard(replyBoardNum) {
 	});
 }
 function submitReplyAnswer(replyBoardNum, pageNo) {
-	alert("처음")
+
 	var url="<%=cp%>/group/reply/answer/created";
 	$.get(url,{replyBoardNum:replyBoardNum, pageNo:pageNo},function(data){
 		 $("#groupReplyBoard").html(data);
@@ -25,15 +25,15 @@ function submitReplyAnswer(replyBoardNum, pageNo) {
 
 </script>	
 
-				<h2 class="text-center">[${dto.groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
-				<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
+		<h2 class="text-center" style="margin-top: 100px;">[${dto.groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
+		<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
 
-		<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px; border: 2px solid;">
+		<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px; border: 2px solid; margin-top: 40px;">
 			  <tr><td colspan="2" height="3" bgcolor="#D4F4FA" align="center">
-			  ${dto.created}||&nbsp;리플 번호=[   ]&nbsp;||&nbsp;&nbsp;방문자수[${dto.hitcount}]</td></tr>
+			  ${dto.created}||&nbsp;리플 번호=[${dto.replyBoardNum}]&nbsp;||&nbsp;&nbsp;방문자수[${dto.hitcount}]</td></tr>
 			
 			  <tr align="left" height="40" style="border: 1px solid;"> 
-			      <td width="100" bgcolor="#EEEEEE" align="center">제 목 [${page}]</td>
+			      <td width="100" bgcolor="#EEEEEE" align="center">제 목</td>
 			      <td width="500" style="padding-left:10px;">      
 			      	${dto.subject}
 			      

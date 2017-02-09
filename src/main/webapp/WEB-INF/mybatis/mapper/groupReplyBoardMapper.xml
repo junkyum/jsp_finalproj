@@ -43,7 +43,7 @@
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
 			     SELECT replyBoardNum, r.userId, 
-			     r.subject, TO_CHAR(r.created, 'YYYY-MM-DD')  created , r.groupName, groupNumber, orderNo, depth
+			     r.subject, TO_CHAR(r.created, 'YYYY-MM-DD')  created , r.groupName, groupNumber, orderNo, depth, hitcount
 			        FROM groupReply r
 			        JOIN member m ON r.userId = m.userId
              		JOIN ggroup g ON r.groupName = g.groupName   

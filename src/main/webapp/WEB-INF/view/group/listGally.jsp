@@ -8,7 +8,7 @@
 %>
 	
 	<c:if test="${dataCount !=0}">
-	 &nbsp;&nbsp;총${dataCount}개&nbsp;(${page}현제/${total_page}전체페이지) 
+
 		<c:forEach var="dto" items="${list}" varStatus="status"> 	
 				<c:if test="${status.index==0}">
                  <c:out value="<div style='clear: both; max-width:1000px; margin: 0px auto; margin-right: 50px;'>" escapeXml="false"/>
@@ -24,7 +24,7 @@
 						</a>
 						</div>
 					<div class="file-name">
-						<span class="file-name" style="margin: auto;">재  목  : ${dto.subject}</span>
+						<span class="file-name" style="margin: auto;">제  목  : ${dto.subject}</span>
 						 <br> <small style="margin: auto;">리스트번호  : ${dto.listNum}</small>
 					</div>
 			   </div>
@@ -52,7 +52,7 @@
 	
 			<div style="float: left; width: 20%; min-width: 85px; margin-left: 40px;">
 				<button type="button" class="btn btn-default btn-sm wbtn" onclick="listPage(1)">새로고침</button>
-				<button type="button" onclick="findGally();">찾기</button>
+				<button type="button" onclick="findGally();"><img src="<%=cp%>/res/images/finder.png" style="width: 30px; height: 30px;"></button>
 			</div>
 			
 

@@ -61,11 +61,11 @@ function articleReplyBoard(replyBoardNum) {
 		,url:url
 		,data:query
 		,success:function(data) {
-				alert("글보기 들어왔어요");
+			console.log("글보기 들어왔어요");
 			$("#groupReplyBoard").html(data);
 		}
 		,error:function(e) {
-			alert(" 오류남");
+			console.log(" 오류남");
 			console.log(e.responseText);
 		}
 		
@@ -103,8 +103,7 @@ function deleteReplyBoard(replyBoardNum) {
 		
 			var state=data.state;
 			if(state=="false")
-				alert("게시물을 삭제 할 수 없습니다. !!!");
-		
+				console.log("게시물을 삭제 할 수 없습니다. !!!");
 				  replyBoardList(pageNo);
 		 }
 		 ,error:function(e) {

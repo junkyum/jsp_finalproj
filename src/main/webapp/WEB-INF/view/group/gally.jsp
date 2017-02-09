@@ -6,7 +6,6 @@
    String cp=request.getContextPath();
 
 %>
-<!-- groupGally/gally   이게 맨처음 겔러리 페이지 -->
 <style type="text/css">
 .imgLayout{
 	width: 200px;
@@ -126,7 +125,7 @@ function updateOK(gallyNum) {
 			 ,success:function(data) {
 				var state=data.state;
 				if(state=="false"){
-					alert("작업 실패 !!!");		
+					console.log("작업 실패 !!!");		
 				} else {
 					 
 				$('#gallyMyModal').modal('hide');
@@ -172,7 +171,6 @@ function send(){
 		return;
 	}
 
-	
 	var f = document.photoForm;
 	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
 		alert('이미지 파일만 가능합니다. !!!');
@@ -180,10 +178,8 @@ function send(){
 		return false;
 	}
 	
-
     var formData = new FormData(f);
-    
-	alert(formData);
+
 	  $.ajax({
 			 type:"post"
 			 ,url:"<%=cp%>/group/photo/created"
@@ -194,7 +190,7 @@ function send(){
 			 ,success:function(data) {
 				var state=data.state;
 				if(state=="false")
-					alert("작업 실패 !!!");
+					console.log("작업 실패 !!!");
 				
 				$("#chk2").dialog("close");
 				listPage(1);
@@ -212,7 +208,6 @@ function send(){
 		});
 
 }
-
 //글보기후 모달띠이우는곳
 function updateDialog(gallyNum) {
      var url="<%=cp%>/group/photo/article?gallyNum="+gallyNum;
@@ -224,11 +219,9 @@ function updateDialog(gallyNum) {
 		$("input[name='name']").focus();
 	});
 }
-
 function updateCancel() {
 	$('#gallyMyModal').modal('hide');
 }
-
 function updateOk() {
 	alert("ok");
 }
@@ -260,7 +253,7 @@ function GReply(gallyNum) {
 			var loginChk=data.loginChk;
 	
 			if(loginChk=="false") {
-				alert("리플등록 실패");
+				console.log("리플등록 실패");
 			} else{
 				listPageAnswer(1);
 
@@ -271,7 +264,7 @@ function GReply(gallyNum) {
 		}
 	});
 }
-////////////////////////////
+
 //원하는 개시물을 찾을떄 사용
 function findGally(){
 
@@ -286,7 +279,7 @@ function findGally(){
 	    buttons:{
 			"찾기":function(){
 				var url="<%=cp%>/groupGally/list";
-				alert($('#searchValueK').val());
+	
 				var searchKeyK=$('#searchKeyK').val();
 				var searchValueK=$('#searchValueK').val();
 				var groupName="${groupName}";
@@ -375,10 +368,8 @@ function sendGReplyAnswer(replyNum, gallyNum) {
 
 	var userId="${sessionScope.member.userId}";
 
-
 	var content=$("#answerContent"+replyNum).val().trim();
 
-	
 	if(! content){
 		$("#answerContent"+replyNum).focus();
 		return;
@@ -448,7 +439,7 @@ function deleteReplyAnswerList(replyNum, replyAnswer) {
 		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
 			var loginChk=data.loginChk;
 			if(loginChk=="false"){
-				alert("댓글별답글 삭제 실패");
+				console.log("댓글별답글 삭제 실패");
 			}else {
 				listReplyAnswer(replyAnswer);
 				countAnswer(replyAnswer);
@@ -481,7 +472,7 @@ function sendReplyLike(replyNum, gallryReplyLike) {
 				
 			var state=data.state;
 			if(state=="true") {
-				alert("들어감");
+				console.log("들어감");
 				groupCountLike(replyNum);
 			} else if(state=="false") {
 					alert("한번만 할수있다.");
@@ -504,7 +495,7 @@ function groupCountLike (replyNum) {
 		var disLikeCountId="#disLikeCount"+replyNum;
 		var likeCount=data.likeCount;
 		var disLikeCount=data.disLikeCount;
-		  alert(disLikeCount+"       "+likeCount);
+
 		  
 		$(likeCountId).html(likeCount);
 		$(disLikeCountId).html(disLikeCount);
@@ -536,7 +527,7 @@ function groupGallyLike(gallyNum, gallyLike) {
 				
 			var state=data.state;
 			if(state=="true") {
-				alert("들어감");
+				console.log("들어감");
 				groupGallyLikeCount(gallyNum)
 			} else if(state=="false") {
 				alert("선택은 한번만!!");
@@ -570,18 +561,12 @@ function groupGallyLikeCount(gallyNum) {
 					<div style="float: left; min-width: 85px; text-align: right;">
 						<div class="chk1"><!-- 버튼이 들어가있는  div -->
 							<button type="button">
-								<img src="<%=cp%>/res/images/btn.png"
-									style="width: 50px; height: 50px; position: relative; top: 10pk;">
-								<div>등록하기</div>
+								<img src="<%=cp%>/res/images/btn.png" style="width: 50px; height: 50px; position: relative; top: 10pk;">	
 							</button>
 						</div>
 					</div>
 			</div>
 		</div> 
-		<!-- 맨처음 main.jsp에서 컨트롤러에있는 gally 메소드로 가서 가지고올꺼 가지고오고 그룹/겔러리 로가서  위쪽에 있는  groupGrally/lisy 로가서
-		맨처음 패이지를 뿌려준다.  난 맨처음 시작하는 동시에 메인 바꾸고@컨트롤러 가서 조작 하고@ 리스트 페이지 펀션 만들고@  리턴으로 listGally 만들고 뿌려주면 됨
-		리스트G겔러리에 그냥 대충 끄적 거려노면 될듯  일단 등록먼저 만들고..-->
-		${groupName}
 		<div id="gallyLayout"> </div>
 </div>		
 
@@ -590,13 +575,14 @@ function groupGallyLikeCount(gallyNum) {
 		<div class="chk2" id="chk2" style="display: none; padding:0px; margin: 0px; width: 500px; height: 500px;">
 		    <form method="post" name="photoForm" id="photoForm" enctype="multipart/form-data" >
 				<div style="height: 300px; width: 480px; border: 1px solid black;">
-					<h3 style="margin-top: 10px; margin-left: 150px;">그룹 명 : ${groupName} </h3>
+					<h3 style="margin-top: 10px; margin-left: 150px;" >그룹 명 : ${groupName}</h3>
+					
 					 <input type="hidden" name="groupName" value="${groupName}">
 		
 						<div style="margin-top: 10px;">
 							<h4 style="float: left; margin: 0px;">재 목 :&nbsp;</h4>
 							<input type="text" name="subject" id="subject" value="" placeholder="내용을 입력하세요" style="clear: both;">
-							<span id="span1" style="display: none;">내용좀 입력하세요</span>
+							<span id="span1" style="display: none;" >내용좀 입력하세요</span>
 						</div>
 						
 						<div>

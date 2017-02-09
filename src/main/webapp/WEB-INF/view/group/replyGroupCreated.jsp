@@ -47,9 +47,9 @@ function submitReplyOK() {
 			
 			var state=data.state;
 			if(state=="false"){
-				alert("실패했다");
+				console.log("실패했다");
 			} else {
-				alert("입력했어요");
+				console.log("입력했어요");
 			replyBoardList(pageNo);
 			}
 		
@@ -70,8 +70,6 @@ function submitReplyAnswerOK() {
 	var orderNo="${dto.orderNo}";
 	var depth="${dto.depth}";
 	var parent="${dto.replyBoardNum}";
-	alert("2번");
-	alert(groupName+"???????????????");
 	if(!subject){
 		 $("#chSubject").focus();
          return;
@@ -82,11 +80,10 @@ function submitReplyAnswerOK() {
 	}
 
 	var url="<%=cp%>/group/reply/answer/created";
-	var query="subject="+subject+"&content="+content+"&groupName="+groupName+"&groupNumber="+groupNumber;
+ 	var query="subject="+subject+"&content="+content+"&groupName="+groupName+"&groupNumber="+groupNumber;
 	query+="&orderNo"+orderNo+"&depth="+depth+"&parent="+parent;
 	
-	
-	
+
 	$.ajax({
 		type:"post"
 		,url:url
@@ -96,9 +93,9 @@ function submitReplyAnswerOK() {
 			
 			var state=data.state;
 			if(state=="false"){
-				alert("실패했다");
+				console.log("실패했다");
 			} else {
-				alert("입력했어요");
+				console.log("입력했어요");
 			replyBoardList(pageNo);
 			}
 		
@@ -117,7 +114,7 @@ function submitReplyAnswerOK() {
 <br><br>
 <form name="replyBoardForm">
 				<h2 class="text-center">[${groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
-				<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
+				<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 작성, 성심껏 답변 해드리겠습니다.</h2>
 
 		<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px;">
 			  <tr><td colspan="2" height="3" bgcolor="#507CD1"></td></tr>

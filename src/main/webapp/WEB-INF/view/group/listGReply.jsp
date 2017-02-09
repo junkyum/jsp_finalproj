@@ -23,26 +23,15 @@
 	<c:if test="${sessionScope.member.userId==GRP.userId || sessionScope.member.userId=='admin'}">		   
 	               <a onclick='deletePhotoReply("${GRP.replyNum}", "${pageNo}");'> 댓 글삭제하기</a>
 	               <!-- 댓글 삭재구간. -->
-	</c:if>	 
-		   
-	 <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">		   
-	                <a href='#'>신고</a>
-	</c:if>  
+	</c:if>	  
 	            </div>
 	        </div>
-	        <div style="clear: both; padding: 5px 0 5px 0px;  min-height: 70px;"> 
-	        ${GRP.replyNum}  리플의번호<br>
-	        ${GRP.userId}     유저 아이디<br>
-	        ${GRP.content}    리플내용<br>
-	        ${GRP.gallyNum}    사진번호<br>
-	        ${GRP.replyAnswer}    리플 답변
-	        </div>
-	        
-	        
+	       <span>&nbsp;&nbsp;&nbsp;<img src="<%=cp%>/res/images/right.gif">&nbsp;&nbsp;[댓글 아이디]=${GRP.userId}</span>
+	        <div style="clear: both; padding: 5px 0 5px 0px;  min-height: 70px;">[내   용]:${GRP.content}</div>
 	        <div style="clear: both; min-height: 30px;" id="kimch">
 	        
 				            <div style="float: left;">
-									<button type="button" class="btn btnGroupAnwerLaout" data-replyNum='${GRP.replyNum}'>답글
+									<button type="button" class="btn btnGroupAnwerLaout" data-replyNum='${GRP.replyNum}'><img src="<%=cp%>/res/images/btn_reply.gif">
 									<span id="answerCount${GRP.replyNum}">${GRP.answerCount}</span> </button>
 				            </div>   
 				            <!-- 좋아 싫어 있는 버튼 -->
