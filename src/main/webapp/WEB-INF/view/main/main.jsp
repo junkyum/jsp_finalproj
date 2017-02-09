@@ -8,14 +8,28 @@
 <script src="//code.jquery.com/jquery-1.10.2.js"></script> 
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	$('#friend_page').click(function() {
+		$("#mk_friend").load("friend/friend");
+		document.getElementById("mk_indiv").style.width="49%";
+		document.getElementById("mk_indivMenu").style.width="0";
+		document.getElementById("mk_group").style.width="0";
+		document.getElementById("mk_groupMenu").style.width="0";
+		document.getElementById("mk_friend").style.width="33%";
+		document.getElementById("mk_friend").style.float="left";
+		$("#mk_friend").delay(1000).animate({
+			left:0
+		},"clip")
+		$("#mk_friend").show("slide",1000);
+	});
+});
+
 function mk_main_indiv() {
-	document.getElementById("mk_indiv").style.width="50%";
-	document.getElementById("mk_indivMenu").style.width="50%";
-	
+	document.getElementById("mk_indiv").style.width="49%";
+	document.getElementById("mk_indivMenu").style.width="49%";
 	document.getElementById("mk_group").style.width="0";
 	document.getElementById("mk_groupMenu").style.width="0";
-	
-	document.getElementById("mk_indiv_friend").style.width="0";
+	document.getElementById("mk_friend").style.display="none";
 	$("#mk_indivMenu").delay(1000).animate({
 		left:0
 	},"clip")
@@ -24,55 +38,14 @@ function mk_main_indiv() {
 function mk_main_group() {
 	document.getElementById("mk_indiv").style.width="0";
 	document.getElementById("mk_indivMenu").style.width="0";
-	
-	document.getElementById("mk_group").style.width="50%";
-	document.getElementById("mk_groupMenu").style.width="50%";
-	
-	document.getElementById("mk_indiv_friend").style.width="0";
+	document.getElementById("mk_group").style.width="49%";
+	document.getElementById("mk_groupMenu").style.width="49%";
+	document.getElementById("mk_friend").style.display="none";
 	$("#mk_groupMenu").delay(1000).animate({
 		left:0
 	},"clip")
 	$("#mk_groupMenu").show("slide",1000);
 }
-function mk_indiv_friend() {
-	document.getElementById("mk_indiv").style.width="50%";
-	document.getElementById("mk_indivMenu").style.width="0";
-	
-	document.getElementById("mk_group").style.width="0";
-	document.getElementById("mk_groupMenu").style.width="0";
-	
-	document.getElementById("mk_indiv_friend").style.width="25%";
-	$("#mk_indiv_friend").delay(1000).animate({
-		left:0
-	},"clip")
-	$("#mk_indiv_friend").show("slide",1000);
-	
-	$(function(){
-		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-			var active=$(this).attr("aria-controls");
-			friend(active);
-		});
-	});
-	function friend(mode) {
-	var url="<%=cp%>/"+mode;
-		$.get(url, {dumi:new Date().getTime()}, function(data){
-			var s=$.trim(data);
-			if(s=="loginFail") {
-				location.href="<%=cp%>/member/login";
-				return;
-			}
-			var id="#tabFriendList";
-			if(mode=="add")
-				id="#tabFriendAdd";
-			else if(mode=="block")
-				id="#tabFriendBlock";
-			$(id).html(data);
-		});
-	}
-}
-
-
-
 
 function maker(){
 	    $("#divGroupMaker").dialog({
@@ -211,7 +184,6 @@ function jkcheck(){
 }
 </script>
 
-
 <style type="text/css">
 #mk_content {
 	text-align: center;
@@ -221,7 +193,8 @@ function jkcheck(){
 }
 #mk_indiv {
 	text-align: center;
-	height: 100%;
+	width: 49%;
+	height: 500px;
 	float: left;
 	padding-top: 20px;	
 }
@@ -230,7 +203,8 @@ function jkcheck(){
 }
 #mk_group {
 	text-align: center;
-	height: 100%;
+	width: 49%;
+	height: 500px;
 	float: left;	
 	padding-top: 20px;
 }
@@ -239,23 +213,26 @@ function jkcheck(){
 }
 #mk_indivMenu {
 	text-align: center;
-	height: 100%;
+	width: 49%;
+	height: 500px;
 	float: left;	
 	padding-top: 50px;
 	display: none;
 }
 #mk_groupMenu {
 	text-align: center;
-	height: 100%;
+	width: 49%;
+	height: 500px;
 	float: left;
 	padding-top: 50px;
 	display: none;	
 }
-#mk_indiv_friend {
+#_mk_friend {
 	text-align: center;
-	float: left;
-	padding-top: 50px;
-	display: none;
+	width: 33%;	
+	height: 500px;
+	float: left;	
+	padding-top:50px;
 }
 div.friendScroll {
 	scrollbar-highlight-color:#FFFFFF;
@@ -267,20 +244,18 @@ div.friendScroll {
 	scrollbar-track-color:#FFFFFF;
 	overflow:auto;
 }
+.btn_mk
 .jkbutton{
 	background:none;
 	border:none;
 }
 </style>
 
-
 <div id="mk_content">
-
-	<!-- 개인 222222-->
+	<!-- 개인 -->
 	<div id="mk_indiv">
-	
 		<div class="mk_indiv_in">
-			<button type="button" onclick="mk_main_indiv();"  id="btn_indiv"  style="background-color:#FFFFFF; border: 0px;">
+			<button type="button" onclick="mk_main_indiv();"  class="btn_mk"  style="background-color:#FFFFFF; border: 0px;">
 				<img src="<%=cp%>/res/images/indiv.png" style="width: 80%">
 			</button>
 		</div>
@@ -289,9 +264,8 @@ div.friendScroll {
 		
 	<!-- 그룹 -->
 	<div id="mk_group">
-	
 		<div class="mk_group_in">
-			<button type="button" onclick="mk_main_group();"  id="btn_group" style="background-color:#FFFFFF; border: 0px;" >
+			<button type="button" onclick="mk_main_group();"  class="btn_mk" style="background-color:#FFFFFF; border: 0px;" >
 				<img src="<%=cp%>/res/images/group.png" style="width: 80%;">
 			</button>
 		</div>
@@ -300,9 +274,9 @@ div.friendScroll {
 	<!-- 개인 메뉴바 -->
 	<div id="mk_indivMenu">
 		<div>
-			<button type="button" onclick="mk_indiv_friend();"  id="btn_indiv_friend"  style="border: 0px; width:25%;">
-				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 100%; height: 135px;">
-			</button>
+			<a id=friend_page>
+				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 25%; height: 135px;">
+			</a>
 		
 			<a href="<%=cp%>/tboard/list">
 				<img src="<%=cp%>/res/images/img_B.jpg" style="width: 25%; height: 135px;">
@@ -357,105 +331,8 @@ div.friendScroll {
 			</button>
 		</div>
 	</div>
-	
 	<!-- 개인 친구 -->
-	<div id="mk_indiv_friend">
-		<div role="button"  style="width: 100%; height: 40px">
-			<ul class="mk_nav-tabs" role="tablist">
-				<li role="button" class="active" style="width: 61px">
-					<a href="#tabFriendList" aria-controls="list" role="tab" data-toggle="tab">친구목록</a>
-				</li>
-				<li role="button" style="width: 61px">
-					<a href="#tabFriendAdd" aria-controls="add" role="tab" data-toggle="tab">친구추가</a>
-				</li>
-				<li role="button" style="width: 61px">
-					<a href="#tabFriendBlock" aria-controls="block" role="tab" data-toggle="tab">차단관리</a>
-				</li>
-			</ul>
-		</div>
-		<div class="tab-content" style="padding: 5px; margin-top: 15px;">
-				<!--  친구 목록 ///  신청받은 목록 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-				<div role="tabpanel" class="tab-pane active" id="tabFriendList">
-					<!--  친구 목록 -->
-					<div style="float: left; width: 49%; height: 400px;">
-						<div class="listFriend" style="height: 380px;">
-								
-						</div>
-						<div style="clear: both; padding-top: 10px;">
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="">쪽지</button>
-						</div>
-					</div>
-					<!-- 신청받은 목록 -->
-					<div style="float: right; width: 49%; height: 400px;">
-						<div class="listFriend" style="height: 380px;">
-							
-						</div>
-						<div style="clear: both; padding-top: 10px;">
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendAccept();">수락</button>
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendDenial();">거절</button>
-						</div>
-					</div>
-				</div>
-				<!-- 친구 검색  ////  신청 목록  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-				<div role="tabpanel" class="tab-pane" id="tabFriendAdd">
-					<!-- 친구 검색 -->
-					<div style="float: left; width: 49%; height: 400px;">
-						<select id="friendKey" class="form-control"
-							style="float: left; width: 40%; height: 30px; font-size: 13px">
-							<option value="userId">ID</option>
-							<option value="userName">이름</option>
-						</select>
-						<div class="input-group" style="float: right; width: 60%">
-							<input type="text" id="friendValue" class="form-control input-sm"
-								placeholder=""> <span class="input-group-btn">
-								<button type="button" class="btn btn-default btn-sm wbtn"
-									id="friendSearchButton" onclick="friendSearch();">검색</button>
-							</span>
-						</div>
-						<div id="friendSearchList" class="listFriend" style="clear: both; height: 166px;">
-							
-						</div>
-					</div>
-					<!-- 신청 목록 -->
-					<div id="friendAskList" class="listFriend">
-						
-					</div>
-				</div>
-				<!-- 친구 목록   ///  차단 목록  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-				<div role="tabpanel" class="tab-pane" id="tabFriendBlock">
-					<!--  친구 목록 -->
-					<div style="float: left; width: 49%; height: 400px;">
-						<div class="listFriend" style="height: 380px;">
-							
-						</div>
-						<div style="clear: both; padding-top: 10px;">
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendBlock();">차단</button>
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendDelete()';">삭제</button>
-						</div>
-					</div>
-					<div style="float: right; width: 49%; height: 400px;">
-						<div class="listFriend" style="height: 380px;">
-							
-						</div>
-						<div style="clear: both; padding-top: 10px;">
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendBlockAccept()';">차단 해제</button>
-							<button type="button" class="btn btn-default btn-sm wbtn"
-								onclick="friendBlockDelete()';">삭제</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	
-	
-	
-	
+	<div id="mk_friend"></div>
 </div><!-- 전체  div -->
 
 

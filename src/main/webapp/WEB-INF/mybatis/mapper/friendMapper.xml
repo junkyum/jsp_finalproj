@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="friend">
+
+     <!-- 친구를 추가할 때 회원에서 이름 또는 아이디 검색 -->
+     <select id="friendSearchList" parameterType="map"
+               resultType="com.sp.friend.Friend">
+          SELECT userId friendUserId, 
+                      userName friendUserName
+                  FROM member
+                  WHERE INSTR(${searchKey}, #{searchValue}) = 1
+                      AND userId != #{userId}
+                      AND (NOT userId IN (SELECT friendUserId FROM friend 
+                                 WHERE userId = #{userId}))
+                 <!-- 
+                      AND (NOT userId IN (SELECT userId FROM friend 
+                                 WHERE friendUserId = #{userId}))
+                  -->
+     </select>
+     
+	<insert id="insertFriend" parameterType="com.sp.friend.Friend">
+	  INSERT INTO friend(num, userId, friendUserId,
+	      state) VALUES (friend_seq.NEXTVAL, #{userId},
+	      #{friendUserId}, #{state})
+	</insert>
+     
+     <!-- 추가할 친구가 나를 친구로 등록한 된 파악(삭제후 다시 추가한경우) -->
+     <select id="friendCount" parameterType="map" resultType="Integer">
+          SELECT NVL(COUNT(*), 0) FROM friend
+               WHERE userId=#{friendUserId} AND 
+                   friendUserId=#{userId}
+     </select>
+     
+     <!-- 상태에 따른 친구 리스트 -->
+     <select id="friendList" parameterType="map"
+               resultType="com.sp.friend.Friend">
+           SELECT num, friendUserId, 
+                       userName friendUserName, state
+                FROM friend f JOIN member m
+                      ON f.friendUserId=m.userId
+                      WHERE f.userId=#{userId}
+                          AND state=#{state} 
+     </select>
+
+     <!-- 요청한 친구 리스트(요청한경우, 거절당한경우) -->
+     <select id="friendAskList" parameterType="String"
+               resultType="com.sp.friend.Friend">
+           SELECT num, friendUserId, 
+                       userName friendUserName, state
+                FROM friend f JOIN member m
+                      ON f.friendUserId=m.userId
+                      WHERE f.userId=#{userId}
+                          AND (state='0' OR state='2')
+     </select>
+
+     <!-- 요청받은 친구 리스트 -->
+     <select id="friendAskedList" parameterType="map"
+               resultType="com.sp.friend.Friend">
+           SELECT num, f.userId friendUserId, userName friendUserName, state
+                FROM friend f JOIN member m
+                      ON f.userId=m.userId
+                      WHERE friendUserId=#{userId}
+                          AND state=#{state} 
+     </select>
+
+	<update id="updateFriend" parameterType="map">
+	    UPDATE friend SET state=#{state}
+	          WHERE num=#{num} 
+	</update>
+	
+	<update id="updateFriendList" parameterType="map">
+	    UPDATE friend SET state=#{state} WHERE 
+               num IN 
+               <foreach item="num" index="index" collection="numList"
+                            open="(" separator="," close=")">
+                    #{num}
+               </foreach>
+	</update>
+	
+    <delete id="deleteFriend" parameterType="Integer">
+        DELETE FROM friend WHERE num=#{num}
+    </delete>	
+
+    <!-- 파라미터가 List인 경우 collection을 list로 해야함 -->
+    <delete id="deleteFriendList" parameterType="java.util.List">
+        DELETE FROM friend WHERE 
+               num IN 
+               <foreach item="num" index="index" collection="list"
+                            open="(" separator="," close=")">
+                    #{num}
+               </foreach>
+    </delete>	
+
+</mapper>
