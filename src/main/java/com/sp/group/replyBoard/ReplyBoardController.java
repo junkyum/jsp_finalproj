@@ -42,18 +42,18 @@ public class ReplyBoardController {
 	
 	@RequestMapping(value="/group/reply/list")
 	public String list(@RequestParam(value="pageNo", defaultValue="1")int current_page,
-			@RequestParam(value="searchKeyC", defaultValue="chSubject") String searchKeyC,
+			@RequestParam(value="searchKeyC", defaultValue="subject") String searchKeyC,
 			@RequestParam(value="searchValueC", defaultValue="") String searchValueC,
 			@RequestParam String groupName,
 			HttpServletRequest req,
 			Model model
 			) throws Exception {
-		
+		 
 		int numPerPage=10;
 		int total_page=0;
 		int dataCount=0;
 		
-		
+
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			searchValueC = URLDecoder.decode(searchValueC, "utf-8");
 		}
@@ -62,6 +62,7 @@ public class ReplyBoardController {
 		map.put("searchKeyC", searchKeyC);
 		map.put("searchValueC", searchValueC);
 		map.put("groupName", groupName);
+		
 		dataCount=service.dataCount(map);
 		
 		if(dataCount !=0)
@@ -86,10 +87,11 @@ public class ReplyBoardController {
         	data.setListNum(listNum);
         	n++;
         }
-
-        String paging= myUtil.paging(current_page, total_page);
+ 
+        String paging= myUtil.pagingMethod(current_page, total_page, "replyBoardList");
         
-      
+        System.out.println(searchValueC+"                                  1");
+        System.out.println(searchKeyC+"                                  2");
         model.addAttribute("leplyLlist", leplyLlist);
         model.addAttribute("total_page", total_page);
         model.addAttribute("page", current_page);
@@ -112,11 +114,8 @@ public class ReplyBoardController {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 
 		
-		dto.setUserId(info.getUserId());//아이디저장.	
-		System.out.println(dto.getGroupName()+"  구릅이름");
-		System.out.println(dto.getContent()+"    내용");
-		System.out.println(dto.getSubject()+"  재목");
-		
+		dto.setUserId(info.getUserId());
+
 		int result=service.insertReplyBoard(dto, "created");
 		String state="ture";
 		if(result==0)
@@ -128,11 +127,57 @@ public class ReplyBoardController {
 	}
 	
 	
-	//group/reply/article
+	@RequestMapping(value="/group/reply/answer/created", method=RequestMethod.GET)
+	public String createdAnswerForm(Model model, @RequestParam int replyBoardNum, @RequestParam int pageNo,HttpSession session){
+			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+
+		
+		
+			ReplyBoard dto = service.readReplyBoard(replyBoardNum);
+			
+			dto.setUserId(info.getUserId());
+			
+			//String my= "["+dto.getUserId()+"] 님의 답변입니다";
+			//String str ="["+dto.getSubject()+"("+dto.getUserId()+"님에)"+"] 대한 답변입니다. \n";
+			String my= "("+dto.getUserId()+"님의)답변!, \n";
+			String str ="["+dto.getSubject()+"]답변 !! \n";
+
+			dto.setSubject(my);
+			dto.setContent(str);
+			
+			model.addAttribute("pageNo", pageNo);
+			model.addAttribute("dto", dto);
+			model.addAttribute("mode", "reply");
+		return "group/replyGroupCreated";
+	}
+	
+	//group/reply/answer/created
+	@RequestMapping(value="/group/reply/answer/created", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> createdAnswer(HttpSession session, ReplyBoard dto){
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+
+		
+		dto.setUserId(info.getUserId());
+
+		int result=service.insertReplyBoard(dto, "reply");
+			String state="ture";
+			if(result==0)
+					state="flase";
+			Map<String, Object> model= new HashMap<>();
+			model.put("state", state);
+		
+		return model;
+	}
+	
+
+	
+
 	@RequestMapping(value="/group/reply/article")
 	public String article(@RequestParam(value="replyBoardNum") int replyBoardNum,
 			@RequestParam(value="pageNo", defaultValue="1")int pageNo,
-			@RequestParam(value="searchKeyC", defaultValue="chSubject") String searchKeyC,
+			@RequestParam(value="searchKeyC", defaultValue="subject") String searchKeyC,
 			@RequestParam(value="searchValueC", defaultValue="") String searchValueC,
 			HttpServletRequest req,
 			Model model
@@ -147,17 +192,23 @@ public class ReplyBoardController {
 		ReplyBoard dto = service.readReplyBoard(replyBoardNum);
 		
 		Map<String, Object> map = new HashMap<>();
+		
 		map.put("searchKeyC", searchKeyC);
 		map.put("searchValueC", searchValueC);
-		map.put("replyBoardNum", dto.getReplyBoardNum());
+		map.put("groupNumber", dto.getGroupNumber());
 		map.put("orderNo", dto.getOrderNo());
+
+		
+		ReplyBoard beforeReadDto= service.preReadReplyBoard(map);
+		ReplyBoard afterReadDto=service.nextReadReplyBoard(map);
 		
 		String params = "page=" + pageNo;
 		if (searchValueC.length()!=0) {
-			params += "&searchKeyC=" + searchKeyC + "&searchValue="
+			params += "&searchKeyC=" + searchKeyC + "&searchValueC="
 					+ URLEncoder.encode(searchValueC, "utf-8");
 		}
-		
+		model.addAttribute("beforeReadDto",beforeReadDto);
+		model.addAttribute("afterReadDto",afterReadDto);
 		model.addAttribute("dto",dto);
 		model.addAttribute("page",pageNo);
 		model.addAttribute("params",params );
@@ -165,96 +216,50 @@ public class ReplyBoardController {
 		
 		return "group/replyGroupBoardArticle";
 	}
-	
-	
-/*	<%@ page contentType="text/html; charset=UTF-8"%>
-	<%@ page trimDirectiveWhitespaces="true" %>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-	<%
-	   String cp=request.getContextPath();
-		//글보기창
-	%>
-
-	ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
 
 
-					<h2 class="text-center">[${dto.groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
-					<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
+	@RequestMapping(value="/group/reply/delete")
+	@ResponseBody
+	public Map<String, Object> delete(@RequestParam(value="replyBoardNum") int replyBoardNum)throws Exception{
+		
+		int result= service.deleteReplyBoard(replyBoardNum);
+		String state= "true";
+		if(result==0)
+			state= "false";
+		Map<String, Object> model= new HashMap<>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+//replyBoardNum, pageNo:pageNo
+		@RequestMapping(value="/group/reply/update", method=RequestMethod.GET)
+		public String updateReplyForm(
+				@RequestParam(value="replyBoardNum") int replyBoardNum,
+				@RequestParam(value="pageNo") int pageNo, Model model){
+			
+			System.out.println(replyBoardNum+" , "+pageNo+"                        ????");
+			ReplyBoard dto =service.readReplyBoard(replyBoardNum);
+			
+			model.addAttribute("mode", "update");
+			model.addAttribute("dto", dto);
+			model.addAttribute("pageNo", pageNo);
+			return "group/replyGroupCreated";
+		}
 
-			<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px;">
-				  <tr><td colspan="2" height="3" bgcolor="#507CD1"></td></tr>
-				
-				  <tr align="left" height="40"> 
-				      <td width="100" bgcolor="#EEEEEE" style="text-align: center;">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
-				      <td width="500" style="padding-left:10px;">      
-				      	${dto.subject}
-				      </td>
-				  </tr>	
-				  <tr align="left"> 
-				      <td width="100" bgcolor="#EEEEEE" style="text-align: center; padding-top:5px;" valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
-				      <td width="500" valign="top" style="padding:5px 0px 5px 10px;"> 
-				       	${dto.content}
-				      </td>
-				  </tr>
-			</table>
-			<table>
-				<tr>
-					<td>
-						<div style="margin-left: 450px; border-bottom:10px;">
-						
-						</div>
-					</td>
-				</tr>
-			</table>
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		@RequestMapping(value="/group/reply/update", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> updateReplySubmit(ReplyBoard dto){
+			
+			int result= service.updateReplyBoard(dto);
+			String state="true";
+			if(result==0)
+					state="false";
+			Map<String, Object> model= new HashMap<>();
+			model.put("state",state);
+			
+			return model;
+		}
 	
 	
 	

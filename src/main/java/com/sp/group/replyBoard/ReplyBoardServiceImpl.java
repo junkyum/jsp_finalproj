@@ -1,5 +1,6 @@
 package com.sp.group.replyBoard;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +21,18 @@ public class ReplyBoardServiceImpl implements  ReplyBoardService{
 				int maxReplyBoardNum=dao.getIntValue("groupReply.maxReplyBoardNum");
 				dto.setReplyBoardNum(maxReplyBoardNum+1);
 				dto.setGroupNumber(dto.getReplyBoardNum());
+			} else if (mode.equals("reply")){
+				Map<String, Object> map=new HashMap<>();
+				map.put("replyBoardNum", dto.getReplyBoardNum());
+				map.put("orderNo", dto.getOrderNo());
+				dao.updateData("groupReply.updateOrderNo", map);
+				
+				int maxReplyBoardNum= dao.getIntValue("groupReply.maxReplyBoardNum", map);
+				dto.setReplyBoardNum(maxReplyBoardNum+1);
+				dto.setDepth(dto.getDepth()+1);
+				dto.setOrderNo(dto.getOrderNo()+1);				
 			}
-			System.out.println(dto.getGroupName()+"              그룹이름");
-			System.out.println(dto.getReplyBoardNum()+"           리플보드넘");
+
 			result=dao.insertData("groupReply.insertReplyBoard", dto);
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -69,16 +79,29 @@ public class ReplyBoardServiceImpl implements  ReplyBoardService{
 
 	@Override
 	public ReplyBoard preReadReplyBoard(Map<String, Object> map) {
-		
-		return null;
+		ReplyBoard dto= null;
+		try{
+			dto=dao.getReadData("groupReply.preReadReplyBoard", map);
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		}
+		return dto;
 	}
-
+	
 	@Override
 	public ReplyBoard nextReadReplyBoard(Map<String, Object> map) {
+		ReplyBoard dto= null;
+		try{
+			dto=dao.getReadData("groupReply.nextReadReplyBoard", map);
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		}
 		
-		return null;
+		return dto;
 	}
 
+	
+	
 	@Override
 	public int updateHitCount(int replyBoardNum) {
 		int result =0;
@@ -92,14 +115,26 @@ public class ReplyBoardServiceImpl implements  ReplyBoardService{
 
 	@Override
 	public int updateReplyBoard(ReplyBoard dto) {
-		
-		return 0;
+		int result=0;
+		try {
+			System.out.println(dto.getReplyBoardNum()+"  ??????????????");
+			result=dao.updateData("groupReply.updateReplyBoard", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
 	}
 
 	@Override
 	public int deleteReplyBoard(int replyBoardNum) {
-		
-		return 0;
+		int result=0;
+
+		try{
+			
+			result=dao.deleteData("groupReply.deleteReplyBoard", replyBoardNum);
+		} catch(Exception e) {
+		}
+		return result;
 	}
 
 

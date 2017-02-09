@@ -4,7 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
-//이곳에서 수정@삭제@등록 할것이다 
+/* 
+	등록-> 완료
+	삭제-> 완료
+	수정-> 미완
+*/
 %>
 <script type="text/javascript">
 function submitReplyOK() {
@@ -21,16 +25,17 @@ function submitReplyOK() {
 	}
 	
 	var mode="${mode}";
-	//alert(subject+","+content+","+mode)
+
 	var query="subject="+subject;
 	query+="&content="+content;
 	query+="&groupName="+groupName;
 	if(mode=="created"){
 		var url="<%=cp%>/group/reply/created"
-		
-		var pageNo=1;
-		var searchKeyC="subject";
-		var searchValueC="";
+
+	} else if (mode=="update"){
+		var url="<%=cp%>/group/reply/update"
+		var replyBoardNum="${dto.replyBoardNum}";
+			query+="&replyBoardNum=x`"+replyBoardNum;
 	}
 	
 	$.ajax({
@@ -44,18 +49,66 @@ function submitReplyOK() {
 			if(state=="false"){
 				alert("실패했다");
 			} else {
-				alert("들어갓다!붕아");
+				alert("입력했어요");
+			replyBoardList(pageNo);
 			}
 		
-			replyBoardList(pageNo);
 		}
 		,error:function(e) {
 			console.log(e.responseText);
 		}
 		
 	});
+}
 
+function submitReplyAnswerOK() {
+	var subject=$("#chSubject").val();
+	var content=$("#chContent").val();
+	var groupName="${dto.groupName}";
+	var page="${page}";
+	var groupNumber="${dto.groupNumber}";
+	var orderNo="${dto.orderNo}";
+	var depth="${dto.depth}";
+	var parent="${dto.replyBoardNum}";
+	alert("2번");
+	alert(groupName+"???????????????");
+	if(!subject){
+		 $("#chSubject").focus();
+         return;
+	}
+	if(!content){
+		 $("#chContent").focus();
+        return;
+	}
 
+	var url="<%=cp%>/group/reply/answer/created";
+	var query="subject="+subject+"&content="+content+"&groupName="+groupName+"&groupNumber="+groupNumber;
+	query+="&orderNo"+orderNo+"&depth="+depth+"&parent="+parent;
+	
+	
+	
+	$.ajax({
+		type:"post"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			
+			var state=data.state;
+			if(state=="false"){
+				alert("실패했다");
+			} else {
+				alert("입력했어요");
+			replyBoardList(pageNo);
+			}
+		
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+		
+	});
+		
 }
 
 
@@ -73,13 +126,13 @@ function submitReplyOK() {
 			      <td width="100" bgcolor="#EEEEEE" style="text-align: center;">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 			      <td width="500" style="padding-left:10px;">      
 			      <input type="hidden" name="${groupName}" value="${groupName}">
-			      <input type="text" id="chSubject" name="chSubject" size="75" maxlength="100" class="boxTF" value="#">
+			      <input type="text" id="chSubject" name="chSubject" size="75" maxlength="100" class="boxTF" value="${dto.subject}">
 			      </td>
 			  </tr>	
 			  <tr align="left"> 
 			      <td width="100" bgcolor="#EEEEEE" style="text-align: center; padding-top:5px;" valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
 			      <td width="500" valign="top" style="padding:5px 0px 5px 10px;"> 
-			        <textarea id="chContent" name="chContent" cols="75" rows="12"></textarea>
+			        <textarea id="chContent" name="chContent" cols="75" rows="12">${dto.content}</textarea>
 			      </td>
 			  </tr>
 		</table>
@@ -87,12 +140,29 @@ function submitReplyOK() {
 			<tr>
 				<td>
 					<div style="margin-left: 450px; border-bottom:10px;">
+					<c:if test="${mode !='reply'}">
 					 <input type="button" value=" ${mode=='created'?'등  록':'수정완료'} " class="btn" onclick="submitReplyOK();">
-      				 <input type="reset" value=" 다시입력 " class="btn">
 					 <input type="button" value=" ${mode=='created'?'리스트가기':'수정취소'} " class="btn" onclick="replyBoardList(pageNo);">
+					 </c:if>
+					 <c:if test="${mode=='reply'}">
+					 <input type="button" value=" 답  변 " class="btn" onclick="submitReplyAnswerOK();">
+					 <input type="button" value=" 답변 취소" class="btn" onclick="replyBoardList(pageNo);">
+					 </c:if>
+      				 <input type="reset" value=" 다시입력 " class="btn">
 					</div>
+					 <c:if test="${mode=='update'}">
+						<input type="hidden" name="replyBoardNum" value="${dto.replyBoardNum}">
+						<input type="hidden" name="pageNo" value="${pageNo}">
+					</c:if>
+					<c:if test="${mode=='reply'}">
+						<input type="hidden" name="page" value="${page}">
+                        <input type="hidden" name="groupNumber" value="${dto.groupNumber}">
+                        <input type="hidden" name="orderNo" value="${dto.orderNo}">
+                        <input type="hidden" name="depth" value="${dto.depth}">
+                        <input type="hidden" name="parent" value="${dto.replyBoardNum}">
+                        <input type="hidden" name="groupName" value="${dto.groupName}">
+					</c:if>
 				</td>
 			</tr>
 		</table>
 </form>
-

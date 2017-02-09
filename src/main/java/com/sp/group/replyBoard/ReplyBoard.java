@@ -11,7 +11,6 @@ public class ReplyBoard {
 	private int parent;
 	private int hitcount;
 
-
 	
 	public int getHitcount() {
 		return hitcount;
@@ -90,3 +89,7 @@ public class ReplyBoard {
 
 
 }
+
+
+
+

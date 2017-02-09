@@ -14,7 +14,7 @@
 var pageNo=1;
 var searchKeyC="subject";
 var searchValueC="";
-
+/* 위에꺼 안하면 이전@이다음글찾지 못한다. */
 $(function(){
 	replyBoardList(1);	
 });
@@ -24,7 +24,7 @@ function replyBoardList(page) {
 	var url="<%=cp%>/group/reply/list";
 	var query="pageNo="+page+"&searchKeyC="+searchKeyC+"&searchValueC="+searchValueC;
 	var groupName="${groupName}"
-
+	
 	query+="&groupName="+groupName;
 	pageNo=page;
 	$.ajax({
@@ -40,7 +40,7 @@ function replyBoardList(page) {
 	});
 }
 
-//글을 등록할것이다.  submitReply
+//글을 등록할것이다.  처음 겟방식
 function submitReply() {
 	var groupName="${groupName}"
 	 var url="<%=cp%>/group/reply/created";
@@ -51,16 +51,17 @@ function submitReply() {
 }
 
 function articleReplyBoard(replyBoardNum) {
-	alert("눌렷음    |"+replyBoardNum);
+
 	var url="<%=cp%>/group/reply/article";
 	var query="pageNo="+pageNo+"&searchKeyC="+searchKeyC+"&searchValueC="+searchValueC;
 	query+="&replyBoardNum="+replyBoardNum;
+	
 	$.ajax({
 		type:"post"
 		,url:url
 		,data:query
 		,success:function(data) {
-				alert(" 들어갓");
+				alert("글보기 들어왔어요");
 			$("#groupReplyBoard").html(data);
 		}
 		,error:function(e) {
@@ -69,8 +70,50 @@ function articleReplyBoard(replyBoardNum) {
 		}
 		
 	});
-	
 }
+
+
+//리스트 찾기
+function searchReplyList() {
+	var url="<%=cp%>/group/reply/list";
+
+	var searchKeyC=$('#searchKeyC').val();
+	var searchValueC=$('#searchValueC').val();
+	var groupName="${groupName}";
+
+	$.post(url, {searchKeyC:searchKeyC, searchValueC:searchValueC, groupName:groupName}, function(data) {
+		$("#groupReplyBoard").html(data);
+		$("#searchValueC").val("");	
+	});
+}
+
+function deleteReplyBoard(replyBoardNum) {
+	if(!confirm("위 자료를 삭제 하시겠습니까 ?"))
+		return;
+	
+	var url="<%=cp%>/group/reply/delete";
+	var query="replyBoardNum="+replyBoardNum;
+
+	$.ajax({
+		type:"post"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+		
+			var state=data.state;
+			if(state=="false")
+				alert("게시물을 삭제 할 수 없습니다. !!!");
+		
+				  replyBoardList(pageNo);
+		 }
+		 ,error:function(e) {
+			 console.log(e.responseText);
+		}
+	});
+}
+
+
 
 
 </script>

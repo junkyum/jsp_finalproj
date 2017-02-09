@@ -103,8 +103,8 @@ public class PhotoController {
 		    model.addAttribute("total_page", total_page);
 		    model.addAttribute("page", current_page);
 		    model.addAttribute("paging", paging);
-		    model.addAttribute("searchKeyK", searchKeyK);
-		    model.addAttribute("searchValueK", searchValueK);
+/*		    model.addAttribute("searchKeyK", searchKeyK);
+		    model.addAttribute("searchValueK", searchValueK);*/
 		    
 		    return "group/listGally";
 	}

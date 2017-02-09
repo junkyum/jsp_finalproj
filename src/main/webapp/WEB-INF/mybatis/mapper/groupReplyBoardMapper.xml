@@ -13,16 +13,16 @@
  			 #{userId}, #{subject}, #{content}, #{groupNumber}, #{depth}, #{orderNo}, #{parent})
  		</insert>
 		
-			<!-- 검색할때 쓰는 문구  searchKeyC   searchValueC -->
+			<!-- 검색할때 쓰는 문구 	//searchKeyC   searchValueC   content   subject   userId     created-->
 		<sql id="where-list">
 			  <if test="searchKeyC=='subject'">
 			       INSTR(subject, #{searchValueC}) &gt; 0
 			  </if>
-			  <if test="searchKeyC='content'">
+			  <if test="searchKeyC=='content'">
 			      INSTR(content, #{searchValueC}) &gt; 0 
 			  </if>
 			  <if test="searchKeyC=='created'">
-			      TO_CHAR(r.created, 'YYYY-MM-DD') = #{searchValueC}
+			      TO_CHAR(p.created, 'YYYY-MM-DD') = #{searchValueC}
 			  </if>
 		</sql>
 		
@@ -34,8 +34,8 @@
 	     	<if test="searchValueC!=null and searchValueC!='' ">
 	     	    <include refid="where-list"/>
 	     	</if>
-	     	AND r.groupName=#{groupName}
-	     </where> 
+	     	AND r.groupName=#{groupName} 
+	     </where>  
 		</select>
 	
 	
@@ -50,9 +50,9 @@
           			  <where>
 				     	<if test="searchValueC!=null and searchValueC!='' ">
 				     	    <include refid="where-list"/>
-				     	</if> 
-				     	AND r.groupName=#{groupName}
-				     </where> 
+				     	</if>
+				     	AND r.groupName=#{groupName}  
+				     </where>
 	                ORDER BY groupNumber DESC , orderNo ASC
 	 <![CDATA[
 		        ) tb WHERE ROWNUM <= #{end}
@@ -78,17 +78,60 @@
 	</select>
 	
 	
+	<!-- 이전 다음 글 preReadReplyBoard   nextReadReplyBoard -->
+	<select id="preReadReplyBoard" resultType="com.sp.group.replyBoard.ReplyBoard" parameterType="map">
+		SELECT tb.* FROM (
+			SELECT replyBoardNum, r.subject  FROM groupReply r
+			         JOIN member m ON m.userId = r.userId
+					<where>
+				     	<if test="searchValueC!=null and searchValueC!='' ">
+				     	    <include refid="where-list"/>
+				     	</if> 
+				     	<![CDATA[
+		                 AND (( groupNumber = #{groupNumber} AND orderNo < #{orderNo})
+                        	 OR (groupNumber > #{groupNumber} ))
+		                 ]]>
+				     </where> 
+				    ORDER BY groupNumber ASC, orderNo DESC
+			) tb WHERE ROWNUM=1
+	</select>
 	
 	
+	<select id="nextReadReplyBoard" resultType="com.sp.group.replyBoard.ReplyBoard" parameterType="map">
+				SELECT tb.* FROM (
+			SELECT replyBoardNum, r.subject  FROM groupReply r
+			         JOIN member m ON m.userId = r.userId
+					<where>
+				     	<if test="searchValueC !=null and searchValueC !='' ">
+				     	    <include refid="where-list"/>
+				     	</if> 
+				     	<![CDATA[
+		                 AND (( groupNumber = #{groupNumber} AND orderNo > #{orderNo})
+                        	 OR (groupNumber < #{groupNumber} ))
+		                 ]]>
+				     </where> 
+				    ORDER BY groupNumber DESC, orderNo ASC
+			) tb WHERE ROWNUM=1
+	</select>
 	
 	
+	<delete id="deleteReplyBoard" parameterType="Integer">
+			DELETE FROM groupReply WHERE replyBoardNum IN 
+               (SELECT replyBoardNum FROM groupReply START WITH  replyBoardNum = #{replyBoardNum}
+	            	CONNECT BY PRIOR replyBoardNum = parent)
+	</delete>
 	
+	<update id="updateReplyBoard" parameterType="com.sp.group.replyBoard.ReplyBoard">
+			UPDATE groupReply SET subject=#{subject}, content=#{content}
+					WHERE replyBoardNum=#{replyBoardNum}
+	</update>
 	
-	
-	
-	
-	
-	
+	<update id="updateOrderNo" parameterType="map">
+		UPDATE groupReply SET orderNo = orderNo+1 
+			<![CDATA[
+				WHERE replyBoardNum = #{replyBoardNum} AND orderNo > #{orderNo} 
+			]]>
+	</update>
 	
 	
 	
