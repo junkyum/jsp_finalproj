@@ -316,7 +316,7 @@ function insertOk() {
 	var endDay=$.trim($("input[name='endDay']").val());
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
-	var content=$.trim($("textarea[name='content']").val());
+	var content=$.trim($("textarea[name='calcontent']").val());
 	
 	if(! title) {
 		alert("제목을 입력 하세요 !!!");

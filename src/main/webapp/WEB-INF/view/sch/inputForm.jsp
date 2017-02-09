@@ -86,7 +86,7 @@ $(function() {
                 <div class="form-group" id="schContent"  style="min-height: 75px;">
                     <label class="col-sm-2 control-label">내용</label>
                     <div class="col-sm-10">
-                        <textarea name="content" class="form-control" rows="3"></textarea>
+                        <textarea id="calcontent" name="calcontent" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
             </form>

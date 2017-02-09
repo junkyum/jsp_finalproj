@@ -49,7 +49,6 @@ public class ScheduleController {
 			model.put("isLogin", "false");
 			return model;
 		}
-		
 		sch.setUserId(info.getUserId());
 		service.insertSchedule(sch);
 	
