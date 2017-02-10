@@ -19,18 +19,23 @@ public class ReplyBoardServiceImpl implements  ReplyBoardService{
 		try {
 			if(mode.equals("created")){
 				int maxReplyBoardNum=dao.getIntValue("groupReply.maxReplyBoardNum");
+
 				dto.setReplyBoardNum(maxReplyBoardNum+1);
 				dto.setGroupNumber(dto.getReplyBoardNum());
+
 			} else if (mode.equals("reply")){
 				Map<String, Object> map=new HashMap<>();
-				map.put("replyBoardNum", dto.getReplyBoardNum());
+				map.put("groupNumber", dto.getGroupNumber());
 				map.put("orderNo", dto.getOrderNo());
 				dao.updateData("groupReply.updateOrderNo", map);
 				
-				int maxReplyBoardNum= dao.getIntValue("groupReply.maxReplyBoardNum", map);
+				
+				int maxReplyBoardNum= dao.getIntValue("groupReply.maxReplyBoardNum");
+				
 				dto.setReplyBoardNum(maxReplyBoardNum+1);
 				dto.setDepth(dto.getDepth()+1);
-				dto.setOrderNo(dto.getOrderNo()+1);				
+				dto.setOrderNo(dto.getOrderNo()+1);	
+
 			}
 
 			result=dao.insertData("groupReply.insertReplyBoard", dto);

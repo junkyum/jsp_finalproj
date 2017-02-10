@@ -12,7 +12,6 @@
 .hbtn {
 	font-family: "Malgun Gothic", "Nanum Gothic", "Dotum";
     background-image:none;
-    color:#fff;
     line-height: 1.5;
     text-align: center;
     padding: 5px 10px;
@@ -32,7 +31,6 @@
 .hbtn:focus {
 	font-family: "Malgun Gothic", "Nanum Gothic", "Dotum";
     background-image:none;
-  /*   color:#fff; */
     text-decoration: none;
 }
 
@@ -68,7 +66,7 @@
 
 /* 일정분류버튼 css */
 #classifyGroup .btn, #classifyGroup .focus.btn, #classifyGroup .btn:focus, #classifyGroup .btn:hover {
-    color: #fff; background-image:none;
+   background-image:none;
 }
 .btn-blue {
     background-color:blue; border-color:blue;

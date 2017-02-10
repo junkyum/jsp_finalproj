@@ -40,10 +40,6 @@ function searchList() {
 		<h3>공지사항</h3>
 	</div>
 
-	<div class="mk_alert-info" style="margin: 0 auto; background: #B2EBF4; width: 800px; text-align: center">
-		중요한 일정 및 알림, 이벤트 등은 공지사항 통해 고객님께 알려 드립니다.</div>
-
-	<div>
 		<c:if test="${dataCount!=0 }">
 			<div style="clear: both; height: 30px; line-height: 30px;">
 				<div style="float: left;">${dataCount}개(${page}/${total_page}

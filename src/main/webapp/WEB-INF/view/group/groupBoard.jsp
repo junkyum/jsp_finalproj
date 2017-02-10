@@ -30,7 +30,7 @@ function groupBoardListpage(page) {
 		$("#gblistlayout").html(data);
 	});
 }
-
+   
 
 
 function mkmgroupBoardCheck(){
