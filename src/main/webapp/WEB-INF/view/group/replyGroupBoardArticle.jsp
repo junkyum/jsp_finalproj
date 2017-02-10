@@ -16,10 +16,10 @@ function updateReplyBoard(replyBoardNum) {
 	});
 }
 function submitReplyAnswer(replyBoardNum, pageNo) {
-
 	var url="<%=cp%>/group/reply/answer/created";
 	$.get(url,{replyBoardNum:replyBoardNum, pageNo:pageNo},function(data){
 		 $("#groupReplyBoard").html(data);
+		 
 	 });
 }
 

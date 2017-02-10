@@ -140,11 +140,12 @@ public class ReplyBoardController {
 			
 			//String my= "["+dto.getUserId()+"] 님의 답변입니다";
 			//String str ="["+dto.getSubject()+"("+dto.getUserId()+"님에)"+"] 대한 답변입니다. \n";
+			
 			String my= "("+dto.getUserId()+"님의)답변!, \n";
-			String str ="["+dto.getSubject()+"]답변 !! \n";
+			String str ="["+dto.getSubject()+"]답변\n";
+			dto.setContent(str);
 
 			dto.setSubject(my);
-			dto.setContent(str);
 			
 			model.addAttribute("pageNo", pageNo);
 			model.addAttribute("dto", dto);
@@ -152,7 +153,7 @@ public class ReplyBoardController {
 		return "group/replyGroupCreated";
 	}
 	
-	//group/reply/answer/created
+	//댓ㄷ글
 	@RequestMapping(value="/group/reply/answer/created", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> createdAnswer(HttpSession session, ReplyBoard dto){
@@ -197,7 +198,7 @@ public class ReplyBoardController {
 		map.put("searchValueC", searchValueC);
 		map.put("groupNumber", dto.getGroupNumber());
 		map.put("orderNo", dto.getOrderNo());
-
+		map.put("groupName", dto.getGroupName());
 		
 		ReplyBoard beforeReadDto= service.preReadReplyBoard(map);
 		ReplyBoard afterReadDto=service.nextReadReplyBoard(map);
@@ -238,7 +239,7 @@ public class ReplyBoardController {
 				@RequestParam(value="replyBoardNum") int replyBoardNum,
 				@RequestParam(value="pageNo") int pageNo, Model model){
 			
-			System.out.println(replyBoardNum+" , "+pageNo+"                        ????");
+
 			ReplyBoard dto =service.readReplyBoard(replyBoardNum);
 			
 			model.addAttribute("mode", "update");
