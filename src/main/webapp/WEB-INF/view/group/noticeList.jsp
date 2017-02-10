@@ -134,8 +134,8 @@
 					<c:if test="${dto.fileCount > 0}">
 						<a href="<%=cp%>/group/notice/download?num=${dto.num}">
 							<button type="button" class="btn btn-default-sm btn-xs" 
-										data-toggle="tooltip" data-placement="right" title="${dto.originalFilename },${dto.fileSize /1024}byte" id="fileNotice">							
-									<span class="glyphicon glyphicon-floppy-save"></span>														
+										data-toggle="tooltip" data-placement="right" title="${dto.originalFilename } (<fmt:formatNumber value="${dto.fileSize/1024 }" pattern="0.00"/>KB)" id="fileNotice">							
+									<span class="glyphicon glyphicon-save"></span>					
 							</button>	
 						</a>
 					</c:if>			
@@ -165,14 +165,14 @@
 	</div>
 	<div style="float: left; width: 60%; text-align: center;">
 		<form name="searchForm" method="post" class="form-inline">
-			<select class="form-control input-sm" name="searchKey">
+			<select class="form-control input-sm" name="searchKey" id="gnsearchKeykm">
 				<option value="subject">제목</option>
 				<option value="content">내용</option>
 				<option value="created">등록일</option>
 			</select> <input type="text" class="form-control input-sm input-search"
-				name="searchValue">
+				name="searchValue" id="gnsearchValuekm">
 			<button type="button" class="btn btn-default btn btn-search"
-				onclick="searchList();">
+				onclick="gnSearchList();">
 				<span class="glyphicon glyphicon-search"></span>
 			</button>
 		</form>

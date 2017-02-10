@@ -104,7 +104,7 @@ public class NoticeServiceImpl implements NoticeService{
 						long fileSize=mf.getSize();
 						dto.setFileSize(fileSize);
 						
-						dao.insertData("groupNotice.insertNoticeFile", dto);
+						dao.updateData("groupNotice.updateNotice", dto);
 					}
 				}
 			}

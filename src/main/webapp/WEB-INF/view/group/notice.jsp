@@ -28,6 +28,8 @@ function noticeListpage(page) {
 	var userId = "${userId}";
 	$.post(url, {num:num, pageNo:page, groupName:groupName, userId:userId}, function(data){
 		$("#noticeListlayout").html(data);
+		$("#gnsearchKeykm").val();
+		$("#gnsearchValuekm").val();
 	});
 }
 
@@ -118,7 +120,18 @@ function noticelayoutview(num) {
 		}
 }
 
-
+function gnSearchList(){
+	var url="<%=cp%>/group/noticeList";
+	var searchKey=$('#gnsearchKeykm').val();
+	var searchValue=$('#gnsearchValuekm').val();
+	var groupName="${groupName}";
+	var userId = "${userId}";
+	$.post(url, {searchKey:searchKey, searchValue:searchValue, groupName:groupName, userId:userId}, function(data) {
+		$("#noticeListlayout").html(data);
+		$("#searchValue").val("");
+		
+	});
+}
 
 </script>
 

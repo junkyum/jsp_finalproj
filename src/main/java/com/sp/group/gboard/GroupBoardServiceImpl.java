@@ -32,12 +32,11 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 						continue;
 
 					String filename = fileManager.doFileUpload(mf, pathname);
-					insertFile(dto);
 					if (filename != null) {
 						dto.setSaveFilename(filename);
 						dto.setOriginalFilename(mf.getOriginalFilename());
-						long gbfileSize = mf.getSize();
-						dto.setFileSize(gbfileSize);
+						long fileSize = mf.getSize();
+						dto.setFileSize(fileSize);
 
 						dao.insertData("gboard.insertGroupBoardFile", dto);
 					}
@@ -129,10 +128,12 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 					if (filename != null) {
 						dto.setSaveFilename(filename);
 						dto.setOriginalFilename(mf.getOriginalFilename());
-						long gbfileSize = mf.getSize();
-						dto.setFileSize(gbfileSize);
+						long fileSize = mf.getSize();
+						dto.setFileSize(fileSize);
 
-						dao.insertData("gboard.insertGroupBoardFile", dto);
+						dao.updateData("board.updateGroupBoard", dto);
+						
+						//dao.updateData("gboard.update", dto);
 					}
 				}
 			}
@@ -228,8 +229,8 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 	public int insertReply(GroupBoardReply dto) {
 		int res=0;
 		try {
-			int maxNum=dao.getIntValue("gboard.replyNum", dto);
-			dto.setReplyNum(maxNum+1);
+			int maxReplyNum=dao.getIntValue("gboard.maxReplyNum", dto);
+			dto.setReplyNum(maxReplyNum+1);
 			
 			res = dao.insertData("gboard.insertReply", dto);
 		} 
@@ -251,25 +252,117 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 	}
 
 	@Override
-	public int deleteReply(int replyNum, String pathname) {
+	public int deleteReply(GroupBoardReply dto) {
 		int res = 0;
 		try {
-			res = dao.deleteData("gboard.deleteReply", replyNum);
+			res = dao.deleteData("gboard.deleteReply", dto);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		return res;
 	}
 
-	@Override
+/*	@Override
 	public int dataCountReply(int boardNum) {
 		int res = 0;
 		try {
-			res = dao.getIntValue("gboard.dataCountReply", boardNum);
+			res = dao.getIntValue("gboard.ReplyDataCount", boardNum);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		return res;
+	}*/
+
+	@Override
+	public int insertBoardLike(GroupBoard dto) {
+		int result=0;
+		try {
+			result = dao.insertData("gboard.insertBoardLike", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public List<GroupBoardReply> listReplyAnswer(int replyAnswer) {
+		List<GroupBoardReply> list=null;
+		
+		try {
+			list=dao.getListData("gboard.listReplyAnswer", replyAnswer);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		return list;
+	}
+
+	@Override
+	public int deleteReplyAnswer(GroupBoardReply dto) {
+		int result=0;
+		try {
+			result=dao.deleteData("gboard.deleteReplyAnswer", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}		
+		return result;
+	}
+
+	@Override
+	public int replyGroupCountAnswer(int replyAnswer) {
+		int result = 0;
+		try {
+			result = dao.getReadData("gboard.replyGroupCountAnswer",replyAnswer);
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());		
+		}			
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> groupBoardLikeCount(int boardNum) {
+		Map<String, Object> map = null;
+		try {
+			map = dao.getReadData("gboard.groupBoardLikeCount",boardNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> groupReplyCountLike(int replyNum) {
+		Map<String, Object> map = null;
+		try {
+			map=dao.getReadData("gboard.groupReplyCountLike",replyNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
+	}
+
+	@Override
+	public int insertBoardReplyLike(GroupBoardReply dto) {
+		int result=0;
+		try {	
+			result = dao.insertData("gboard.insertGroupReplyLike", dto);				
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int replyDataCount(int boardNum) {
+		int result =0;		
+		try {
+			
+			result=dao.getIntValue("gboard.replyDataCount", boardNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
 	}
 
 }

@@ -12,6 +12,7 @@ public class GroupBoard {
 	private int hitCount;
 	
 	private int boardLike;
+	private int boardLikeCount;
 	
 	private int fileNum;
 	private String saveFilename, originalFilename;
@@ -19,6 +20,9 @@ public class GroupBoard {
 	
 	private List<MultipartFile> upload;
 	private long gap;
+	private int fileCount;
+	
+	
 	public int getBoardNum() {
 		return boardNum;
 	}
@@ -115,7 +119,18 @@ public class GroupBoard {
 	public void setGap(long gap) {
 		this.gap = gap;
 	}
-	
+	public int getFileCount() {
+		return fileCount;
+	}
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
+	}
+	public int getBoardLikeCount() {
+		return boardLikeCount;
+	}
+	public void setBoardLikeCount(int boardLikeCount) {
+		this.boardLikeCount = boardLikeCount;
+	}
 	
 	
 	

@@ -13,13 +13,6 @@ public class GroupNotice {
 	   private    String saveFilename,originalFilename;
 	   private int fileCount;
 	   
-	   public int getFileCount() {
-		return fileCount;
-	}
-
-	public void setFileCount(int fileCount) {
-		this.fileCount = fileCount;
-	}
 
 	//스프링에서 파일 받기
 	   private List<MultipartFile> upload;
@@ -136,5 +129,13 @@ public class GroupNotice {
 
 	public void setGap(long gap) {
 		this.gap = gap;
+	}
+	
+	public int getFileCount() {
+		return fileCount;
+	}
+
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
 	}
 }
