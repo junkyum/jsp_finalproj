@@ -17,10 +17,11 @@
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript">
 $(function(){
-	listPage(1);
+	groupBoardListpage(1);
 });
 
-function listPage(page) {	
+function groupBoardListpage(page) {	
+	
 	var url="<%=cp%>/group/groupBoardList";
 	var boardNum = "${dto.boardNum}";
 	var groupName = "${groupName}";
@@ -29,6 +30,8 @@ function listPage(page) {
 		$("#gblistlayout").html(data);
 	});
 }
+
+
 
 function mkmgroupBoardCheck(){
 	var page = "${page}";
@@ -58,7 +61,7 @@ function mkmgroupBoardCheck(){
 					$("#gbcontentkm").val("");
 					$("#gbfilekm").val("");
 					$("#gbkeywordkm").val("");				
-					listPage(1);					
+					groupBoardListpage(1);					
 				}else {
 					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
 				}
@@ -69,7 +72,289 @@ function mkmgroupBoardCheck(){
 		
 	});	
 }
+
+function articleGroupBoard(boardNum,page){
+	var url="<%=cp%>/group/gboard/boardArticle";
+	var searchKey = "${searchKey}";
+	var searchValue = "${searchValue}";
+	var groupName = "${groupName}";
+	var query="boardNum="+boardNum+"&page="+page+"&groupName="+groupName+"&searchKey="+searchKey+"&searchValue="+searchValue;
+	
+	$.ajax({
+		type:"post"
+		,url:url
+		,data:query
+		,success:function(data) {
+			$("#gblistlayout").html(data);
+		}
+		,error:function(e) {
+			alert(e.responseText);
+		}
+	});
+}
+
+ function groupBaordListGo(page){
+	groupBoardListpage(page);
+} 
+ 
+
+<%--  function gboardReplyListpage(page){
+	 var url="<%=cp%>/group/gboard/listReply";
+		var boardNum="${dto.boardNum}";
+		$.post(url, {boardNum:boardNum, page:page}, function(data){
+			$("#groupBoardListReply").html(data);
+		});
+ }
+  --%>
+function gboardsendReply(boardNum){
+	var userId="${sessionScope.member.userId}";
+	var content = $("#gboardReplyContent").val().trim();
+	if(! content){
+		$("#gboardReplyContent").focus();
+		return;
+	}
+	var query = "boardNum="+boardNum+"&content="+content+"&replyAnswer=0"+"&userId="+userId;
+	
+	$.ajax({
+		type:"POST",
+		url:"<%=cp%>/group/gboard/insertReply",
+		data:query,
+		dataType:"JSON",
+		success:function(data){
+			$("#gboardReplyContent").val("");
+			var state = data.state;
+			if(state =="true"){
+				gboardReplyListpage(1);				
+			} else{
+				alert("댓글 남기는거 실패함 어떻게할지 생각중임 ")
+			}
+		}
+	});
+}
+function kmListReplyAnswer(replyAnswer){
+	var listReplyAnswerkm="#kmListReplyAnswer"+replyAnswer;	
+	var url="<%=cp%>/group/gboard/listReplyAnswer";
+	$.get(url, {replyAnswer:replyAnswer}, function(data){
+		$(listReplyAnswerkm).html(data);
+	});
+}
+
+function countAnswerkm(replyAnswer) {
+	var url="<%=cp%>/group/gboard/replyCountAnswer";
+	$.post(url, {replyAnswer:replyAnswer}, function(data){
+		var count="("+data.count+")";
+
+		var answerCountkm="#gbAnswerCount"+replyAnswer;
+		var answerGlyphiconkm="#answerGlyphicon"+replyAnswer;
+		
+		$(answerCountkm).html(count);
+		$(answerGlyphiconkm).removeClass("glyphicon-triangle-bottom");
+
+	}, "JSON");
+}
+
+$(function(){	
+	$("body").on("click", ".btnGroupReplyAnwerLaout", function(){
+		var $divGroupReplyAnswerkm = $(this).parent().parent().next();
+		/* 이부분이  listReply안있는  .btnR의 아버지 의 아버지div의 다음 것 을 지칭 한다.
+		div class=GroupReplyAnswer =   ?GroupReplyAnswer  이전에 이상한 거엿음 외거런지 확인해서. 을 지칭한다.
+		*/
+		var $answerGroupBoardList = $divGroupReplyAnswerkm.children().children().eq(0);
+		/* <div id='listReplyAnswer${vo.replyNum}' 을 의미한다 listReply의 */
+		
+		var isVisible = $divGroupReplyAnswerkm.is(':visible');
+		//보여주기위해서
+		var replyNum = $(this).attr("data-replyNum");
+		//해당답글 번호.
+	
+		if(isVisible) {
+			$divGroupReplyAnswerkm.hide();
+			
+		} else if (!isVisible){
+			$divGroupReplyAnswerkm.show();
+		
+			//답변 버튼눌럿을떄도 리스트나오게 하는것 listPageAnswer
+			kmListReplyAnswer(replyNum);//대댓글 리스트
+			countAnswerkm(replyNum);
+		}
+		
+	});
+});
+
+function gboardSendGReplyAnswer(replyNum, boardNum) {
+	var userId="${sessionScope.member.userId}";
+	var content=$("#gboardAnswerContent"+replyNum).val().trim();
+	
+	if(! content){
+		$("#gboardAnswerContent"+replyNum).focus();
+		return;
+	}
+	var query="boardNum="+boardNum+"&userId="+userId+"&content="+content+"&replyAnswer="+replyNum;
+	
+	console.log(query);	
+	var url="<%=cp%>/group/gboard/insertReplyAnswer";
+
+	$.ajax({
+		type:"post"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			$("#gboardAnswerContent"+replyNum).val("");
+			
+			var loginChk=data.loginChk;
+			if(loginChk=="false") {
+				console.log("안들어감");
+				
+			} else {
+				console.log("들어감");
+				//등록해도 리스트 나오게 한는것
+				kmListReplyAnswer(replyNum);
+				countAnswerkm(replyNum);
+			
+			}
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+		
+	});	
+}
+
+function deleteBoardReply(replyNum, page) {
+	var userId="${sessionScope.member.userId}";
+    	
+	if(confirm("댓글을  삭제 하시겟습니까?")){
+		var url="<%=cp%>/group/gboard/deleteBoardReply";
+		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
+				var loginChk= data.loginChk;
+				if(loginChk=="false"){
+					console.log("들어가냐??");
+				} else {
+					gboardReplyListpage(page);
+				}
+			
+		}, "json");	
+	}
+}
+
+function deletegboardReplyAnswerList(replyNum, replyAnswer) {
+	var userId="${sessionScope.member.userId}";
+
+	
+	if(confirm("댓글별 답글을 삭제하시겠습니까 ??????????? ")) {	
+		var url="<%=cp%>/group/gboard/deleteReplyAnswer";
+		$.post(url, {replyNum:replyNum, userId:userId}, function(data) {
+			var loginChk=data.loginChk;
+			if(loginChk=="false"){
+				alert("댓글별답글 삭제 실패");
+			}else {
+				kmListReplyAnswer(replyAnswer);
+				countAnswerkm(replyAnswer);
+			}
+		}, "json");	
+	}	
+}
+
+function kmSendReplyLike(replyNum, boardReplyLike) {
+	var userId="${sessionScope.member.userId}";
+	
+	var msg="게시물이 마음에 들지 않으십니까 ?";
+	if(boardReplyLike==1)
+		msg="게시물에 공감하십니까 ?";
+	if(! confirm(msg))
+		return false;
+	
+	var query="replyNum="+replyNum+"&boardReplyLike="+boardReplyLike;
+	
+	var url="<%=cp%>/group/gboard/boardReplyLike";
+	
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+				groupgboardCountLike(replyNum);
+			} else if(state=="false") {
+					alert("한번만 할수있다.");
+			} else if(state=="loginFail") {
+					login();
+			}
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+		
+	});
+}
+
+function groupgboardCountLike (replyNum) {
+	var url="<%=cp%>/group/gboard/groupCountLike";
+	$.post(url, {replyNum:replyNum}, function(data){
+		var likeCountkm="#kmLikeCount"+replyNum;
+		var disLikeCountkm="#kmDisLikeCount"+replyNum;
+		var likeCountkm=data.likeCountkm;
+		var disLikeCountkm=data.disLikeCountkm;
+		  alert(disLikeCountkm+"       "+likeCountkm);
+		  
+		$(likeCountkm).html(kmlikeCount);
+		$(disLikeCountkm).html(kmDisLikeCount);
+	}, "JSON");
+}
+
+
+function groupBoardLike(boardNum, boardLike) {
+	var userId="${sessionScope.member.userId}";
+	
+	var msg="사진 괜찬아요???";
+	if(boardLike==1)
+		msg="게시물에 공감하십니까 ?";
+	
+	if(! confirm(msg))
+		return false;
+	
+	var query="boardNum="+boardNum+"&boardLike="+boardLike;
+	var url= "<%=cp%>/group/gboard/boardLike";
+		
+	$.ajax({
+		type:"POST"
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+				
+			var state=data.state;
+			if(state=="true") {
+				alert("들어감");
+				groupBoardLikeCount(boardNum)
+			} else if(state=="false") {
+				alert("선택은 한번만!!");
+			} 
+		}
+		,error:function(e) {
+			console.log(e.responseText);
+		}
+	});
+}
+
+function groupBoardLikeCount(boardNum) {
+	var url="<%=cp%>/group/gboard/groupBoardLikeCount";
+	$.post(url, {boardNum:boardNum}, function(data){
+		var boardLikeCountId="#boardLikeCount"+boardNum;
+		var boardLikeCount=data.boardLikeCount;
+		
+		$(boardLikeCountId).html(boardLikeCount);
+	}, "JSON");
+}
+
 </script>
+
+
 
 <div class="gbbestbig">
 

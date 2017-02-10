@@ -13,9 +13,9 @@
 </insert>
 
 
-<insert id="insertGroupBoardFile">
-	insert into groupboard(fileNum, boardNum, userId, saveFilename, originalFilename, fileSize)
-		 values ( gboardFile_seq.NEXTVAL, #{boardNum}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize})
+<insert id="insertGroupBoardFile" parameterType="com.sp.group.gboard.GroupBoard">
+	insert into groupboardfile (fileNum, boardNum, userId, saveFilename, originalFilename, fileSize)
+		 values (groupboardfile_seq.NEXTVAL, #{boardNum}, #{userId}, #{saveFilename}, #{originalFilename}, #{fileSize} )
 </insert>
 
 <sql id="where-list">
@@ -47,9 +47,17 @@
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
- 				select boardNum, b.userId, m.userName, subject, content,hitCount, created
-  					from groupboard b
-  					join member m on b.userId = m.userId
+				SELECT b.BOARDNUM, b.userId, subject, content, created, nvl(fileCount, 0) fileCount , 
+              nvl(g.fileSize,0) fileSize, g.ORIGINALFILENAME
+				FROM groupBoard b 
+        
+				left OUTER join 
+		          (
+			          select boardnum, nvl(count(*),0) fileCount from GROUPBOARDFILE
+			          group by BOARDNUM 
+		          ) f on b.BOARDNUM = f.BOARDNUM 
+              left outer join 
+              GROUPBOARDFILE g on b.BOARDNUM = g.BOARDNUM 
 	<where>
 			groupName =#{groupName}
 		<if test="searchValue != null and searchValue !='' ">
@@ -70,10 +78,11 @@
 </update>
 	
 <select id="readGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
-	select boardNum, b.userId, userName, subject, content, hitCount, b.created
+	select b.boardNum, b.userId, subject, content, hitCount, b.created
   		from groupboard b
   		join member m on b.userId = m.userId
   		where boardNum =#{boardNum}
+  		
 </select>
 
 <select id="preReadGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
@@ -123,7 +132,7 @@
 <update id="updateGroupBoard" parameterType="com.sp.group.gboard.GroupBoard">
 	UPDATE groupboard SET subject=#{subject},
 	  content=#{content}
-	   WHERE gbnum=#{gbnum}
+	   WHERE boardNum=#{boardNum}
 </update>
     
 <delete id="deleteGroupBoard" parameterType="Integer">
@@ -134,27 +143,57 @@
 	DELETE FROM groupboardFile WHERE ${field} = #{boardNum}
 </delete>
 
+<select id="maxReplyNum" resultType="Integer" >
+	select NVL(max(replyNum), 0) from groupboardReply
+</select>
 
 <insert id="insertReply" parameterType="com.sp.group.gboard.GroupBoardReply">
-	insert into groupboardReply ( replyNum, boardNum, userId, content)  
-         values ( #{replyNum} #{boardNum}, #{userId}, #{content})
+	insert into groupboardReply (replyNum, boardNum, userId, content,replyAnswer)  
+         values (#{replyNum}, #{boardNum}, #{userId}, #{content},#{replyAnswer})
 </insert>
 
-<select id="dataCountReply" resultType="Integer" parameterType="Integer">
-	   SELECT NVL(COUNT(*), 0)
-	        FROM groupboardReply WHERE boardNum=#{boardNum}
-	</select>
+							<select id="dataCountReply" resultType="Integer" parameterType="Integer">
+								   SELECT NVL(COUNT(*), 0)
+								        FROM groupboardReply WHERE boardNum=#{boardNum}
+								</select>
 	
-<select id="listReply" resultType="com.sp.group.gboard.GroupBoardReply" 
-	          parameterType="map">
+	
+<select id="replyDataCount" resultType="Integer" parameterType="map">
+			SELECT NVL(COUNT(*),0) FROM groupboardReply WHERE boardNum=#{boardNum} AND replyAnswer=0
+</select>	
+	
+<select id="listReply" resultType="com.sp.group.gboard.GroupBoardReply" parameterType="map">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
-		        SELECT replyNum, boardNum, r.userId, userName 
-                      ,content, created
-			    FROM groupboardReply r 
-	            JOIN member m ON r.userId=m.userId
-	            WHERE r.boardNum=#{boardNum}
-	            ORDER BY replyNum DESC
+		        SELECT gbr.replyNum, boardNum, userId, content, created, gbr.replyAnswer
+		        	,NVL(answerCount, 0) answerCount
+		        	,NVL(likeCount, 0) likeCount
+                    ,NVL(disLikeCount, 0) disLikeCount
+                 FROM
+		        (
+				      (   
+                SELECT replyNum, r.boardNum, r.userId, r.content,
+                        r.created ,  replyAnswer          
+                    FROM groupBoardReply r
+                          JOIN groupBoard p ON r.boardNum=p.boardNum
+                          JOIN member m ON r.userId=m.userId
+                            WHERE r.boardNum=#{boardNum} AND replyAnswer=0
+			           ) gbr
+			           LEFT OUTER JOIN
+			           (
+			                SELECT replyAnswer, COUNT(*) answerCount
+                  				  FROM groupBoardReply GROUP BY replyAnswer
+                  
+			           ) gbrAnswer ON gbr.replyNum = gbrAnswer.replyAnswer
+			           LEFT OUTER JOIN
+			           (
+			                SELECT replyNum, 
+			                         COUNT(DECODE(boardReplyLike, 1, 1)) likeCount,
+			                         COUNT(DECODE(boardReplyLike, 0, 1)) disLikeCount
+                                 FROM groupBoardReplylike GROUP BY replyNum
+			           ) gboardlike ON gbr.replyNum = gboardlike.replyNum
+	           )
+	           ORDER BY replyNum DESC
 	<![CDATA[
 	        ) tb WHERE ROWNUM <= #{end}
 	    ) WHERE rnum >= #{start}
@@ -162,11 +201,55 @@
 	</select>
 	
 <delete id="deleteReply" parameterType="Integer">
-	DELETE groupboardReply WHERE replyNum=#{replyNum}
+	DELETE FROM groupboardReply WHERE replyNum IN (SELECT replyNum FROM groupboardReply 
+		START WITH replyNum=#{replyNum} CONNECT BY PRIOR replyNum = replyAnswer)
 </delete>
 
 <delete id="deleteAllReply" parameterType="Integer">
 	DELETE groupboardReply WHERE boardNum=#{boardNum}
 </delete>
+
+<select id="listReplyAnswer" parameterType="Integer" resultType="com.sp.group.gboard.GroupBoardReply">
+	SELECT replyNum, boardNum, gbr.userId, content, created , replyAnswer
+	   	 FROM groupboardReply gbr 
+	   		JOIN member m ON gbr.userId=m.userId 
+	   			 WHERE replyAnswer=#{replyAnswer}
+  						 ORDER BY replyNum DESC
+</select>
+
+<delete id="deleteReplyAnswer" parameterType="Integer">
+	DELETE FROM groupboardReply WHERE replyNum=#{replyNum}
+</delete>
+
+
+<select id="replyGroupCountAnswer" parameterType="Integer" resultType="Integer">
+	  SELECT NVL(COUNT(*), 0)
+	        FROM groupboardReply WHERE replyAnswer=#{replyAnswer}
+</select>
+
+
+
+<insert id="insertGroupReplyLike" parameterType="com.sp.group.gboard.GroupBoardReply">
+		INSERT INTO groupboardReply(replyNum, userId, boardReplyLike)
+		   VALUES (#{replyNum}, #{userId}, #{boardReplyLike})
+</insert>
+
+
+<select id="groupReplyCountLike" resultType="map"  parameterType="Integer">
+   SELECT  NVL(COUNT(DECODE(boardReplyLike, 1, 1)), 0) likeCount,
+		        NVL(COUNT(DECODE(boardReplyLike, 0, 1)), 0) disLikeCount
+        FROM groupboardReplyLike WHERE replyNum=#{replyNum}
+</select> 
+
+
+<insert id="insertBoardLike" parameterType="com.sp.group.gboard.GroupBoardReply">
+	INSERT INTO groupBoardLike(boardNum, userId, boardLike ) 
+			VALUES (#{boardNum}, #{userId}, #{boardLike})
+</insert>
+
+<select id="groupBoardLikeCount" resultType="map" parameterType="Integer">
+	  SELECT NVL(COUNT(DECODE(boardLike,1,1)),0) boardikeCount
+          		 FROM groupBoardLike WHERE boardNum= #{boardNum}
+</select>
 
 </mapper>

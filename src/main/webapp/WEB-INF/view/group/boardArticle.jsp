@@ -11,82 +11,131 @@
 	height: 680px;
 	border: 1px solid #5D5D5D;
 }
-
 </style>
+<script type="text/javascript">
+$(function(){
+	gboardReplyListpage(1);
+});
+
+function gboardReplyListpage(page){
+	var url="<%=cp%>/group/gboard/listReply";
+	var boardNum="${dto.boardNum}";
+	$.post(url, {boardNum:boardNum, page:page}, function(data){
+		$("#groupBoardListReply").html(data);
+	});
+}
+
+</script>
 <head>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="bodyFrame2">
+    
+    
+    <div class="table-responsive" style="clear: both;">
+        <div class="bbs-article">
+				<table class="table">
+					<thead>
+						<tr>
+							<th colspan="2" style="text-align: center;">${dto.subject }
+							</th>
+						</tr>
+					<thead>
+						<tr>
+							<td style="text-align: left;">이름 : ${dto.userName }</td>
+							<td style="text-align: right;">${dto.created } | 조회 :
+								${dto.hitCount }</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="height: 230px;">${dto.content }</td>
+						</tr>
+						<tr>
+							<td colspan="2"><span
+								style="display: inline-block; min-width: 45px;">첨부</span> : <a
+								href="<%=cp%>/group/gboard/download?boardNum=${dto.boardNum}">
+									${dto.originalFilename}(<fmt:formatNumber
+										value="${dto.fileSize/1024}" pattern="0.0" /> KB) <span
+									class="glyphicon glyphicon-save"></span>
+							</a></td>
+							<td colspan="2">
+								<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupBoardLike('${dto.boardNum}', '1')">
+									<span class="glyphicon glyphicon-hand-up"></span>
+									<span id="boardLikeCount${dto.boardNum}">${dto.boardLikeCount}</span></button>
+							</td>
+						</tr>
+				</table>
+				
 
-	<div class="container" style="clear: both;">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th style="width: 70px;">번호</th>
-					<th>제목</th>
-					<th class="text-center" style="width: 100px;">작성자</th>
-					<th class="text-center" style="width: 100px;">등록일</th>
-					<th class="text-center" style="width: 70px;">조회수</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>가입인사</td>
-					<td class="text-center" style="width: 100px;">문경미</td>
-					<td class="text-center" style="width: 100px;">2017-01-20</td>
-					<td class="text-center" style="width: 70px;">100</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>가입인사</td>
-					<td class="text-center" style="width: 100px;">문최고</td>
-					<td class="text-center" style="width: 100px;">2017-01-20</td>
-					<td class="text-center" style="width: 70px;">100</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>가입인사</td>
-					<td class="text-center" style="width: 100px;">문미미</td>
-					<td class="text-center" style="width: 100px;">2017-01-20</td>
-					<td class="text-center" style="width: 70px;">100</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="threediv" style="clear: both;">
-			<div style="float: left; width: 20%; min-width: 85px;">
-				<button type="button" class="btn btn-default btn-sm wbtn">새로고침</button>
-			</div>
-			<div style="float: left; width: 60%; text-align: center;">
-				<form name="searchForm" method="post" class="form-inline">
-					<select class="form-control input-sm" name="searchKey">
-						<option value="subject">제목</option>
-						<option value="userName">작성자</option>
-						<option value="content">내용</option>
-						<option value="created">등록일</option>
-					</select> <input type="text" class="form-control input-sm input-search"
-						name="searchValue">
-					<button type="button" class="btn btn-info btn-sm btn-search"
-						onclick="searchList();">
-						<span class="glyphicon glyphicon-search"></span> 검색
-					</button>
-				</form>
-			</div>
-			<div
-				style="float: left; width: 20%; min-width: 85px; text-align: right;">
-				<button type="button" class="btn btn-primary btn-sm bbtn">
-					<span class="glyphicon glyphicon glyphicon-pencil"></span> 글쓰기
-				</button>
+ <!-- 리플 달기 디쟌  -->
+		<div id="groupBoardListReply" style="width:600px; margin: 0px auto;"></div>
+		
+		
+				<table style="margin: 0px auto; border-spacing: 0px;">
+					<tr height="50">
+						<td align="left">
+							<textarea rows="5" cols="85" class="boxTF" id="gboardReplyContent" style="width: 600px; height: 45px;"></textarea>
+						</td>
+						<td width="80" align="right">
+							<button type="button" id="btngboardReplySend" onclick="gboardsendReply(${dto.boardNum})"
+								class="btn" style="width: 60px; height: 52px;">등록</button>
+						</td>
+					</tr>
+				</table>
 
-			</div>
-		</div>
 
-	</div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				<div>
+                     <table>
+	                     <tr>
+	                         <td colspan="2">
+	                              <span style="display: inline-block; min-width: 45px;">이전글</span> :
+	                              <c:if test="${not empty preReadDto }">
+	                              		<a href="<%=cp%>/group/gboard/boardArticle?boardNum=${preReadDto.boardNum}">${preReadDto.subject }</a>
+	                              </c:if>
+	                         </td>
+	                     </tr>
+	                     <tr>
+	                         <td colspan="2" style="border-bottom: #d5d5d5 solid 1px;">
+	                              <span style="display: inline-block; min-width: 45px;">다음글</span> :
+	                               <c:if test="${not empty nextReadDto }">
+	                              		<a href="<%=cp%>/group/gboard/boardArticle?boardNum=${nextReadDto.boardNum}">${nextReadDto.subject }</a>
+	                              </c:if>
+	                         </td>
+	                     </tr>                                          
+	               
+	                
+	                	<tr>
+	                		<td>
+	                		    <button type="button" class="btn btn-default btn-sm wbtn">수정</button>
+	                		    <button type="button" class="btn btn-default btn-sm wbtn"<%--  onclick="deleteBoard('${dto.num}')" --%>>삭제</button>
+	                		</td>
+	                		<td align="right">
+	                		    <button type="button" class="btn btn-default btn-sm wbtn" 
+	                		    	onclick="groupBaordListGo(${page});"> 목록으로 </button>
+	                		</td>
+	                	</tr>
+	                	</table>
+                </div>
+            
+       </div>
+   </div>
+</div>
 </body>
 
