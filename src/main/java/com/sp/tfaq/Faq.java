@@ -11,6 +11,7 @@ public class Faq {
 	private int hitCount;
 	public int getNum() {
 		return num;
+		//
 	}
 	public void setNum(int num) {
 		this.num = num;
