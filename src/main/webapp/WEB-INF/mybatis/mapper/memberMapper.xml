@@ -37,6 +37,14 @@
             WHERE userId = #{userId} 
     </select>
     
+    <select id="readEmail" resultType="com.sp.member.Member" parameterType="String">
+        SELECT userId, userName, userPW,gender, keyword, area ,
+               infoSetDate, lastLogin, enabled, email, tel, 
+               TO_CHAR(birth, 'YYYY-MM-DD') birth , groupList ,menuBar
+            FROM member
+            WHERE email = #{email} 
+    </select>
+    
       
     <select id="dataCount" parameterType="map"
             resultType="Integer">

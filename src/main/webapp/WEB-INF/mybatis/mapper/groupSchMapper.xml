@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupSch">
+
+    <insert id="insertSchedule" parameterType="com.sp.group.sch.GroupSch">
+       INSERT INTO GroupSch (schNum, userId, subject, color, content, allDay, startDate, endDate, startTime, endTime)
+          VALUES (groupsch_seq.NEXTVAL, #{userId}, #{subject} 
+                ,#{color, jdbcType=VARCHAR}
+                ,#{content, jdbcType=VARCHAR}
+                ,#{allDay, jdbcType=VARCHAR}
+                ,#{startDate, jdbcType=VARCHAR}
+                ,#{endDate, jdbcType=VARCHAR}
+                ,#{startTime, jdbcType=VARCHAR}
+                ,#{endTime, jdbcType=VARCHAR}
+           )
+    </insert>
+
+    <!-- 월별 일정 -->
+    <select id="listMonthSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="map">
+        SELECT schNum, s.GROUPNAME, subject, color, content, allDay, startDate, endDate, startTime, endTime, created 
+             FROM GroupSch s JOIN GROUPmember m ON s.GROUPNAME=m.GROUPNAME
+     <where>
+        s.GROUPNAME = #{groupName}
+		<if test="group !='all' ">
+		    AND color=#{group}
+		</if>
+        <![CDATA[
+             AND ((startDate>=#{start} AND startDate<=#{end})
+                OR (endDate>=#{start} AND endDate<=#{end}))
+        ]]>             
+   	  </where>
+             ORDER BY startDate ASC, schNum DESC
+    </select>
+
+    <!-- 일정 상세 정보 -->
+    <select id="readSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="Integer">
+        SELECT schNum, s.GROUPNAME, subject, color, content, allDay, startDate, endDate, startTime, endTime, created
+            FROM GroupSch s JOIN GROUPmember m ON s.GROUPNAME=m.GROUPNAME
+            WHERE schNum=#{schNum}
+    </select>
+
+    <!-- 일정 수정 -->
+    <update id="updateSchedule" parameterType="com.sp.group.sch.GroupSch">
+       UPDATE GroupSch SET 
+            title=#{subject}
+            ,color=#{color, jdbcType=VARCHAR}
+            ,content=#{content, jdbcType=VARCHAR}
+            ,allDay=#{allDay, jdbcType=VARCHAR}
+            ,startDate=#{startDate, jdbcType=VARCHAR}
+            ,endDate=#{endDate, jdbcType=VARCHAR}
+            ,startTime=#{startTime, jdbcType=VARCHAR}
+            ,endTime=#{endTime, jdbcType=VARCHAR}
+            WHERE schnum=#{schNum}
+    </update>
+    
+    <!-- 일정 삭제 -->
+    <delete id="deleteSchedule" parameterType="Integer">
+       DELETE FROM GroupSch WHERE schNum=#{schNum}
+    </delete>
+</mapper>

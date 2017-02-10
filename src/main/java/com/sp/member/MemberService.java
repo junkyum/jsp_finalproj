@@ -24,4 +24,6 @@ public interface MemberService {
 	public Member readAuthority(int num);
 	public List<Member> listAuthority(String userId);
 	public int deleteAuthority(Map<String, Object> map);
+
+	public Member readEmail(String email);
 }

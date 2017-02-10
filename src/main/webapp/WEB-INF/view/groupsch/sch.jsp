@@ -138,7 +138,7 @@ $(function() {
 				var startDay=start.format("YYYY-MM-DD");
 				var endDay=end.format("YYYY-MM-DD");
 		        
-				var url="<%=cp%>/sch/month?start="+startDay+"&end="+endDay+"&group="+group+"&dumi="+new Date().getTime();
+				var url="<%=cp%>/group/sch/month?start="+startDay+"&end="+endDay+"&group="+group+"&dumi="+new Date().getTime();
 
 				$.ajax({
 				    url: url,
@@ -236,7 +236,7 @@ function articleForm(calEvent) {
 	if(! content) content="";
 	tempContent=content;
 	
-	$('#scheduleModal .modal-body').load("<%=cp%>/sch/articleForm", function() {
+	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/articleForm", function() {
 		$("#schTitle").html(title);
 		$("#schUserName").html(userName);
 		$("#schClassify").html(classify);
@@ -259,7 +259,7 @@ function articleForm(calEvent) {
 // -- 입력 및 수정 대화상자
 // 일정 등록 폼
 function insertForm(start, end) {
-	$('#scheduleModal .modal-body').load("<%=cp%>/sch/inputForm", function() {
+	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/inputForm", function() {
 		var startDay="", startTime="";
 		var endDay="", endTime="";
 		
@@ -380,7 +380,7 @@ function insertOk() {
        +"&endTime="+endTime
        +"&content="+content;
 	
-	var url="<%=cp%>/sch/created";
+	var url="<%=cp%>/group/sch/created";
     
      $.ajax({
         type:"POST"
@@ -417,7 +417,7 @@ function insertOk() {
 //-------------------------------------------------
 // 수정 폼
 function updateForm(num, title, allDay, startDay, endDay, startTime, endTime, color) {
-	$('#scheduleModal .modal-body').load("<%=cp%>/sch/inputForm", function() {
+	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/inputForm", function() {
 		$("input[name='title']").val(title);
 		classifyChange(color);
 		// $("input[name='color']").val(color);
@@ -521,7 +521,7 @@ function updateOk(num) {
        +"&endTime="+endTime
        +"&content="+content;
 	
-	var url="<%=cp%>/sch/update";
+	var url="<%=cp%>/group/sch/update";
        
     $.ajax({
          type:"POST"
@@ -624,7 +624,7 @@ function updateDrag(e) {
 //-------------------------------------------
 function deleteOk(num) {
 	if(confirm("삭제 하시겠습니까 ?")) {
-		$.post("<%=cp%>/sch/delete", {num:num}, function(data){
+		$.post("<%=cp%>/group/sch/delete", {num:num}, function(data){
      	   var isLogin=data.isLogin;
     	   if(isLogin=="false") {
     		   location.href="<%=cp%>/member/login";
@@ -650,22 +650,14 @@ function classifyChange(classify) {
 	                              .removeClass("btn-red");
 	
 	if(classify=="blue") {
-		$("#btnTitle").html("개인일정")
+		$("#btnTitle").html("그룹일정")
 		$("#btnTitle").addClass("btn-blue");
 		$("#btnDropdown").addClass("btn-blue");
 	} else if(classify=="black") {
-		$("#btnTitle").html("가족일정")
+		$("#btnTitle").html("개인일정")
 		$("#btnTitle").addClass("btn-black");
 		$("#btnDropdown").addClass("btn-black");
-	} else if(classify=="green") {
-		$("#btnTitle").html("회사일정")
-		$("#btnTitle").addClass("btn-green");
-		$("#btnDropdown").addClass("btn-green");
-	} else if(classify=="red") {
-		$("#btnTitle").html("부서일정")
-		$("#btnTitle").addClass("btn-red");
-		$("#btnDropdown").addClass("btn-red");
-	}
+	} 
 	$("#scheduleModal input[name='color']").val(classify);
 }
 
@@ -692,13 +684,9 @@ $(function(){
                  <a class="hbtn hbtn-bottom" style="background: white; color:#2f3741;"
                        href="javascript:classification('all', 0);">전체일정</a>
                  <a class="hbtn" 
-                       href="javascript:classification('blue', 1);">개인일정</a>
+                       href="javascript:classification('blue', 1);">그룹일정</a>
                  <a class="hbtn" 
-                       href="javascript:classification('black', 2);">가족일정</a>
-                 <a class="hbtn" 
-                       href="javascript:classification('green', 3);">회사일정</a>
-                 <a class="hbtn" 
-                       href="javascript:classification('red', 4);">부서일정</a>
+                       href="javascript:classification('black', 2);">회원일정</a>
              </div>      
         </div>
     </div>
