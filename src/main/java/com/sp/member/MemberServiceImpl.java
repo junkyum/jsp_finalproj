@@ -214,4 +214,16 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
+
+	@Override
+	public Member readEmail(String email) {
+			Member dto = null;
+			try {
+				dto= dao.getReadData("member.readEmail", email);
+			} catch (Exception e) {
+			System.out.println(e.toString());
+			}
+					
+		return dto;
+	}
 }

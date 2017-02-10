@@ -1,4 +1,4 @@
-package com.sp.sch;
+package com.sp.group.sch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,32 +17,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.member.SessionInfo;
 
-@Controller("sch.scheduleController")
-public class ScheduleController {
+@Controller("groupSch.groupSchController")
+public class GroupSchController {
 	@Autowired
-	private ScheduleService service;
+	private GroupSchService service;
 	
-	@RequestMapping(value="/sch/sch")
+	@RequestMapping(value="/group/sch")
 	public String sch(HttpSession session) throws Exception {
 		
-		return ".sch.sch";
+		return "/groupsch/sch";
 	}
 
 	// 대화상자에 출력 할 일정 추가 폼
-	@RequestMapping(value="/sch/inputForm")
+	@RequestMapping(value="/group/sch/inputForm")
 	public String inputForm() throws Exception {
-		return "/sch/inputForm";
+		return "/groupsch/inputForm";
 	}
 
 	// 대화상자에 출력 할 상세 일정 폼
-	@RequestMapping(value="/sch/articleForm")
+	@RequestMapping(value="/group/sch/articleForm")
 	public String articleForm() throws Exception {
-		return "/sch/articleForm";
+		return "/groupsch/articleForm";
 	}
 	
-	@RequestMapping(value="/sch/created", method=RequestMethod.POST)
+	@RequestMapping(value="/group/sch/created", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> created(Schedule sch, HttpSession session) throws Exception {
+	public Map<String, Object> created(GroupSch sch, HttpSession session) throws Exception {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
 			Map<String, Object> model = new HashMap<>(); 
@@ -58,7 +58,7 @@ public class ScheduleController {
 		return model;		
 	}
 	
-	@RequestMapping(value="/sch/month")
+	@RequestMapping(value="/group/sch/month")
 	@ResponseBody
 	public Map<String, Object> month(
 			@RequestParam(value="start") String start,
@@ -76,20 +76,20 @@ public class ScheduleController {
 		map.put("group", group);
 		map.put("start", start);
 		map.put("end", end);
-		map.put("userId", info.getUserId());
+		map.put("groupName", "디자인이");
 		
-		List<Schedule> list=service.listMonthSchedule(map);
+		List<GroupSch> list=service.listMonthSchedule(map);
 		
-	 	List<ScheduleJSON> listJSON=new ArrayList<>();
-	    Iterator<Schedule> it=list.iterator();
+	 	List<GroupSchJSON> listJSON=new ArrayList<>();
+	    Iterator<GroupSch> it=list.iterator();
 		while(it.hasNext()) {
-			Schedule sch=it.next();
+			GroupSch sch=it.next();
 			// if(sch.getContent()!=null)
 			//   sch.setContent(sch.getContent().replaceAll("\n", "<br>"));
 			
-			ScheduleJSON dto=new ScheduleJSON();
-	    	dto.setId(sch.getNum());
-	    	dto.setTitle(sch.getTitle());
+			GroupSchJSON dto=new GroupSchJSON();
+	    	dto.setId(sch.getSchNum());
+	    	dto.setTitle(sch.getSubject());
 	    	dto.setUserName(sch.getUserName());
 	    	dto.setColor(sch.getColor());
 	    	if(sch.getAllDay().equals("true"))
@@ -98,14 +98,14 @@ public class ScheduleController {
 	    		dto.setAllDay(false);
 	    	
 	    	if(sch.getStartTime()!=null && sch.getStartTime().length()!=0)
-		    	dto.setStart(sch.getStartDay()+" " + sch.getStartTime());
+		    	dto.setStart(sch.getStartDate()+" " + sch.getStartTime());
 	    	else
-	    		dto.setStart(sch.getStartDay());
+	    		dto.setStart(sch.getStartDate());
 	    	
 	    	if(sch.getEndTime()!=null && sch.getEndTime().length()!=0)
-	    		dto.setEnd(sch.getEndDay()+" " + sch.getEndTime());
+	    		dto.setEnd(sch.getEndDate()+" " + sch.getEndTime());
 	    	else
-	    		dto.setEnd(sch.getEndDay());
+	    		dto.setEnd(sch.getEndDate());
 	    	dto.setContent(sch.getContent());
 	    	dto.setCreated(sch.getCreated());
 	    	listJSON.add(dto);
@@ -118,7 +118,7 @@ public class ScheduleController {
 		return model;
 	}
 	
-	@RequestMapping(value="/sch/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/group/sch/delete", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> delete(
 			HttpSession session,
@@ -142,10 +142,10 @@ public class ScheduleController {
 		return model;
 	}
 	
-	@RequestMapping(value="/sch/update", method=RequestMethod.POST)
+	@RequestMapping(value="/group/sch/update", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object>  update(
-			Schedule sch,
+			GroupSch sch,
 			HttpSession session) throws Exception {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {

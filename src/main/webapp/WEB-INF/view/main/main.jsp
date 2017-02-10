@@ -244,11 +244,11 @@ div.friendScroll {
 	scrollbar-track-color:#FFFFFF;
 	overflow:auto;
 }
-.btn_mk
 .jkbutton{
 	background:none;
 	border:none;
 }
+
 </style>
 
 <div id="mk_content">
@@ -256,7 +256,7 @@ div.friendScroll {
 	<div id="mk_indiv">
 		<div class="mk_indiv_in">
 			<button type="button" onclick="mk_main_indiv();"  class="btn_mk"  style="background-color:#FFFFFF; border: 0px;">
-				<img src="<%=cp%>/res/images/indiv.png" style="width: 80%">
+				<img src="<%=cp%>/res/images/indiv.png" style="width: 60%; height: 240px;">
 			</button>
 		</div>
 	</div>
@@ -266,7 +266,7 @@ div.friendScroll {
 	<div id="mk_group">
 		<div class="mk_group_in">
 			<button type="button" onclick="mk_main_group();"  class="btn_mk" style="background-color:#FFFFFF; border: 0px;" >
-				<img src="<%=cp%>/res/images/group.png" style="width: 80%;">
+				<img src="<%=cp%>/res/images/group.jpg" style="width: 80%;">
 			</button>
 		</div>
 	</div>
@@ -275,20 +275,20 @@ div.friendScroll {
 	<div id="mk_indivMenu">
 		<div>
 			<a id=friend_page>
-				<img src="<%=cp%>/res/images/img_A.jpg" style="width: 25%; height: 135px;">
+				<img src="<%=cp%>/res/images/img_A.png" style="width: 25%; height: 135px;">
 			</a>
 		
-			<a href="<%=cp%>/tboard/list">
-				<img src="<%=cp%>/res/images/img_B.jpg" style="width: 25%; height: 135px;">
+			<a id=mk_note>
+				<img src="<%=cp%>/res/images/img_B.png" style="width: 25%; height: 135px;">
 			</a>
 		</div>
 		<div>
-			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_C.jpg" style="width: 25%; height: 135px;">
+			<a href="<%=cp%>/tboard/list">
+				<img src="<%=cp%>/res/images/img_C.png" style="width: 25%; height: 135px;">
 			</a>
 		
 			<a href="<%=cp%>/#">
-				<img src="<%=cp%>/res/images/img_D.jpg" style="width: 25%; height: 135px;">
+				<img src="<%=cp%>/res/images/img_D.png" style="width: 25%; height: 135px;">
 			</a>
 		</div>
 		<div>
