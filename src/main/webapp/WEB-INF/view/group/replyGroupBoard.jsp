@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
-	//전체적인 리스트 뿌리는 곳!!!
+	//전체적인 리스트 뿌리는dddddd 곳!!!
 %>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
