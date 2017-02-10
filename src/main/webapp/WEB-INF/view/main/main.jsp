@@ -5,8 +5,6 @@
 <%
     	String cp = request.getContextPath();
 %>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script> 
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#friend_page').click(function() {
@@ -15,13 +13,30 @@ $(document).ready(function(){
 		document.getElementById("mk_indivMenu").style.width="0";
 		document.getElementById("mk_group").style.width="0";
 		document.getElementById("mk_groupMenu").style.width="0";
-		document.getElementById("mk_friend").style.width="33%";
+		document.getElementById("note_mk").style.display="none";
+		document.getElementById("mk_friend").style.width="49%";
 		document.getElementById("mk_friend").style.float="left";
 		$("#mk_friend").delay(1000).animate({
 			left:0
 		},"clip")
 		$("#mk_friend").show("slide",1000);
 	});
+	
+	$('#mk_note').click(function() {
+		$("#note_mk").load("note/note");
+		document.getElementById("mk_indiv").style.width="49%";
+		document.getElementById("mk_indivMenu").style.width="0";
+		document.getElementById("mk_group").style.width="0";
+		document.getElementById("mk_groupMenu").style.width="0";
+		document.getElementById("mk_friend").style.display="none";
+		document.getElementById("note_mk").style.width="33%";
+		document.getElementById("note_mk").style.float="left";
+		$("#note_mk").delay(1000).animate({
+			left:0
+		},"clip")
+		$("#note_mk").show("slide",1000);
+	});
+	
 });
 
 function mk_main_indiv() {
@@ -29,6 +44,7 @@ function mk_main_indiv() {
 	document.getElementById("mk_indivMenu").style.width="49%";
 	document.getElementById("mk_group").style.width="0";
 	document.getElementById("mk_groupMenu").style.width="0";
+	document.getElementById("note_mk").style.display="none";
 	document.getElementById("mk_friend").style.display="none";
 	$("#mk_indivMenu").delay(1000).animate({
 		left:0
@@ -40,6 +56,7 @@ function mk_main_group() {
 	document.getElementById("mk_indivMenu").style.width="0";
 	document.getElementById("mk_group").style.width="49%";
 	document.getElementById("mk_groupMenu").style.width="49%";
+	document.getElementById("note_mk").style.display="none";
 	document.getElementById("mk_friend").style.display="none";
 	$("#mk_groupMenu").delay(1000).animate({
 		left:0
@@ -234,6 +251,13 @@ function jkcheck(){
 	float: left;	
 	padding-top:50px;
 }
+#note_mk {
+	text-align: center;
+	width: 49%;	
+	height: 500px;
+	float: left;	
+	padding-top:50px;
+}
 div.friendScroll {
 	scrollbar-highlight-color:#FFFFFF;
 	scrollbar-shadow-color:#FFFFFF;
@@ -333,6 +357,7 @@ div.friendScroll {
 	</div>
 	<!-- 개인 친구 -->
 	<div id="mk_friend"></div>
+	<div id="note_mk"></div>
 </div><!-- 전체  div -->
 
 
