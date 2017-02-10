@@ -133,7 +133,7 @@ function check(){
 	<div  id="groupTap" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
 	  	<ul >
 		<li ><a href="<%=cp%>/group/notice?userId=${dto.userId}&groupName=${dto.groupName}"><span>공지사항</span></a></li>
-		<li ><a href="<%=cp%>/sch/sch"><span>그룹스케줄</span></a></li>
+		<li ><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>
 		<li ><a href="<%=cp%>/groupGally/gally?groupName=${dto.groupName}"><span>그룹갤러리</span></a></li>
 		<li ><a href="<%=cp%>/group/groupBoard?userId=${dto.userId}&groupName=${dto.groupName}"><span>게시판</span></a></li>
 		<li ><a href="<%=cp%>/group/bbs?groupName=${dto.groupName}"><span>답변형게시판</span></a></li>
