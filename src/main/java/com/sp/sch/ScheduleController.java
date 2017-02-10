@@ -25,7 +25,7 @@ public class ScheduleController {
 	@RequestMapping(value="/sch/sch")
 	public String sch(HttpSession session) throws Exception {
 		
-		return "/sch/sch";
+		return ".sch.sch";
 	}
 
 	// 대화상자에 출력 할 일정 추가 폼

@@ -72,7 +72,7 @@ function check(){
 
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
-		<div id="groupInfo" style="margin-bottom: 20px; height: 200px; border: 1px solid black;">
+		<div id="groupInfo" style="margin-bottom: 20px; height: 200px;">
 			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}" style = "margin-bottom: 0px;"><br>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
  			${dto.groupName}
@@ -124,13 +124,10 @@ function check(){
 			  </ul>
 			</div>
 		</div>
-		<div style="height: 480px; border: 1px solid black;">
-		
-		</div>
 		
 	</div>
 	
-	<div  id="groupTap" style = "float: left; margin-left:2% ; width:77%; height:700px; border: 1px solid black;">
+	<div  id="groupTap" style = "float: left; margin-left:2% ; width:77%;">
 	  	<ul >
 		<li ><a href="<%=cp%>/group/notice?userId=${dto.userId}&groupName=${dto.groupName}"><span>공지사항</span></a></li>
 		<li ><a href="<%=cp%>/group/sch"><span>그룹스케줄</span></a></li>

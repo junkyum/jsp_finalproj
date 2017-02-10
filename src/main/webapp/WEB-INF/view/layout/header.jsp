@@ -52,7 +52,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">스케줄 <b class="caret"></b></a>
               <ul class="dropdown-menu" role="menu">
                 <li>
-                  <a href="#"> 개인 </a>
+                  <a href="<%=cp%>/sch/sch"> 개인 </a>
                 </li>
                 <li>
                   <a href="#">그룹</a>
