@@ -85,10 +85,6 @@ function goodCount() {
 		<h3>일반 게시판</h3>
 	</div>
 
-	<div class="mk_alert-info"
-		style="margin: 0 auto; background: #B2EBF4; width: 800px; text-align: center">
-		일반 게시파아아아아아ㅏㄴㄴ</div>
-
 	<div class="table-responsive" style="clear: both;">
 		<div class="bbs-article">
 			<table class="table" border="1">

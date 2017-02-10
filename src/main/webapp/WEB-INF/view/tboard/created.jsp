@@ -113,10 +113,6 @@ $(function(){
 		</h3>
 	</div>
 
-	<div class="mk_alert-info" style="margin : 0 auto; background:#B2EBF4; width:800px; text-align: center">
-		일반 게시파아아아아아ㅏㄴㄴ
-	</div>
-    
     <div>
         <form name="tboardForm" method="post" onsubmit="return check();" enctype="multipart/form-data">
             <div class="bs-write">
