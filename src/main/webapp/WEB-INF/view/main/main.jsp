@@ -248,7 +248,7 @@ div.friendScroll {
 	background:none;
 	border:none;
 }
-.btn_mk
+
 </style>
 
 <div id="mk_content">
