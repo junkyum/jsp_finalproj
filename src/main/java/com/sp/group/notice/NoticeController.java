@@ -53,7 +53,7 @@ public class NoticeController {
 			@RequestParam(value="num", defaultValue = "1") int num,
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
 			@RequestParam String groupName, @RequestParam String userId, 
-			@RequestParam(value="searchKey", defaultValue="groupSubject") String searchKey,
+			@RequestParam(value="searchKey", defaultValue="subject") String searchKey,
 			@RequestParam(value="searchValue", defaultValue="") String searchValue
 			) throws Exception{
 		

@@ -30,8 +30,13 @@
 			<tbody>
 				<c:forEach var="dto" items="${boardList}">
 					<tr>
-						<td style="width: 70px;">${dto.listNum}</td>
-				        <td >${dto.subject}</td>    
+						<td>${dto.listNum}</td>
+				        <td><a onclick="articleGroupBoard(${dto.boardNum}, ${page});"> ${dto.subject }  &nbsp;</a>			        	
+				       		<c:if test="${not empty dto.originalFilename}">
+							  	<span class="glyphicon glyphicon-save"></span>
+							</c:if>
+							
+						</td> 													   
 						<td class="text-center" >${dto.userId}</td>
 						<td class="text-center">${dto.created}</td>
 						<td class="text-center" >${dto.hitCount}</td>
