@@ -4,11 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
-	//전체적인 리스트 뿌리는 곳!!!
+	//전체적인 리스트 뿌리는dddddd 곳!!!
 %>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 
 var pageNo=1;
@@ -61,11 +61,11 @@ function articleReplyBoard(replyBoardNum) {
 		,url:url
 		,data:query
 		,success:function(data) {
-				alert("글보기 들어왔어요");
+			console.log("글보기 들어왔어요");
 			$("#groupReplyBoard").html(data);
 		}
 		,error:function(e) {
-			alert(" 오류남");
+			console.log(" 오류남");
 			console.log(e.responseText);
 		}
 		
@@ -103,8 +103,7 @@ function deleteReplyBoard(replyBoardNum) {
 		
 			var state=data.state;
 			if(state=="false")
-				alert("게시물을 삭제 할 수 없습니다. !!!");
-		
+				console.log("게시물을 삭제 할 수 없습니다. !!!");
 				  replyBoardList(pageNo);
 		 }
 		 ,error:function(e) {

@@ -213,7 +213,7 @@ function check() {
         <div class="col-sm-7">
              <div class="row">
                   <div class="col-sm-3" style="padding-right: 5px;">
-                    <select class="form-control" id="tel1" name="tel1" >
+                    <select class="form-control" id="tel1" name="tel1" style="width: 80px" >
                         <option value="">선 택</option>
                         <option value="010" ${dto.tel1=="010" ? "selected='selected'" : ""}>010</option>
                         <option value="011" ${dto.tel1=="011" ? "selected='selected'" : ""}>011</option>
@@ -227,13 +227,13 @@ function check() {
                   <div class="col-sm-1" style="width: 1%; padding-left: 5px; padding-right: 10px;">
                          <p class="form-control-static">-</p>
                   </div>
-                 <div class="col-sm-2" style="padding-left: 5px; padding-right: 5px;">
+                 <div class="col-sm-2" style="padding-left: 5px; padding-right: 5px;width: 70px">
                      <input class="form-control" id="tel2" name="tel2" type="text" value="${dto.tel2}" maxlength="4">
                   </div>
                   <div class="col-sm-1" style="width: 1%; padding-left: 5px; padding-right: 10px;">
                          <p class="form-control-static">-</p>
                   </div>
-                  <div class="col-sm-2" style="padding-left: 5px; padding-right: 5px;">
+                  <div class="col-sm-2" style="padding-left: 5px; padding-right: 5px;width: 70px">
                     <input class="form-control" id="tel3" name="tel3" type="text" value="${dto.tel3}" maxlength="4">
                   </div>
              </div>
@@ -284,12 +284,12 @@ function check() {
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
 <c:if test="${mode=='created'}">
-            <button type="submit" name="sendButton" class="btn btn-primary">회원가입 <span class="glyphicon glyphicon-ok"></span></button>
-            <button type="button" class="btn btn-danger" onclick="javascript:location.href='<%=cp%>/';">가입취소 <span class="glyphicon glyphicon-remove"></span></button>
+            <button type="submit" name="sendButton" class="btn btn-default btn-sm wbtn">회원가입 <span class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';">가입취소 <span class="glyphicon glyphicon-remove"></span></button>
 </c:if>            
 <c:if test="${mode=='update'}">
-            <button type="submit" class="social-login-buttons">정보수정 <span class="glyphicon glyphicon-ok"></span></button>
-            <button type="button" class="btn btn-danger" onclick="javascript:location.href='<%=cp%>/';">수정취소 <span class="glyphicon glyphicon-remove"></span></button>
+            <button type="submit" class="btn btn-default btn-sm wbtn">정보수정 <span class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';">수정취소 <span class="glyphicon glyphicon-remove"></span></button>
 </c:if>            
         </div>
     </div>

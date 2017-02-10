@@ -43,7 +43,7 @@
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
 			     SELECT replyBoardNum, r.userId, 
-			     r.subject, TO_CHAR(r.created, 'YYYY-MM-DD')  created , r.groupName, groupNumber, orderNo, depth
+			     r.subject, TO_CHAR(r.created, 'YYYY-MM-DD')  created , r.groupName, groupNumber, orderNo, depth, hitcount
 			        FROM groupReply r
 			        JOIN member m ON r.userId = m.userId
              		JOIN ggroup g ON r.groupName = g.groupName   
@@ -91,6 +91,9 @@
 		                 AND (( groupNumber = #{groupNumber} AND orderNo < #{orderNo})
                         	 OR (groupNumber > #{groupNumber} ))
 		                 ]]>
+		                 
+		                 AND r.groupName=#{groupName} 
+		                 
 				     </where> 
 				    ORDER BY groupNumber ASC, orderNo DESC
 			) tb WHERE ROWNUM=1
@@ -109,6 +112,9 @@
 		                 AND (( groupNumber = #{groupNumber} AND orderNo > #{orderNo})
                         	 OR (groupNumber < #{groupNumber} ))
 		                 ]]>
+		                 
+		                 AND r.groupName=#{groupName} 
+		                 
 				     </where> 
 				    ORDER BY groupNumber DESC, orderNo ASC
 			) tb WHERE ROWNUM=1
@@ -129,7 +135,7 @@
 	<update id="updateOrderNo" parameterType="map">
 		UPDATE groupReply SET orderNo = orderNo+1 
 			<![CDATA[
-				WHERE replyBoardNum = #{replyBoardNum} AND orderNo > #{orderNo} 
+				WHERE groupNumber = #{groupNumber} AND orderNo > #{orderNo} 
 			]]>
 	</update>
 	

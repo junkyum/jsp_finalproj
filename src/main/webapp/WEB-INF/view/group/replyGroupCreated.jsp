@@ -15,6 +15,7 @@ function submitReplyOK() {
 	var subject=$("#chSubject").val();
 	var content=$("#chContent").val();
 	var groupName="${groupName}";
+	var replyBoardNum ="${dto.replyBoardNum}";
 	if(!subject){
 		 $("#chSubject").focus();
          return;
@@ -30,12 +31,13 @@ function submitReplyOK() {
 	query+="&content="+content;
 	query+="&groupName="+groupName;
 	if(mode=="created"){
+
 		var url="<%=cp%>/group/reply/created"
 
 	} else if (mode=="update"){
-		var url="<%=cp%>/group/reply/update"
 		var replyBoardNum="${dto.replyBoardNum}";
-			query+="&replyBoardNum=x`"+replyBoardNum;
+		var url="<%=cp%>/group/reply/update"
+			query+="&replyBoardNum="+replyBoardNum;
 	}
 	
 	$.ajax({
@@ -44,12 +46,12 @@ function submitReplyOK() {
 		,data:query
 		,dataType:"json"
 		,success:function(data) {
-			
+			alert("3번");
 			var state=data.state;
 			if(state=="false"){
-				alert("실패했다");
+				console.log("실패했다");
 			} else {
-				alert("입력했어요");
+				console.log("입력했어요???");
 			replyBoardList(pageNo);
 			}
 		
@@ -62,16 +64,18 @@ function submitReplyOK() {
 }
 
 function submitReplyAnswerOK() {
-	var subject=$("#chSubject").val();
-	var content=$("#chContent").val();
+
+	var subject=$("#chSubject").val();//제목
+	var content=$("#chContent").val();//내용
 	var groupName="${dto.groupName}";
-	var page="${page}";
+	
+	var page="${page}";//페이지?
 	var groupNumber="${dto.groupNumber}";
 	var orderNo="${dto.orderNo}";
 	var depth="${dto.depth}";
 	var parent="${dto.replyBoardNum}";
-	alert("2번");
-	alert(groupName+"???????????????");
+/* 	console.log(subject+"(제목)|"+content+"(내용)|"+groupName+"(그룹이름)|"+groupNumber+"(그룹번호)|"+orderNo+"(오더번호)|"+depth+"(딥번호)|"+
+			parent+"(페어런츠번호)|"+replyBoardNum+"해당리플 번호"); */	
 	if(!subject){
 		 $("#chSubject").focus();
          return;
@@ -80,13 +84,12 @@ function submitReplyAnswerOK() {
 		 $("#chContent").focus();
         return;
 	}
-
+	
 	var url="<%=cp%>/group/reply/answer/created";
-	var query="subject="+subject+"&content="+content+"&groupName="+groupName+"&groupNumber="+groupNumber;
-	query+="&orderNo"+orderNo+"&depth="+depth+"&parent="+parent;
+ 	var query="subject="+subject+"&content="+content+"&groupName="+groupName+"&groupNumber="+groupNumber;
+	query+="&orderNo="+orderNo+"&depth="+depth+"&parent="+parent;
 	
-	
-	
+
 	$.ajax({
 		type:"post"
 		,url:url
@@ -96,9 +99,9 @@ function submitReplyAnswerOK() {
 			
 			var state=data.state;
 			if(state=="false"){
-				alert("실패했다");
+				console.log("실패했다");
 			} else {
-				alert("입력했어요");
+				console.log("입력했어요");
 			replyBoardList(pageNo);
 			}
 		
@@ -117,7 +120,7 @@ function submitReplyAnswerOK() {
 <br><br>
 <form name="replyBoardForm">
 				<h2 class="text-center">[${groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
-				<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
+				<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 작성, 성심껏 답변 해드리겠습니다.</h2>
 
 		<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px;">
 			  <tr><td colspan="2" height="3" bgcolor="#507CD1"></td></tr>
@@ -141,6 +144,7 @@ function submitReplyAnswerOK() {
 				<td>
 					<div style="margin-left: 450px; border-bottom:10px;">
 					<c:if test="${mode !='reply'}">
+					<%-- //<input type="hidden" name="replyBoardNum" value="${dto.replyBoardNum}"> --%>
 					 <input type="button" value=" ${mode=='created'?'등  록':'수정완료'} " class="btn" onclick="submitReplyOK();">
 					 <input type="button" value=" ${mode=='created'?'리스트가기':'수정취소'} " class="btn" onclick="replyBoardList(pageNo);">
 					 </c:if>

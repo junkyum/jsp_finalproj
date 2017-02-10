@@ -11,6 +11,9 @@ public interface MemberService {
 	public int updateMember(Member dto);
 	public int updateLastLogin(String userId);
 	
+	public int updatePW(Member mb);
+	public String findId(String email); 
+	public String findPW(String email);
 	public int deleteMember(Member dto);
 	
 	public int dataCount(Map<String, Object> map);

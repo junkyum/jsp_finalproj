@@ -35,7 +35,7 @@
     </div>
 
     <p>
-          <button type="button" class="btn btn-default btn-lg btn-block" onclick="javascript:location.href='<%=cp%>/';"> 메인화면으로 이동 &raquo; </button>
+          <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';"> 메인화면으로 이동 &raquo; </button>
     </p>
 </div>    
     

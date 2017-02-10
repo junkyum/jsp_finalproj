@@ -43,7 +43,7 @@
             
        SELECT COUNT(*) FROM member 
        
-    </select>
+       </select>
     
 	<select id="listMember" parameterType="map"
 	            resultType="com.sp.member.Member">
@@ -114,5 +114,22 @@
 	<delete id="deleteAuthority" parameterType="map">
 	    DELETE FROM memberAuthority WHERE ${field}=#{value}
 	</delete>
+	
+	<select id="findId"  parameterType="String" resultType="String">
+	
+	 select userId from member where  email= #{email}
+	 
+	</select>
+	
+	<select id="findPW"  parameterType="String" resultType="String">
+	
+	 select userPW from member where  email= #{email}
+	 
+	</select>
+	
+	 <update id="updatePW" parameterType="com.sp.member.Member">
+        UPDATE member SET userPW=#{userPW} WHERE email= #{email}
+    </update>
+	
     
 </mapper>
