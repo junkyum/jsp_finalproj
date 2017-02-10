@@ -171,11 +171,11 @@ function send(){
 	}
 
 	var f = document.photoForm;
-	if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
+	/* if(! /(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.upload.value)) {
 		alert('이미지 파일만 가능합니다. !!!');
 		f.upload.focus();
 		return false;
-	}
+	} */
 	
     var formData = new FormData(f);
 
