@@ -244,11 +244,11 @@ div.friendScroll {
 	scrollbar-track-color:#FFFFFF;
 	overflow:auto;
 }
-.btn_mk
 .jkbutton{
 	background:none;
 	border:none;
 }
+.btn_mk
 </style>
 
 <div id="mk_content">
