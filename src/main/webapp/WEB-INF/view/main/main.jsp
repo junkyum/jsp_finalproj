@@ -311,7 +311,7 @@ div.friendScroll {
 				<img src="<%=cp%>/res/images/img_C.png" style="width: 25%; height: 135px;">
 			</a>
 		
-			<a href="<%=cp%>/#">
+			<a href="<%=cp%>/tphoto/list">
 				<img src="<%=cp%>/res/images/img_D.png" style="width: 25%; height: 135px;">
 			</a>
 		</div>
