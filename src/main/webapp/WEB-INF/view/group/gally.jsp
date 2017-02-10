@@ -44,7 +44,7 @@ h4{
 <!-- a작스로 파일저장시 필요한거, -->
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <!-- 위에있는거 모달 띠워주는것 -->
 <script type="text/javascript">
 $(function(){
