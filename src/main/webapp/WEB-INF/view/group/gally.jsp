@@ -73,8 +73,7 @@ function listPage(page) {
     var groupName="${groupName}";
 	$.get(url,{pageNo:page, groupName:groupName}, function(data) {
 		$("#gallyLayout").html(data);
-		$('#searchKeyK').val("");
-		$('#searchValueK').val("");
+
 	});
 }
 /*  -------------------------------*/

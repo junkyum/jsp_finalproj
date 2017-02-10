@@ -49,7 +49,7 @@ function listPageAnswer(pageNo){
 				<div style="float: left; margin-left:50px; width: 50%; min-width: 85px; margin-top: 30px; margin: auto;"> 그룹 명:${dto.groupName} </div>
 			</div> 
 		
-				<h3 style="margin:auto; margin-top: 0px;">재 목: ${dto.subject}</h3>
+				<h3 style="margin:auto; margin-top: 0px;">제 목: ${dto.subject}</h3>
 			<div style="width: 570px; height: 100px; border: 1px solid black;">
 			<!-- 재목@내용 -->
 				<div style=" width: 50%;">
