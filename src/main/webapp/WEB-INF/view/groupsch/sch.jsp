@@ -57,7 +57,6 @@
 	font-family:나눔고딕, 맑은 고딕, 돋움, Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
 	font-size: 1em;
 	font-weight: bold;
-	/* -webkit-margin-after: 0.83em; */
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 }
@@ -135,10 +134,10 @@ $(function() {
 			editable: true,
 			events: function(start, end, timezone, callback){
 				// 캘린더가 처음 실행되거나 월이 변경되면
-				var startDay=start.format("YYYY-MM-DD");
-				var endDay=end.format("YYYY-MM-DD");
+				var startDate=start.format("YYYY-MM-DD");
+				var endDate=end.format("YYYY-MM-DD");
 		        
-				var url="<%=cp%>/group/sch/month?start="+startDay+"&end="+endDay+"&group="+group+"&dumi="+new Date().getTime();
+				var url="<%=cp%>/group/sch/month?start="+startDate+"&end="+endDate+"&group="+group+"&dumi="+new Date().getTime();
 
 				$.ajax({
 				    url: url,
@@ -185,48 +184,46 @@ function articleForm(calEvent) {
 	var str;
 	
 	var num=calEvent.id;
-	var title=calEvent.title;
+	var subject=calEvent.subject;
 	var userName=calEvent.userName;
 	
 	var color=calEvent.color;
 	var classify="";
-	if(color=="blue") classify="개인일정";
-	else if(color=="black") classify="가족일정";
-	else if(color=="green") classify="회사일정";
-	else if(color=="red") classify="부서일정";
+	if(color=="blue") classify="그룹일정";
+	else if(color=="black") classify="회원일정";
 	
 	var allDay=calEvent.allDay;
-	var startDay="", startTime="", sday="";
-	var endDay="", endTime="", eday="";
+	var startDate="", startTime="", sday="";
+	var endDate="", endTime="", eday="";
 	var strDay;
-	startDay=calEvent.start.format("YYYY-MM-DD");
+	startDate=calEvent.start.format("YYYY-MM-DD");
 	if(calEvent.start.hasTime()) {
 	   startTime=calEvent.start.format("HH:mm");
 		if(calEvent.end!=null && calEvent.start.format()!=calEvent.end.add("-30", "minutes").format()) {
-			endDay=calEvent.end.format("YYYY-MM-DD");
+			endDate=calEvent.end.format("YYYY-MM-DD");
 			endTime=calEvent.end.format("HH:mm");
 		}
 		if(calEvent.end!=null)
 		    calEvent.end.add("30", "minutes");
 	} else {
 		if(calEvent.end!=null && calEvent.start.format()!=calEvent.end.add("-1", "days").format()) {
-			endDay=calEvent.end.format("YYYY-MM-DD");
+			endDate=calEvent.end.format("YYYY-MM-DD");
 		}
 		if(calEvent.end!=null)
 		    calEvent.end.add("1", "days");
 	}
 	if(allDay==false) {
-		sday=startDay+" "+ startTime;
-		eday=endDay+" "+ endTime;
+		sday=startDate+" "+ startTime;
+		eday=endDate+" "+ endTime;
 		strDay="시간일정";
 	}else if(allDay==false) {
-		sday=startDay+" "+ startTime;
-		eday=endDay;
+		sday=startDate+" "+ startTime;
+		eday=endDate;
 		endTime="";
 		strDay="시간일정";
 	}else {
-		sday=startDay;
-		eday=endDay;
+		sday=startDate;
+		eday=endDate;
 		startTime="";
 		endTime="";
 		strDay="하루종일";
@@ -237,15 +234,15 @@ function articleForm(calEvent) {
 	tempContent=content;
 	
 	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/articleForm", function() {
-		$("#schTitle").html(title);
+		$("#schSubject").html(subject);
 		$("#schUserName").html(userName);
 		$("#schClassify").html(classify);
 		$("#schAllDay").html(strDay);
-		$("#schStartDay").html(sday);
-		$("#schEndDay").html(eday);
+		$("#schStartDate").html(sday);
+		$("#schEndDate").html(eday);
 		$("#schContent").html(content);
 		
-		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='updateForm(\""+num+"\", \""+title+"\", \""+allDay+"\", \""+startDay+"\",\""+endDay+"\",\""+startTime+"\",\""+endTime+"\",\""+color+"\");'> 수정 <span class='glyphicon glyphicon-ok'></span></button>";
+		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='updateForm(\""+num+"\", \""+subject+"\", \""+allDay+"\", \""+startDate+"\",\""+endDate+"\",\""+startTime+"\",\""+endTime+"\",\""+color+"\");'> 수정 <span class='glyphicon glyphicon-ok'></span></button>";
 		str+="<button type='button' class='btn btn-danger' style='margin-right: 5px;' onclick='deleteOk(\""+num+"\");'> 삭제 <span class='glyphicon glyphicon-remove'></span></button>";
 		str+="<button type='button' class='btn btn-default' data-dismiss='modal' style='margin-left: 0px;'> 닫기 </button>";
 		$("#schFooter").html(str);
@@ -260,13 +257,13 @@ function articleForm(calEvent) {
 // 일정 등록 폼
 function insertForm(start, end) {
 	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/inputForm", function() {
-		var startDay="", startTime="";
-		var endDay="", endTime="";
+		var startDate="", startTime="";
+		var endDate="", endTime="";
 		
-		startDay=start.format("YYYY-MM-DD");
+		startDate=start.format("YYYY-MM-DD");
 		startTime=start.format("HH:mm");
 
-		$("input[name='startDay']").val(startDay);
+		$("input[name='startDate']").val(startDate);
 
 		if(start.hasTime()) {
 			// 시간 일정인 경우
@@ -276,10 +273,10 @@ function insertForm(start, end) {
             
 			$("input[name='startTime']").val(startTime);
 			if(start.format()!=end.add("-30", "minutes").format()) {
-				endDay=end.format("YYYY-MM-DD");
+				endDate=end.format("YYYY-MM-DD");
 				endTime=end.format("HH:mm");
 			
-				$("input[name='endDay']").val(endDay);
+				$("input[name='endDate']").val(endDate);
 				$("input[name='endTime']").val(endTime);
 			}
 			end.add("30", "minutes");
@@ -292,8 +289,8 @@ function insertForm(start, end) {
 			$("#endTime").hide();
 			
 			if(start.format()!=end.add("-1", "days").format()) {
-				endDay=end.format("YYYY-MM-DD");
-				$("input[name='endDay']").val(endDay);
+				endDate=end.format("YYYY-MM-DD");
+				$("input[name='endDate']").val(endDate);
 			}
 			end.add("1", "days");
 		}
@@ -301,7 +298,7 @@ function insertForm(start, end) {
 	    $('#scheduleModal .modal-title').html('일정 추가');
 		$('#scheduleModal').modal('show');
 		
-		$("input[name='title']").focus();
+		$("input[name='subject']").focus();
 		
 		calendar.fullCalendar('unselect');
 	});
@@ -309,29 +306,29 @@ function insertForm(start, end) {
 
 // 새로운 일정 등록
 function insertOk() {
-	var title=$.trim($("input[name='title']").val());
+	var subject=$.trim($("input[name='subject']").val());
 	var color=$.trim($("input[name='color']").val());
 	var allDay=$("input[name='allDay']:checked").val();
-	var startDay=$.trim($("input[name='startDay']").val());
-	var endDay=$.trim($("input[name='endDay']").val());
+	var startDate=$.trim($("input[name='startDate']").val());
+	var endDate=$.trim($("input[name='endDate']").val());
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
 	var content=$.trim($("textarea[name='calcontent']").val());
 	
-	if(! title) {
+	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
-		$("input[name='title']").focus();
+		$("input[name='subject']").focus();
 		return
 	}
 	
-	 if(! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(startDay)){
+	 if(! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(startDate)){
 			alert("날짜를 정확히 입력 하세요 [yyyy-mm-dd] !!! ");
-			$("input[name='startDay']").focus();
+			$("input[name='startDate']").focus();
 			return
 	 }
-	 if(endDay!="" && ! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(endDay)){
+	 if(endDate!="" && ! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(endDate)){
 			alert("날짜를 정확히 입력 하세요 [yyyy-mm-dd] !!! ");
-			$("input[name='endDay']").focus();
+			$("input[name='endDate']").focus();
 			return
 	 }
 	
@@ -350,16 +347,16 @@ function insertOk() {
 	// 종료 날짜는 하루(시간일정은 30분)가 더 커야한다.
 	//  캘런더에 start<=일정날짜또는시간<end 까지 표시함
     var end;
-    if(endDay!="") {
+    if(endDate!="") {
     	if(endTime!="") {
-        	end=moment(endDay+"T"+endTime);
+        	end=moment(endDate+"T"+endTime);
         	end=end.add("30", "minutes");
-			endDay=end.format("YYYY-MM-DD");
+			endDate=end.format("YYYY-MM-DD");
 			endTime=end.format("HH:mm");
     	} else {
-        	end=moment(endDay);
+        	end=moment(endDate);
         	end=end.add("1", "days");
-			endDay=end.format("YYYY-MM-DD");
+			endDate=end.format("YYYY-MM-DD");
     	}
     }
     
@@ -371,11 +368,11 @@ function insertOk() {
 		allDay=false;
 	}
 	 
-	var query="title="+title
+	var query="subject="+subject
        +"&color="+color
        +"&allDay="+allDay
-       +"&startDay="+startDay
-       +"&endDay="+endDay
+       +"&startDate="+startDate
+       +"&endDate="+endDate
        +"&startTime="+startTime
        +"&endTime="+endTime
        +"&content="+content;
@@ -416,14 +413,15 @@ function insertOk() {
 
 //-------------------------------------------------
 // 수정 폼
-function updateForm(num, title, allDay, startDay, endDay, startTime, endTime, color) {
+function updateForm(num, subject, allDay, startDate, endDate, startTime, endTime, color) {
+	alert("들어옴");
 	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/inputForm", function() {
-		$("input[name='title']").val(title);
+		$("input[name='subject']").val(subject);
 		classifyChange(color);
 		// $("input[name='color']").val(color);
 		$("input[name='allDay']:checked").val();
-		$("input[name='startDay']").val(startDay);
-		$("input[name='endDay']").val(endDay);
+		$("input[name='startDate']").val(startDate);
+		$("input[name='endDate']").val(endDate);
 		$("input[name='startTime']").val(startTime);
 		$("input[name='endTime']").val(endTime);
 		$("textarea[name='content']").val(tempContent);
@@ -445,35 +443,35 @@ function updateForm(num, title, allDay, startDay, endDay, startTime, endTime, co
 	    $('#scheduleModal .modal-title').html('일정 수정');
 		$('#scheduleModal').modal('show');
 		
-		$("input[name='title']").focus();
+		$("input[name='subject']").focus();
 	});
 }
 
 // 수정 완료
 function updateOk(num) {
-	var title=$.trim($("input[name='title']").val());
+	var title=$.trim($("input[name='subject']").val());
 	var color=$.trim($("input[name='color']").val());
 	var allDay=$("input[name='allDay']:checked").val();
-	var startDay=$.trim($("input[name='startDay']").val());
-	var endDay=$.trim($("input[name='endDay']").val());
+	var startDate=$.trim($("input[name='startDate']").val());
+	var endDate=$.trim($("input[name='endDate']").val());
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
 	var content=$.trim($("textarea[name='content']").val());
 	
-	if(! title) {
+	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
 		$("input[name='title']").focus();
 		return
 	}
 	
-	 if(! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(startDay)){
+	 if(! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(startDate)){
 			alert("날짜를 정확히 입력 하세요 [yyyy-mm-dd] !!! ");
-			$("input[name='startDay']").focus();
+			$("input[name='startDate']").focus();
 			return
 	 }
-	 if(endDay!="" && ! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(endDay)){
+	 if(endDate!="" && ! /[12][0-9]{3}-[0-9]{2}-[0-9]{2}/.test(endDate)){
 			alert("날짜를 정확히 입력 하세요 [yyyy-mm-dd] !!! ");
-			$("input[name='endDay']").focus();
+			$("input[name='endDate']").focus();
 			return
 	 }
 	
@@ -490,16 +488,16 @@ function updateOk(num) {
 	 }
 
 	 var end;
-	 if(endDay!="") {
+	 if(endDate!="") {
 	    	if(endTime!="") {
-	        	end=moment(endDay+"T"+endTime);
+	        	end=moment(endDate+"T"+endTime);
 	        	end=end.add("30", "minutes");
-				endDay=end.format("YYYY-MM-DD");
+				endDate=end.format("YYYY-MM-DD");
 				endTime=end.format("HH:mm");
 	    	} else {
-	        	end=moment(endDay);
+	        	end=moment(endDate);
 	        	end=end.add("1", "days");
-				endDay=end.format("YYYY-MM-DD");
+				endDate=end.format("YYYY-MM-DD");
 	    	}
 	}
 	 
@@ -512,11 +510,11 @@ function updateOk(num) {
 	}
 
 	var query="num="+num
-	   +"&title="+title
+	   +"&subject="+subject
        +"&color="+color
        +"&allDay="+allDay
-       +"&startDay="+startDay
-       +"&endDay="+endDay
+       +"&startDate="+startDate
+       +"&endDate="+endDate
        +"&startTime="+startTime
        +"&endTime="+endTime
        +"&content="+content;
@@ -554,13 +552,13 @@ function updateOk(num) {
 //일정을 드래그하거나 일정의 크기를 변경할 때 일정 수정
 function updateDrag(e) {
 	var num=e.id;
-	var title=e.title;
+	var subject=e.subject;
 	var color=e.color;
 	var allDay=e.allDay;
-	var startDay="", startTime="";
-	var endDay="", endTime="";
+	var startDate="", startTime="";
+	var endDate="", endTime="";
 	
-	startDay=e.start.format("YYYY-MM-DD");
+	startDate=e.start.format("YYYY-MM-DD");
 	if(e.start.hasTime()) {
 		// 시간 일정인 경우
 		startTime=e.start.format("HH:mm");
@@ -568,15 +566,15 @@ function updateDrag(e) {
 		endDay=e.end.format("YYYY-MM-DD");
 		endTime=e.end.format("HH:mm");
 		if(e.start.format()==e.end.add("-30", "minutes").format()) {
-			endDay="";
+			endDate="";
 			endTime="";
 		}
 		e.end.add("30", "minutes");
 	} else {
 		// 하루종일 일정인 경우
-		endDay=e.end.format("YYYY-MM-DD");
+		endDate=e.end.format("YYYY-MM-DD");
 		if(e.start.format()==e.end.add("-1", "days").format()) {
-			endDay="";
+			endDate="";
 		}
 		e.end.add("1", "days")
 	}
@@ -592,11 +590,11 @@ function updateDrag(e) {
 		content="";
 
 	var query="num="+num
-           +"&title="+title
+           +"&subject="+subject
            +"&color="+color
            +"&allDay="+allDay
-           +"&startDay="+startDay
-           +"&endDay="+endDay
+           +"&startDate="+startDate
+           +"&endDate="+endDate
            +"&startTime="+startTime
            +"&endTime="+endTime
            +"&content="+content;
@@ -641,13 +639,9 @@ function deleteOk(num) {
 // 입력 및 수정 화면에서 일정 분류를 선택 한 경우
 function classifyChange(classify) {
 	$("#btnTitle").removeClass("btn-blue")
-	                     .removeClass("btn-black")
-	                     .removeClass("btn-green")
-	                     .removeClass("btn-red");
+	                     .removeClass("btn-black");
 	$("#btnDropdown").removeClass("btn-blue")
-	                              .removeClass("btn-black")
-	                              .removeClass("btn-green")
-	                              .removeClass("btn-red");
+	                              .removeClass("btn-black");
 	
 	if(classify=="blue") {
 		$("#btnTitle").html("그룹일정")

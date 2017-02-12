@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="note">
+
+    <!-- 친구 리스트 -->
+    <select id="listFriend" parameterType="String"
+               resultType="com.sp.friend.Friend">
+           SELECT num, friendUserId, 
+                       userName friendUserName
+                FROM friend f JOIN member m
+                      ON f.friendUserId=m.userId
+                      WHERE f.userId=#{userId}
+                          AND state='1' 
+    </select>
+
+    <insert id="insertNote" parameterType="com.sp.note.Note">
+         INSERT INTO note(num, content, sendUserId, receiveUserId,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent) VALUES (
+                 note_seq.NEXTVAL, #{content}, #{sendUserId}, #{receiveUserId},
+                 SYSDATE, #{identifyDay, jdbcType=VARCHAR}, 'N', 'N', #{parent}
+                 )
+    </insert>
+    
+	<sql id="where-list">
+	  <if test="searchKey=='sendUserName' or searchKey=='receiveUserName'">
+	      INSTR(userName, #{searchValue}) = 1
+	  </if>
+	  <if test="searchKey=='sendUserId' or searchKey=='receiveUserId'">
+	      ${searchKey}=#{searchValue}
+	  </if>
+	  <if test="searchKey=='content'">
+	      INSTR(content, #{searchValue}) &gt; 0
+	  </if>
+	</sql>
+    
+    <!-- 받은 쪽지 리스트 -->
+    <select id="dataCountReceive" parameterType="map" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) 
+                   FROM note JOIN member
+                   ON sendUserId=userId
+                  <where>
+	     	         <if test="searchValue!=null and searchValue!='' ">
+	     	              <include refid="where-list"/>
+	     	          </if>
+	     	          AND receiveUserId = #{userId}
+	     	          AND receiveDelete = 'N'
+                  </where> 
+    </select>
+    
+    <select id="listReceive" parameterType="map" resultType="com.sp.note.Note">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+			     SELECT num, content, sendUserId, userName sendUserName,
+                   TO_CHAR(sendDay, 'YYYY-MM-DD HH24:MI:SS') sendDay, 
+                   NVL2(identifyDay, TO_CHAR(identifyDay, 'YYYY-MM-DD HH24:MI:SS'), null) identifyDay, 
+                   sendDelete, receiveDelete, parent
+                 FROM note JOIN member ON sendUserId=userId
+                    <where>
+	     	            <if test="searchValue!=null and searchValue!='' ">
+	     	                <include refid="where-list"/>
+	     	             </if>
+	     	             AND receiveUserId = #{userId}
+	     	             AND receiveDelete = 'N'
+	                </where>
+	                ORDER BY num DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+    </select>
+    
+    <!-- 보낸 쪽지 리스트 -->
+    <select id="dataCountSend" parameterType="map" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) 
+                   FROM note JOIN member
+                   ON receiveUserId=userId
+                  <where>
+	     	         <if test="searchValue!=null and searchValue!='' ">
+	     	              <include refid="where-list"/>
+	     	          </if>
+	     	          AND sendUserId = #{userId}
+	     	          AND sendDelete = 'N'
+                  </where> 
+    </select>
+    
+    <select id="listSend" parameterType="map" resultType="com.sp.note.Note">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+			     SELECT num, content, receiveUserId, userName receiveUserName,
+                    TO_CHAR(sendDay, 'YYYY-MM-DD HH24:MI:SS') sendDay, 
+                    NVL2(identifyDay, TO_CHAR(identifyDay, 'YYYY-MM-DD HH24:MI:SS'), null) identifyDay, 
+                    sendDelete, receiveDelete, parent
+                   FROM note JOIN member ON receiveUserId=userId
+                    <where>
+	     	             <if test="searchValue!=null and searchValue!='' ">
+	     	                  <include refid="where-list"/>
+	     	              </if>
+	     	              AND sendUserId = #{userId}
+	     	              AND sendDelete = 'N'
+	                </where>
+	                ORDER BY num DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+    </select>
+    
+    <!-- 받은 쪽지 내용 보기 -->
+    <select id="readReceive" parameterType="Integer" resultType="com.sp.note.Note">
+         SELECT num, content, sendUserId, userName sendUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON sendUserId=userId
+                   WHERE num=#{num}
+      </select>    
+    
+	<!-- 받은 쪽지 이전글 -->
+	<select id="preReadReceive" resultType="com.sp.note.Note" parameterType="map">
+		SELECT tb.* FROM (
+			 SELECT num, content, sendUserId, userName sendUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON sendUserId=userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND receiveUserId = #{userId}
+	     	             AND receiveDelete = 'N'
+		                 AND (num > #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num ASC
+			) tb WHERE ROWNUM=1
+	</select>
+
+	<!-- 받은 쪽지 다음글 -->
+	<select id="nextReadReceive" resultType="com.sp.note.Note" parameterType="map">
+		SELECT tb.* FROM (
+			 SELECT num, content, sendUserId, userName sendUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON sendUserId=userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND receiveUserId = #{userId}
+	     	             AND receiveDelete = 'N'
+		                 AND (num < #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num DESC
+			) tb WHERE ROWNUM=1
+	</select>
+  
+    <!-- 보낸 쪽지 내용 보기 -->
+    <select id="readSend" parameterType="Integer" resultType="com.sp.note.Note">
+         SELECT num, content, receiveUserId, userName receiveUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON receiveUserId=userId
+                   WHERE num=#{num}
+      </select>    
+    
+	<!-- 보낸 쪽지 이전글 -->
+	<select id="preReadSend" resultType="com.sp.note.Note" parameterType="map">
+		SELECT tb.* FROM (
+			 SELECT num, content, receiveUserId, userName receiveUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON receiveUserId=userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND sendUserId = #{userId}
+	     	              AND sendDelete = 'N'
+		                 AND (num > #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num ASC
+			) tb WHERE ROWNUM=1
+	</select>
+
+	<!-- 보낸 쪽지 다음글 -->
+	<select id="nextReadSend" resultType="com.sp.note.Note" parameterType="map">
+		SELECT tb.* FROM (
+			 SELECT num, content, receiveUserId, userName receiveUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON receiveUserId=userId
+                    <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                AND sendUserId = #{userId}
+	     	              AND sendDelete = 'N'
+		                 AND (num < #{num})
+		                 ]]>
+	                </where>
+				ORDER BY num DESC
+			) tb WHERE ROWNUM=1
+	</select>
+    
+    
+    <!-- 보낸 쪽지함에서 쪽지 답변 보기 -->
+    <select id="readReplReceive" parameterType="Integer" resultType="com.sp.note.Note">
+         SELECT num, content, sendUserId, userName sendUserName,
+                 sendDay, identifyDay, sendDelete, receiveDelete, parent
+                   FROM note JOIN member
+                   ON sendUserId=userId
+                   WHERE parent=#{num} AND receiveDelete = 'N'
+      </select>    
+    
+    <!-- 쪽지를확인상태로변경 -->
+    <delete id="updateIdentifyDay" parameterType="Integer">
+        UPDATE note SET identifyDay = SYSDATE 
+                 WHERE num=#{num} AND identifyDay IS NULL
+    </delete>
+    
+    <!-- 쪽지를삭제상태로변경 -->
+    <delete id="updateDeleteState" parameterType="map">
+        UPDATE note SET ${field1} = 'Y' WHERE
+               num IN 
+               <foreach item="num" index="index" collection="numList"
+                            open="(" separator="," close=")">
+                    #{num}
+               </foreach>
+    </delete>
+    
+    <!-- 쪽지삭제 -->
+    <delete id="deleteNote" parameterType="map">
+        DELETE FROM note WHERE 
+               ${field2} = 'Y' AND
+               num IN 
+               <foreach item="num" index="index" collection="numList"
+                            open="(" separator="," close=")">
+                    #{num}
+               </foreach>
+    </delete>
+    
+    <!-- 새로운 쪽지 개수 -->
+    <select id="newNoteCount" parameterType="String" resultType="Integer">
+       SELECT NVL(COUNT(*), 0) FROM note
+           WHERE identifyDay IS NULL AND receiveUserId=#{userId}
+    </select>
+    
+</mapper>

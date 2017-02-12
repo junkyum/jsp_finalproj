@@ -50,6 +50,7 @@ public class GroupSchController {
 			return model;
 		}
 		sch.setUserId(info.getUserId());
+		sch.setGroupName("디자인이");
 		service.insertSchedule(sch);
 	
 		Map<String, Object> model = new HashMap<>(); 
@@ -89,7 +90,7 @@ public class GroupSchController {
 			
 			GroupSchJSON dto=new GroupSchJSON();
 	    	dto.setId(sch.getSchNum());
-	    	dto.setTitle(sch.getSubject());
+	    	dto.setSubject(sch.getSubject());
 	    	dto.setUserName(sch.getUserName());
 	    	dto.setColor(sch.getColor());
 	    	if(sch.getAllDay().equals("true"))
