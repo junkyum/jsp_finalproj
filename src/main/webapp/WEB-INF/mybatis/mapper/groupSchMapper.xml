@@ -4,8 +4,8 @@
 <mapper namespace="groupSch">
 
     <insert id="insertSchedule" parameterType="com.sp.group.sch.GroupSch">
-       INSERT INTO GroupSch (schNum, userId, subject, color, content, allDay, startDate, endDate, startTime, endTime)
-          VALUES (groupsch_seq.NEXTVAL, #{userId}, #{subject} 
+       INSERT INTO GroupSch (schNum, userId, groupName, subject, color, content, allDay, startDate, endDate, startTime, endTime)
+          VALUES (groupsch_seq.NEXTVAL, #{userId}, #{groupName}, #{subject} 
                 ,#{color, jdbcType=VARCHAR}
                 ,#{content, jdbcType=VARCHAR}
                 ,#{allDay, jdbcType=VARCHAR}
@@ -18,8 +18,8 @@
 
     <!-- 월별 일정 -->
     <select id="listMonthSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="map">
-        SELECT schNum, s.GROUPNAME, subject, color, content, allDay, startDate, endDate, startTime, endTime, created 
-             FROM GroupSch s JOIN GROUPmember m ON s.GROUPNAME=m.GROUPNAME
+        SELECT schNum, GROUPNAME, s.userId, userName, subject, color, content, allDay, startDate, endDate, startTime, endTime, created 
+             FROM GroupSch s JOIN member m ON s.userId =m.userId
      <where>
         s.GROUPNAME = #{groupName}
 		<if test="group !='all' ">
@@ -51,7 +51,7 @@
             ,endDate=#{endDate, jdbcType=VARCHAR}
             ,startTime=#{startTime, jdbcType=VARCHAR}
             ,endTime=#{endTime, jdbcType=VARCHAR}
-            WHERE schnum=#{schNum}
+            WHERE schNum=#{schNum}
     </update>
     
     <!-- 일정 삭제 -->

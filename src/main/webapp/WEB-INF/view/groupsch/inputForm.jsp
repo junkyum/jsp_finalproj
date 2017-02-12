@@ -8,16 +8,16 @@
 <script type="text/javascript" src="http://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
 <script type="text/javascript">
 $(function() {
-    $("input[name=startDay]").datepicker();
-    $("input[name=endDay]").datepicker();
+    $("input[name=startDate]").datepicker();
+    $("input[name=endDate]").datepicker();
 });
 </script>
 
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">제목</label>
-                    <div class="col-sm-10" id="schTitle">
-                        <input class="form-control" name="title" type="text" placeholder="제목">
+                    <div class="col-sm-10" id="schSubject">
+                        <input class="form-control" name="subject" type="text" placeholder="제목">
                     </div>
                 </div>
                 
@@ -32,8 +32,8 @@ $(function() {
                     <label class="col-sm-2 control-label">일정분류</label>
                     <div class="col-sm-10"  id="schClassify">
                         <div class="btn-group" id="classifyGroup">
-                                <button type="button" class="btn btn-blue" id="btnTitle" style="background-image: none;">개인일정</button>
-                                <button type="button" class="btn dropdown-toggle btn-blue" id="btnDropdown" style="border-left-color: #ccc;" data-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn btn-black" id="btnTitle" style="background-image: none;">개인일정</button>
+                                <button type="button" class="btn dropdown-toggle btn-black" id="btnDropdown" style="border-left-color: #ccc;" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only"></span>
                             </button>
@@ -44,7 +44,7 @@ $(function() {
                                 <li><a href='javascript:classifyChange("black");'>개인일정</a></li>
                             </ul>
                         </div>
-                        <input type="hidden" name="color" value="blue">
+                        <input type="hidden" name="color" value="black">
                     </div>
                 </div>
                 
@@ -57,10 +57,10 @@ $(function() {
                 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">시작일자</label>
-                    <div class="col-sm-10" id="schStartDay">
+                    <div class="col-sm-10" id="schStartDate">
                         <div class="row">
                             <div class="col-sm-3" style="padding-right: 0px;">
-                                <input class="form-control" name="startDay" type="text" readonly="readonly" style="background: #fff;" placeholder="시작날짜">
+                                <input class="form-control" name="startDate" type="text" readonly="readonly" style="background: #fff;" placeholder="시작날짜">
                             </div>
                             <div class="col-sm-3" style="padding-left: 5px;">
                                 <input class="form-control" id="startTime" name="startTime" type="text" placeholder="시작시간">
@@ -71,10 +71,10 @@ $(function() {
                 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">종료일자</label>
-                    <div class="col-sm-10" id="schEndDay">
+                    <div class="col-sm-10" id="schEndDate">
                         <div class="row">
                             <div class="col-sm-3" style="padding-right: 0px;">
-                                <input class="form-control" name="endDay" type="text" readonly="readonly" style="background: #fff;" placeholder="종료날짜">
+                                <input class="form-control" name="endDate" type="text" readonly="readonly" style="background: #fff;" placeholder="종료날짜">
                             </div>
                             <div class="col-sm-3" style="padding-left: 5px;">
                                 <input class="form-control" id="endTime" name="endTime" type="text" placeholder="종료시간">

@@ -4,6 +4,7 @@ public class GroupSch {
 	private int schNum;
 
 	
+	private String groupName;
 
 	private String userId, userName;
 	private String subject;
@@ -19,6 +20,15 @@ public class GroupSch {
 	
 	private String created;
 
+	
+	
+	public String getGroupName() {
+		return groupName;
+	}
+	
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 	public int getSchNum() {
 		return schNum;
 	}

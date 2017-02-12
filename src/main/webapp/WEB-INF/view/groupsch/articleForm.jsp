@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">제목</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static" id="schTitle"></p>
+                        <p class="form-control-static" id="schSubject"></p>
                     </div>
                 </div>
                 
@@ -38,14 +38,14 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">시작일자</label>
                     <div class="col-sm-10">
-                         <p class="form-control-static" id="schStartDay"></p>
+                         <p class="form-control-static" id="schStartDate"></p>
                      </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">종료일자</label>
                     <div class="col-sm-10">
-                         <p class="form-control-static" id="schEndDay"></p>
+                         <p class="form-control-static" id="schEndDate"></p>
                      </div>
                 </div>
                 
