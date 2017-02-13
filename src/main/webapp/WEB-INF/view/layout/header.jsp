@@ -36,7 +36,7 @@
                   <a href="<%=cp%>/tfaq/faq">fAQ</a>
                 </li>
                 <li>
-                  <a href="#">QNA</a>
+                  <a href="<%=cp%>/tqna/list">QNA</a>
                 </li>
               </ul>
             </li>
