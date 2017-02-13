@@ -181,9 +181,11 @@
 		<c:if test="${userId==sessionScope.member.userId}">
 			
 			<button type="button" class="btn btn-default btn wbtn" id="btnpen"
-				data-toggle="modal" data-target="#moon_created" >				
+				data-toggle="modal" data-target="#kmNoticeModal" >				
 				<span class="glyphicon glyphicon glyphicon-pencil"></span>
 			</button>
 		</c:if>
 	</div>
 </div>
+
+

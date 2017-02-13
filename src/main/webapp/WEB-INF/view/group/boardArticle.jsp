@@ -107,7 +107,9 @@ function updateOk() {
 	                		</td>
 	                		<td align="right">
 	                		    <button type="button" class="btn btn-default btn-sm wbtn" 
-	                		    	onclick="groupBaordListGo(${page});"> 목록으로 </button>
+	                		    	onclick="groupBaordListGo(${page});">
+	                		    	<span class="glyphicon glyphicon-list"></span>
+	                		     </button>
 	                		</td>
 	                	</tr>
 				</table>
