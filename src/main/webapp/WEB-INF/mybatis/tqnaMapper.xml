@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tqna">
+
+    <select id="maxQnaNum" resultType="Integer">
+    SELECT NVL(MAX(qnaNum),0) FROM tqna
+      
+    </select>
+
+	<insert id="insertQna" parameterType="com.sp.tqna.Qna">
+	INSERT INTO tqna 
+     (qnaNum, userId, subject, content,
+     groupNum, orderNo, depth, parent ) VALUES (
+        #{qnaNum}, #{userId}, #{subject}, #{content},
+        #{groupNum}, #{orderNo}, #{depth}, #{parent}
+     )
+	</insert>
+	
+<sql id="where-list">
+   <if test="searchKey=='userName' ">
+        userName=#{searchValue}
+   </if>
+   <if test="searchKey=='subject' ">
+        subject LIKE '%' || #{searchValue} || '%'
+   </if>
+   <if test="searchKey=='content' ">
+        DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0
+   </if>
+   <if test="searchKey=='created' ">
+        TO_CHAR(b.created, 'YYYY-MM-DD') = #{searchValue}
+   </if>
+</sql>
+	
+	<select id="dataCount" resultType="Integer" parameterType="map">
+	SELECT NVL(COUNT(*),0) FROM tqna
+	</select>
+	
+	
+	<select id="listQna" parameterType="map" resultType="com.sp.tqna.Qna">
+	SELECT * FROM(
+		SELECT ROWNUM rnum, tb.* FROM(
+				SELECT qnaNum, userName, q.userId, subject, TO_CHAR(q.created,'YYYY-MM-DD') created
+				,hitCount, groupNum, orderNo, depth
+				FROM tqna q
+				JOIN member m ON q.userId= m.userId
+					<where>
+             	          <if test="searchValue != null and searchValue != ''">
+			                  <include refid="where-list"/>
+		                 </if>
+	                </where>
+	                ORDER BY groupNum DESC, orderNo ASC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+	    ) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readQna" resultType="com.sp.tqna.Qna" parameterType="Integer">
+	
+	SELECT qnaNum, userName, q.userId, subject, content, groupNum, depth, orderNo, parent, hitCount
+	FROM tqna q
+	JOIN member m ON q.userId = m.userId
+	WHERE qnaNum = #{qnaNum}
+
+	</select>
+	
+	<update id="updateHitCount" parameterType="Integer">
+	UPDATE tqna SET hitCount= hitCount+1 where qnaNum = #{qnaNum}
+	</update>
+	
+	<select id="preReadQna" resultType="com.sp.tqna.Qna" parameterType="java.util.Map">
+	SELECT tb.* FROM (
+			SELECT qnaNum, subject 
+			         FROM tqna q JOIN member m ON q.userId=m.userId
+			              <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND (( groupNum = #{groupNum} AND orderNo < #{orderNo})
+                         OR (groupNum > #{groupNum} ))
+		                 ]]>
+	                </where>
+				ORDER BY groupNum ASC, orderNo DESC
+			) tb WHERE ROWNUM=1
+    </select> 
+	
+	
+	
+		<select id="nextReadQna" resultType="com.sp.tqna.Qna" parameterType="Map">
+	SELECT tb.* FROM (
+			SELECT qnaNum, subject 
+			         FROM tqna q JOIN member m ON q.userId = m.userId
+			              <where>
+                         <if test="searchValue != null and searchValue != '' ">
+			                  <include refid="where-list"/>
+		                 </if>
+		               <![CDATA[
+		                 AND (( groupNum = #{groupNum} AND orderNo > #{orderNo})
+                         OR (groupNum < #{groupNum} ))
+		                 ]]>
+	                </where>
+				ORDER BY groupNum DESC, orderNo ASC
+			) tb WHERE ROWNUM=1
+    </select> 
+	
+	<select id="updateQna" parameterType="com.sp.tqna.Qna">
+	UPDATE tqna SET subject=#{subject}, content =#{content} WHERE qnaNum =#{qnaNum}
+	</select>
+	
+	<delete id="deleteQna" parameterType="Integer">
+             DELETE FROM tqna WHERE qnaNum IN 
+               (SELECT qnaNum FROM tqna START WITH  qnaNum = #{qnaNum}
+	            CONNECT BY PRIOR qnaNum = parent)
+	</delete>
+<update id="updateOrderNo" parameterType="map">
+       UPDATE tqna SET orderNo=orderNo+1
+   	<![CDATA[
+          WHERE groupNum = #{groupNum} AND orderNo > #{orderNo}
+	]]>                    
+</update>
+
+	
+</mapper>
