@@ -28,10 +28,23 @@ function groupBoardListpage(page) {
 	var userId = "${userId}";
 	$.get(url, {boardNum:boardNum, page:page, groupName:groupName, userId:userId}, function(data){
 		$("#gblistlayout").html(data);
+		$("#gnsearchKeykm").val();
+		$("#gnsearchValuekm").val();
 	});
 }
    
-
+function gboardSearchList(){
+	var url="<%=cp%>/group/groupBoardList";
+	var searchKey=$('#gbsearchKeykm').val();
+	var searchValue=$('#gbsearchValuekm').val();
+	var groupName="${groupName}";
+	var userId = "${userId}";
+	$.post(url, {searchKey:searchKey, searchValue:searchValue, groupName:groupName, userId:userId}, function(data) {
+		$("#gblistlayout").html(data);
+		$("#searchValue").val("");
+		
+	});
+}
 
 function mkmgroupBoardCheck(){
 	var page = "${page}";
@@ -93,19 +106,118 @@ function articleGroupBoard(boardNum,page){
 	});
 }
 
+function updateBoard(boardNum){
+	alert("SDf"+boardNum);
+	$("#myModalGboardUpdate").show();
+	
+	
+} 
+	<%-- var update ; 
+	update = $("#gbMyModalUpdate").dialog({
+		title:"게시물 수정",
+		modal:true,
+		width:500,
+		height:200,
+		show:"clip",
+		hide:"clip",
+		buttons:{
+			"수정":function(){
+				var url="<%=cp%>/group/gboard/update";	
+				var subject=$('#searchKeyK').val();
+				var searchValueK=$('#searchValueK').val();
+				var groupName="${groupName}";
+				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
+					$(dlg).dialog("close");
+					$("#gallyLayout").html(data);
+					$("#searchValueK").val("");
+					
+				});
+				
+				
+			}, "취소":function() {
+				$(this).dialog("close");
+			}
+			
+			
+		}
+	}); --%>
+	
+	
+
+<%-- function mkmgroupBoardUpdateCheck(){
+	var url="<%=cp%>/group/gboard/update";
+	var page = "${page}";
+	var subject = $("#gbsubjectkm2").val().trim();
+	var content = $("#gbcontentkm2").val().trim();
+	var keyword = $("#gbkeywordkm2").val();
+	var groupName= "${groupName}";
+	if(!subject){
+		$("#gbsubjectkm2").focus();
+		return;
+	}
+	
+	var gbUpdate = document.gBoard2;
+	var gbUpdateformData = new FormData(gbUpdate);
+		$.ajax({
+			type:"post",
+			url :url,
+			processData: false,
+			contentType: false,
+			data : gbUpdateformData,
+			dataType:"json",
+			success:function(data){
+				var result = data.result;
+				if(data.result=="true"){
+					$("#gbsubjectkm").val("");
+					$("#gbcontentkm").val("");
+					$("#gbfilekm").val("");
+					$("#gbkeywordkm").val("");				
+					groupBoardListpage(1);					
+				}else {
+					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+				}
+				
+			},error:function(e) {
+		    	  console.log(e.responseText);
+		      }
+		
+	});	
+} --%>
+
+function deleteBoard(boardNum,page,fileNum) {
+	
+	var url="<%=cp%>/group/gboard/delete";	
+	var query="boardNum="+boardNum+"&page="+page+"&fileNum="+fileNum;
+	
+	if(confirm("게시물 삭제 하시겟습니까?")){
+			$.ajax({
+				type:"post"
+				,url:url
+				,data:query
+				,dataType:"json"
+				,success:function(data) {
+		
+					var state=data.state;			
+					if(state=="false") {						
+						groupBoardListpage(page);
+					} else{
+						alert("삭제ㄴㄴ");
+					}			
+				}
+				,error:function(e) {
+					console.log(e.responseText);
+				}
+			});
+	}
+}
+
+
+
  function groupBaordListGo(page){
 	groupBoardListpage(page);
 } 
  
 
-<%--  function gboardReplyListpage(page){
-	 var url="<%=cp%>/group/gboard/listReply";
-		var boardNum="${dto.boardNum}";
-		$.post(url, {boardNum:boardNum, page:page}, function(data){
-			$("#groupBoardListReply").html(data);
-		});
- }
-  --%>
 function gboardsendReply(boardNum){
 	var userId="${sessionScope.member.userId}";
 	var content = $("#gboardReplyContent").val().trim();
@@ -255,7 +367,7 @@ function deletegboardReplyAnswerList(replyNum, replyAnswer) {
 		}, "json");	
 	}	
 }
-
+//게시물 답글의 좋아요@싫어요 추가시키는 곳
 function kmSendReplyLike(replyNum, boardReplyLike) {
 	var userId="${sessionScope.member.userId}";
 	
@@ -264,11 +376,8 @@ function kmSendReplyLike(replyNum, boardReplyLike) {
 		msg="게시물에 공감하십니까 ?";
 	if(! confirm(msg))
 		return false;
-	
 	var query="replyNum="+replyNum+"&boardReplyLike="+boardReplyLike;
-	
 	var url="<%=cp%>/group/gboard/boardReplyLike";
-	
 	$.ajax({
 		type:"POST"
 		,url:url
@@ -278,8 +387,8 @@ function kmSendReplyLike(replyNum, boardReplyLike) {
 				
 			var state=data.state;
 			if(state=="true") {
-				alert("들어감");
 				groupgboardCountLike(replyNum);
+				gboardReplyListpage(1);
 			} else if(state=="false") {
 					alert("한번만 할수있다.");
 			} else if(state=="loginFail") {
@@ -292,22 +401,20 @@ function kmSendReplyLike(replyNum, boardReplyLike) {
 		
 	});
 }
-
+//게시물 답글의 좋아요, 싫어요 갯수 세는곳 
 function groupgboardCountLike (replyNum) {
-	var url="<%=cp%>/group/gboard/groupCountLike";
+	var url="<%=cp%>/group/gboard/groupgboardCountLike";
 	$.post(url, {replyNum:replyNum}, function(data){
 		var likeCountkm="#kmLikeCount"+replyNum;
 		var disLikeCountkm="#kmDisLikeCount"+replyNum;
-		var likeCountkm=data.likeCountkm;
-		var disLikeCountkm=data.disLikeCountkm;
-		  alert(disLikeCountkm+"       "+likeCountkm);
-		  
-		$(likeCountkm).html(kmlikeCount);
+		var kmLikeCount=data.kmLikeCount;
+		var kmDisLikeCount=data.kmDisLikeCount;
+		$(likeCountkm).html(kmLikeCount);
 		$(disLikeCountkm).html(kmDisLikeCount);
 	}, "JSON");
 }
 
-
+//게시물의 좋아요 추가 시키는 곳 
 function groupBoardLike(boardNum, boardLike) {
 	var userId="${sessionScope.member.userId}";
 	
@@ -317,7 +424,6 @@ function groupBoardLike(boardNum, boardLike) {
 	
 	if(! confirm(msg))
 		return false;
-	
 	var query="boardNum="+boardNum+"&boardLike="+boardLike;
 	var url= "<%=cp%>/group/gboard/boardLike";
 		
@@ -330,7 +436,6 @@ function groupBoardLike(boardNum, boardLike) {
 				
 			var state=data.state;
 			if(state=="true") {
-				alert("들어감");
 				groupBoardLikeCount(boardNum)
 			} else if(state=="false") {
 				alert("선택은 한번만!!");
@@ -341,17 +446,89 @@ function groupBoardLike(boardNum, boardLike) {
 		}
 	});
 }
-
+// 게시물 좋아요 
 function groupBoardLikeCount(boardNum) {
+	alert("1="+boardNum);
 	var url="<%=cp%>/group/gboard/groupBoardLikeCount";
+	alert("1="+boardNum+"asdasdas");
 	$.post(url, {boardNum:boardNum}, function(data){
 		var boardLikeCountId="#boardLikeCount"+boardNum;
+		alert("2="+boardLikeCountId);
 		var boardLikeCount=data.boardLikeCount;
-		
+		alert("3="+boardLikeCount);
 		$(boardLikeCountId).html(boardLikeCount);
 	}, "JSON");
 }
 
+function gboardDeleteFile(fileNum) {
+	var url="<%=cp%>/group/gboard/deleteFile";
+	$.post(url, {fileNum:fileNum}, function(data){
+		$("#f"+fileNum).remove();
+	}, "JSON");
+}
+
+$(function(){
+	$("body").on("change", "input[name=upload]", function(){
+		if(! $(this).val()) {
+			return;	
+		}
+		
+		var b=false;
+		$("input[name=upload]").each(function(){
+			if(! $(this).val()) {
+				b=true;
+				return;
+			}
+		});
+		if(b)
+			return;
+
+		var $p, $input;
+		
+	    $p=$("<p>", {class:"p",  html:"첨부"});
+	    $input=$("<input>", {type:"file", name:"upload", class:"form-control input-sm", style:"height: 35px;"});
+	    $p.append($input);
+	    
+	    $("#p").append($p);
+	});
+});
+
+function groupBoardUpdateOk(){
+	var page = "${page}";
+	var url = "<%=cp%>/group/gboard/update";
+	var subject = $("#updateSubjectkm").val().trim();
+	var content = $("#updateContentkm").val().trim();
+	var keyword = $("#updateKeywordkm").val();
+	var groupName= "${groupName}";
+
+	
+	var dialogUpdateForm = document.dialogUpdateForm;
+	var updateForm = new FormData(dialogUpdateForm);
+		$.ajax({
+			type:"post",
+			url :url,
+			processData: false,
+			contentType: false,
+			data : updateForm,
+			dataType:"json",
+			success:function(data){
+				var result = data.result;
+				if(data.result=="true"){
+					$("#updateSubjectkm").val("");
+					$("#updateContentkm").val("");
+					$("#updateFilekm").val("");
+					$("#updateKeywordkm").val("");				
+					groupBoardListpage(1);					
+				}else {
+					alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+				}
+				
+			},error:function(e) {
+		    	  console.log(e.responseText);
+		      }
+		
+	});	
+}
 </script>
 
 
@@ -367,6 +544,7 @@ function groupBoardLikeCount(boardNum) {
 	<form name="gBoard" method="POST" enctype="multipart/form-data">
 		<div class="modal-dialog">
 			<div class="modal-content">
+			
 				<div class="modal-header">
 					<h4 class="modal-title">
 						<span class="glyphicon glyphicon glyphicon-pencil"></span>&nbsp;
@@ -380,7 +558,6 @@ function groupBoardLikeCount(boardNum) {
 						required="required"></textarea>
 					<br> <input type="file" name="upload" id="gbfilekm"
 						class="form-control input"><br> 
-					<input type="text" name="keywork" id="gbkeyworkkm" class="form-control input" placeholder="태그를 입력해주세요.">
 					<input type="hidden" name="groupName" value="${groupName }">
 				</div>
 				<div class="modal-footer">

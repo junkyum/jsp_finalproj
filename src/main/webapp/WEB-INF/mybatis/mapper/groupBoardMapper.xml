@@ -35,7 +35,7 @@
 		join member m 
 		ON b.userId = m.userId
 	<where>
-		groupName =#{groupName}
+		b.groupName =#{groupName}
 		<if test="searchValue != null and searchValue !='' ">
 		and
 			<include refid="where-list" />
@@ -45,12 +45,16 @@
 
 
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
-		SELECT * FROM (
+	SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT b.BOARDNUM, b.userId, subject, content, created, nvl(fileCount, 0) fileCount , 
-              nvl(g.fileSize,0) fileSize, g.ORIGINALFILENAME
-				FROM groupBoard b 
-        
+				SELECT b.BOARDNUM, b.userId, b.subject, b.content, b.created, nvl(fileCount, 0) fileCount , b.groupName,
+              nvl(g.fileSize,0) fileSize, NVL(g.ORIGINALFILENAME,'none') ORIGINALFILENAME, NVL(boardLikeCount, 0) boardLikeCount
+				FROM groupBoard b JOIN ggroup p  ON b.groupName = p.groupName
+         LEFT OUTER JOIN
+	                     (
+	                           SELECT boardNum, NVL(COUNT(DECODE(boardlike,1,1)),0) boardLikeCount FROM groupboardLike
+	                          GROUP BY boardNum
+	                     ) c ON b.boardNum = c.boardNum
 				left OUTER join 
 		          (
 			          select boardnum, nvl(count(*),0) fileCount from GROUPBOARDFILE
@@ -58,18 +62,21 @@
 		          ) f on b.BOARDNUM = f.BOARDNUM 
               left outer join 
               GROUPBOARDFILE g on b.BOARDNUM = g.BOARDNUM 
-	<where>
-			groupName =#{groupName}
-		<if test="searchValue != null and searchValue !='' ">
-		and
-			<include refid="where-list" />
-		</if>
-	</where>
-				ORDER BY boardNum DESC
-	<![CDATA[                
-            ) tb WHERE ROWNUM <= #{end}
-        ) WHERE rnum >= #{start}
-	]]>
+              
+                  	 <where>
+                  	 b.groupName=#{groupName}  
+				     	<if test="searchValueK!=null and searchValueK!='' ">
+				     	AND 
+				     	    <include refid="where-list"/>
+				     	</if>
+				     	
+				     </where> 
+	                ORDER BY boardNum DESC
+		<![CDATA[
+		        ) tb WHERE ROWNUM <= #{end}
+		    ) WHERE rnum >= #{start}
+		]]>  
+		
 </select>
 
 <update id="updateHitCount" parameterType="Integer">
@@ -77,13 +84,27 @@
 		where boardNum = #{boardNum}
 </update>
 	
+
+
 <select id="readGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="Integer">
-	select b.boardNum, b.userId, subject, content, hitCount, b.created
+select b.boardNum, b.userId, subject, content, groupName ,hitCount, b.created,
+  nvl(g.FILESIZE,0) filesize, nvl(g.ORIGINALFILENAME,'none') ORIGINALFILENAME, NVL (boardLikeCount, 0) boardLikeCount
   		from groupboard b
   		join member m on b.userId = m.userId
-  		where boardNum =#{boardNum}
+       LEFT OUTER JOIN
+                       (
+	                           SELECT boardNum, NVL(COUNT(DECODE(boardlike,1,1)),0) boardLikeCount FROM groupboardLike l
+	                          GROUP BY boardNum
+	                     ) c ON b.boardNum = c.boardNum
+  		LEFT OUTER JOIN groupboardfile g  
+  		   ON b.BOARDNUM = g.BOARDNUM
+      where b.boardNum =#{boardNum}
   		
 </select>
+
+
+
+
 
 <select id="preReadGroupBoard" resultType="com.sp.group.gboard.GroupBoard" parameterType="map">
 		select tb.* from (
@@ -230,7 +251,7 @@
 
 
 <insert id="insertGroupReplyLike" parameterType="com.sp.group.gboard.GroupBoardReply">
-		INSERT INTO groupboardReply(replyNum, userId, boardReplyLike)
+		INSERT INTO groupboardReplyLike (replyNum, userId, boardReplyLike)
 		   VALUES (#{replyNum}, #{userId}, #{boardReplyLike})
 </insert>
 
@@ -248,7 +269,7 @@
 </insert>
 
 <select id="groupBoardLikeCount" resultType="map" parameterType="Integer">
-	  SELECT NVL(COUNT(DECODE(boardLike,1,1)),0) boardikeCount
+	  SELECT NVL(COUNT(DECODE(boardLike,1,1)),0) boardLikeCount
           		 FROM groupBoardLike WHERE boardNum= #{boardNum}
 </select>
 

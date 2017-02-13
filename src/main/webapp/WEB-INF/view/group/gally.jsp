@@ -276,26 +276,27 @@ function findGally(){
 	    show:"clip",
 		hide:"clip",
 	    buttons:{
-			"찾기":function(){
-				var url="<%=cp%>/groupGally/list";
-	
-				var searchKeyK=$('#searchKeyK').val();
-				var searchValueK=$('#searchValueK').val();
-				var groupName="${groupName}";
-				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
-					$(dlg).dialog("close");
-					$("#gallyLayout").html(data);
-					$("#searchValueK").val("");
+	    	buttons:{
+				"찾기":function(){
+					var url="<%=cp%>/groupGally/list";
+		
+					var searchKeyK=$('#searchKeyK').val();
+					var searchValueK=$('#searchValueK').val();
+					var groupName="${groupName}";
+					$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
+						$(dlg).dialog("close");
+						$("#gallyLayout").html(data);
+						$("#searchValueK").val("");
+						
+					});
 					
-				});
+					
+				}, "취소":function() {
+					$(this).dialog("close");
+				}
 				
 				
-			}, "취소":function() {
-				$(this).dialog("close");
 			}
-			
-			
-		}
     });
    
 }

@@ -223,81 +223,112 @@ public class GroupBoardController {
 			out.print("<script>alert('파일 다운로드가 실패했습니다.');history.back();</script>");
 		}
 	}
-	/*
-	@RequestMapping(value="/gboard/update", method=RequestMethod.GET)
-	public String updateForm(
-			@RequestParam(value="boardNum") int boardNum,
-			@RequestParam(value="page") String page,
-			Model model, HttpSession session) throws Exception {
-
+	
+	
+/*	@ResponseBody
+	public Map<String, Object> update(GroupBoard dto, HttpSession session) throws Exception{
+		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		if(info==null) {
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+File.separator+"uploads"+File.separator+"GroupBoard";
+		String state="false";
+
+		int result = service.updateGroupBoard(dto, pathname);
+		if(result!=0)
+			state="true";
+		
+		Map<String, Object> model= new HashMap<>();
+		model.put("state", state);
+		return model;
+	}*/
+	
+	@RequestMapping(value="/group/gboard/update", method=RequestMethod.GET)
+	public String updateForm(
+			@RequestParam(value="boardNum") int boardNum ,
+			@RequestParam(value="page") String page, 
+			Model model,
+			HttpSession session			
+			) throws Exception{
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info==null){
 			return "redirect:/member/login";
 		}
-
-		GroupBoard dto = (GroupBoard) service.readGroupBoard(boardNum);
-		if(dto==null) {
-			return "redirect:/gboard/list?page="+page;
+		GroupBoard dto = service.readGroupBoard(boardNum);
+		if(dto==null||!dto.getUserId().equals(info.getUserId())){
+			return "redirect:/group/gboard/boardList?page="+page;
 		}
-
 		List<GroupBoard> listFile=service.listFile(boardNum);
-
-		model.addAttribute("mode", "update");
-		model.addAttribute("page", page);
-		model.addAttribute("dto", dto);
+		
 		model.addAttribute("listFile", listFile);
-
-		return ".gboard.created";
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
+		return "group/boardUpdate";
 	}
 
-	@RequestMapping(value="gboard/update", method=RequestMethod.POST)
-	public String updateSubmit(
+	@RequestMapping(value="/group/gboard/update", method=RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object>  updateSubmit(
 			GroupBoard dto,
-			@RequestParam String page,
-			HttpSession session) throws Exception {
-
+			@RequestParam(value="page") String page,
+			HttpSession session,
+			HttpServletResponse resp, HttpServletRequest req) throws Exception {
+		
+		String cp = req.getContextPath();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
-			return "redirect:/member/login";
+			resp.sendRedirect(cp+"/member/login");
 		}
 
 		if(! info.getUserId().equals("admin"))
-			return "redirect:/gboard/list?page="+page;
+			resp.sendRedirect(cp+"/group/gboard/boardList?page="+page);
 
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
 
-		dto.setUserId(info.getUserId());
 		service.updateGroupBoard(dto, pathname);
 
-		return "redirect:/gboard/list?page="+page;
-	}
+		Map <String, Object> model = new HashMap<>();
+		model.put("page", page);
+		return model;
+	} 
 
-	@RequestMapping(value="/gboard/delete", method=RequestMethod.GET)
-	public String delete(
+	@RequestMapping(value="/group/gboard/delete", method=RequestMethod.POST)
+	public void delete(
 			@RequestParam int boardNum,
 			@RequestParam String page,
+			@RequestParam(value="fileNum") int fileNum, 
+			HttpServletResponse resp,
 			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
 
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		if(info==null) {
-			return "redirect:/member/login";
-		}
-
-		if(! info.getUserId().equals("admin"))
-			return "redirect:/gboard/list?page="+page;
-
-		// 내용 지우기
 		service.deleteGroupBoard(boardNum, pathname);
-
-		return "redirect:/gboard/boardList?page="+page;
+		
+		GroupBoard dto = service.readFile(fileNum);
+		if(dto!=null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+		}
+		
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("field", "fileNum");
+		map.put("num", fileNum);
+		service.deleteFile(map);
+		
+		JSONObject ob=new JSONObject();
+		ob.put("state", "false");		
+		resp.setContentType("text/html; charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		
+		out.print(ob.toString());	
+		
+		
 	}
 	
 
 
-	@RequestMapping(value="/gboard/deleteFile", method=RequestMethod.POST)
+	@RequestMapping(value="/group/gboard/deleteFile", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> deleteFile(
 			@RequestParam int fileNum,
@@ -321,7 +352,7 @@ public class GroupBoardController {
 		return model;
 	}
 	
-	
+	/*
 	@RequestMapping(value="/gboard/boardArticle", method=RequestMethod.POST)
 	public String insertRepleSubmit( GroupBoard dto, HttpSession session) throws Exception {
 
@@ -529,7 +560,7 @@ public class GroupBoardController {
 		return model;
 	}
 	
-	@RequestMapping(value="/group/gboard/groupCountLike", method=RequestMethod.POST)
+	@RequestMapping(value="/group/gboard/groupgboardCountLike", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> groupCountLike(@RequestParam int replyNum)throws Exception{
 		int likeCount=0, disLikeCount=0;
@@ -546,6 +577,7 @@ public class GroupBoardController {
 		return model;
 	}
 
+	//게시물 좋아요 하는 곳 
 	@RequestMapping(value="/group/gboard/boardLike",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> insertBoardLike(GroupBoard dto , HttpSession session)throws Exception{
