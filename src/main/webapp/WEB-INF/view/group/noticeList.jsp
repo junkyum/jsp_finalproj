@@ -110,7 +110,7 @@
 					<c:if test="${userId==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default" id="kmUpdatebtn"
 							onclick="updateNoG(${dto.num},${page });" data-num="${dto.num }"
-							data-toggle="modal" data-target="#kmNoticeModal">
+							data-toggle="modal" data-target="#moon_update">
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					
@@ -181,7 +181,7 @@
 		<c:if test="${userId==sessionScope.member.userId}">
 			
 			<button type="button" class="btn btn-default btn wbtn" id="btnpen"
-				data-toggle="modal" data-target="#kmNoticeModal" >				
+				data-toggle="modal" data-target="#moon_created" >				
 				<span class="glyphicon glyphicon glyphicon-pencil"></span>
 			</button>
 		</c:if>

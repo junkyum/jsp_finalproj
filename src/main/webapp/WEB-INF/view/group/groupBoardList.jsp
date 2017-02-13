@@ -31,11 +31,10 @@
 				<c:forEach var="dto" items="${boardList}">
 					<tr>
 						<td>${dto.listNum}</td>
-				        <td><a onclick="articleGroupBoard(${dto.boardNum}, ${page});"> ${dto.subject }  &nbsp;</a>			        	
-				       		<c:if test="${not empty dto.originalFilename}">
+				        <td><a onclick="articleGroupBoard(${dto.boardNum}, ${page});"> ${dto.subject } <%-- [${dto.boardLike }] --%>  &nbsp;</a>			        	
+				       		<c:if test="${ dto.fileCount!=0}">
 							  	<span class="glyphicon glyphicon-save"></span>
-							</c:if>
-							
+							</c:if>							
 						</td> 													   
 						<td class="text-center" >${dto.userId}</td>
 						<td class="text-center">${dto.created}</td>
@@ -61,15 +60,15 @@
 	</div>
 	<div style="float: left; width: 60%; text-align: center;">
 		<form name="searchForm" method="post" class="form-inline">
-			<select class="form-control input-sm" name="searchKey">
+			<select class="form-control input-sm" name="searchKey" id="gbsearchKeykm">
 				<option value="subject">제목</option>
 				<option value="userName">작성자</option>
 				<option value="content">내용</option>
 				<option value="created">등록일</option>
 			</select> <input type="text" class="form-control input-sm input-search"
-				name="searchValue">
+				name="searchValue" id="gbsearchValuekm">
 			<button type="button" class="btn btn-default btn btn-search"
-				onclick="searchList();">
+				onclick="gboardSearchList();">
 				<span class="glyphicon glyphicon-search"></span>
 			</button>
 		</form>

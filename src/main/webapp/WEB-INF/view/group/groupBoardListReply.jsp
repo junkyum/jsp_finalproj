@@ -42,7 +42,7 @@
 	            	<button type="button" onclick="kmSendReplyLike('${dto.replyNum}', '1')">
 	            	<span id="kmLikeCount${dto.replyNum}">${dto.likeCount}</span></button>
 	            	
-	            	<button type="button" onclick="kmsendReplyLike('${dto.replyNum}', '0')">
+	            	<button type="button" onclick="kmSendReplyLike('${dto.replyNum}', '0')">
 	            	<span id="kmDisLikeCount${dto.replyNum}">${dto.disLikeCount}</span></button>
 	            </div>                           
 	        </div>

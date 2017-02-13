@@ -20,11 +20,29 @@ $(function(){
 function gboardReplyListpage(page){
 	var url="<%=cp%>/group/gboard/listReply";
 	var boardNum="${dto.boardNum}";
-	$.post(url, {boardNum:boardNum, page:page}, function(data){
+	$.get(url, {boardNum:boardNum, page:page}, function(data){
 		$("#groupBoardListReply").html(data);
 	});
 }
 
+function updateGBoard(boardNum,page) {
+	var url="<%=cp%>/group/gboard/update?boardNum="+boardNum+"&page="+page;
+	alert(boardNum);
+	$("#myModalUpdate .modal-body").load(url, function() {
+	    $("#myModalUpdate .modal-title").html('정보 수정');
+		$("#myModalUpdate").modal('show');
+		$("input[name='name']").focus();
+	});
+}
+
+/* function updateCancel() {
+	$('#myModalUpdate').modal('hide');
+}
+
+function updateOk() {
+	alert("ok");
+}
+ */
 </script>
 <head>
 </head>
@@ -42,7 +60,7 @@ function gboardReplyListpage(page){
 						</tr>
 					<thead>
 						<tr>
-							<td style="text-align: left;">이름 : ${dto.userName }</td>
+							<td style="text-align: left;">글쓴이 : ${dto.userId }</td>
 							<td style="text-align: right;">${dto.created } | 조회 :
 								${dto.hitCount }</td>
 						</tr>
@@ -50,25 +68,54 @@ function gboardReplyListpage(page){
 							<td colspan="2" style="height: 230px;">${dto.content }</td>
 						</tr>
 						<tr>
-							<td colspan="2"><span
-								style="display: inline-block; min-width: 45px;">첨부</span> : <a
-								href="<%=cp%>/group/gboard/download?boardNum=${dto.boardNum}">
-									${dto.originalFilename}(<fmt:formatNumber
-										value="${dto.fileSize/1024}" pattern="0.0" /> KB) <span
-									class="glyphicon glyphicon-save"></span>
-							</a></td>
+							<td colspan="2">
+								<c:if test="${dto.fileSize > 0 }">
+									<span>첨부</span> : 
+							<a href="<%=cp%>/group/gboard/download?boardNum=${dto.boardNum}">
+									${dto.originalFilename}(<fmt:formatNumber value="${dto.fileSize/1024}" pattern="0.0" /> KB) 
+									<span class="glyphicon glyphicon-save"></span>
+							</a></c:if></td>
 							<td colspan="2">
 								<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupBoardLike('${dto.boardNum}', '1')">
 									<span class="glyphicon glyphicon-hand-up"></span>
 									<span id="boardLikeCount${dto.boardNum}">${dto.boardLikeCount}</span></button>
 							</td>
 						</tr>
+							
+						<tr>
+	                         <td colspan="2">
+	                              <span class="glyphicon glyphicon-triangle-top"></span>
+	                              <c:if test="${not empty preReadDto }">	                              		
+	                              		<a onclick="articleGroupBoard(${preReadDto.boardNum},${page});">${preReadDto.subject }</a>
+	                              </c:if>
+	                         </td>
+	                     </tr>
+	                     <tr>
+	                         <td colspan="2" >
+	                              <span class="glyphicon glyphicon-triangle-bottom"></span>
+	                               <c:if test="${not empty nextReadDto }">
+	                              		<a onclick="articleGroupBoard(${nextReadDto.boardNum},${page});">${nextReadDto.subject }</a>
+	                              </c:if>
+	                         </td>
+	                     </tr>
+	                	<tr>
+	                		<td>
+	                		<c:if test="${sessionScope.member.userId==dto.userId}">
+	                		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="updateGBoard(${dto.boardNum},${page });">수정</button>
+	                		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="deleteBoard(${dto.boardNum},${page },${dto.fileNum });">삭제</button>
+	                		</c:if>
+	                		</td>
+	                		<td align="right">
+	                		    <button type="button" class="btn btn-default btn-sm wbtn" 
+	                		    	onclick="groupBaordListGo(${page});"> 목록으로 </button>
+	                		</td>
+	                	</tr>
 				</table>
 				
 
  <!-- 리플 달기 디쟌  -->
+	
 		<div id="groupBoardListReply" style="width:600px; margin: 0px auto;"></div>
-		
 		
 				<table style="margin: 0px auto; border-spacing: 0px;">
 					<tr height="50">
@@ -81,61 +128,21 @@ function gboardReplyListpage(page){
 						</td>
 					</tr>
 				</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				<div>
-                     <table>
-	                     <tr>
-	                         <td colspan="2">
-	                              <span style="display: inline-block; min-width: 45px;">이전글</span> :
-	                              <c:if test="${not empty preReadDto }">
-	                              		<a href="<%=cp%>/group/gboard/boardArticle?boardNum=${preReadDto.boardNum}">${preReadDto.subject }</a>
-	                              </c:if>
-	                         </td>
-	                     </tr>
-	                     <tr>
-	                         <td colspan="2" style="border-bottom: #d5d5d5 solid 1px;">
-	                              <span style="display: inline-block; min-width: 45px;">다음글</span> :
-	                               <c:if test="${not empty nextReadDto }">
-	                              		<a href="<%=cp%>/group/gboard/boardArticle?boardNum=${nextReadDto.boardNum}">${nextReadDto.subject }</a>
-	                              </c:if>
-	                         </td>
-	                     </tr>                                          
-	               
-	                
-	                	<tr>
-	                		<td>
-	                		    <button type="button" class="btn btn-default btn-sm wbtn">수정</button>
-	                		    <button type="button" class="btn btn-default btn-sm wbtn"<%--  onclick="deleteBoard('${dto.num}')" --%>>삭제</button>
-	                		</td>
-	                		<td align="right">
-	                		    <button type="button" class="btn btn-default btn-sm wbtn" 
-	                		    	onclick="groupBaordListGo(${page});"> 목록으로 </button>
-	                		</td>
-	                	</tr>
-	                	</table>
-                </div>
-            
        </div>
    </div>
+</div>
+
+
+<div class="modal fade" id="myModalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold;">수정</h4>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
 </div>
 </body>
 
