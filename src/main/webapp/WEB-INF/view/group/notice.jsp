@@ -75,23 +75,47 @@ function mkmmodalCheck(){
 	});	
 }
 
-<%-- function updateNoG(numm,page) {
+function updateNoG(num,page){
+	alert(page+"SDf"+num);
+	$("#myModalNoticeUpdate").show();
+	
+} 
+
+function groupNoticeUpdateOk(){
+	var page = "${page}";
+	var num= "${dto.num}";
 	var url = "<%=cp%>/group/notice/update";
+	var subject = $("#updateSubjectNotice").val().trim();
+	var content = $("#updateContentNotice").val().trim();
+	var groupName= "${groupName}";
 	
-	$.post(url, {num:num, page:page}, function(data){
-		var state = data.state;
-		if(state =="true"){
-			$("#kmsubject").val(data.subject);
-			$("#kmcontent").val(data.content);
-			listPage(page);
-		}else {
-			alert("오잉 ");
-		}
-	}, "json");
-	
-
-} --%>
-
+	var dialogNoticeUpdateForm = document.dialogNoticeUpdateForm;
+	var updateNoticeForm = new FormData(dialogNoticeUpdateForm);
+		$.ajax({
+			type:"post",
+			url :url,
+			processData: false,
+			contentType: false,
+			data : updateNoticeForm,
+			dataType:"json",
+			success:function(data){
+				var result = data.result;
+				if(data.result=="true"){
+					alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+				}else {
+					$("#updateSubjectNotice").val("");
+					$("#updateContentNotice").val("");
+					$("#updateFileNotice").val("");		
+					$("#myModalNoticeUpdate").hide();
+					noticeListpage(page);	
+				}
+				
+			},error:function(e) {
+		    	  console.log(e.responseText);
+		      }
+		
+	});	
+}
 	
 function deleteNoG(num,page,fileNum){	
 	if(confirm("공지사항을 삭제 하시겠습니까 ? ")){
@@ -176,5 +200,20 @@ function gnSearchList(){
 			</div>
 		</form>
 	</div>
+	
+	
+<div class="modal fade" id="myModalNoticeUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold;">수정</h4>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
+	
+	
 </body>
 

@@ -223,26 +223,7 @@ public class GroupBoardController {
 			out.print("<script>alert('파일 다운로드가 실패했습니다.');history.back();</script>");
 		}
 	}
-	
-	
-/*	@ResponseBody
-	public Map<String, Object> update(GroupBoard dto, HttpSession session) throws Exception{
 		
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+File.separator+"uploads"+File.separator+"GroupBoard";
-		String state="false";
-
-		int result = service.updateGroupBoard(dto, pathname);
-		if(result!=0)
-			state="true";
-		
-		Map<String, Object> model= new HashMap<>();
-		model.put("state", state);
-		return model;
-	}*/
-	
 	@RequestMapping(value="/group/gboard/update", method=RequestMethod.GET)
 	public String updateForm(
 			@RequestParam(value="boardNum") int boardNum ,
@@ -282,14 +263,15 @@ public class GroupBoardController {
 
 		if(! info.getUserId().equals("admin"))
 			resp.sendRedirect(cp+"/group/gboard/boardList?page="+page);
-
+		String result = "false";
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
 
 		service.updateGroupBoard(dto, pathname);
-
+		
 		Map <String, Object> model = new HashMap<>();
 		model.put("page", page);
+		model.put("result", result);
 		return model;
 	} 
 
@@ -303,7 +285,6 @@ public class GroupBoardController {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
 
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		service.deleteGroupBoard(boardNum, pathname);
 		
 		GroupBoard dto = service.readFile(fileNum);
@@ -452,8 +433,6 @@ public class GroupBoardController {
 	
 	@RequestMapping(value="/group/gboard/deleteBoardReply", method=RequestMethod.POST)
 	public void deletReply(GroupBoardReply dto,HttpServletResponse resp,HttpSession session)throws Exception{
-						
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
 						
 		String loginChk="true";
 		String state="false";

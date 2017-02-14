@@ -47,7 +47,7 @@
 <select id="listGroupBoard" parameterType="map" resultType="com.sp.group.gboard.GroupBoard">
 	SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT b.BOARDNUM, b.userId, b.subject, b.content, b.created, nvl(fileCount, 0) fileCount , b.groupName,
+				SELECT b.BOARDNUM, b.userId, b.subject, b.content, b.created, b.hitCount,nvl(fileCount, 0) fileCount , b.groupName,
               nvl(g.fileSize,0) fileSize, NVL(g.ORIGINALFILENAME,'none') ORIGINALFILENAME, NVL(boardLikeCount, 0) boardLikeCount
 				FROM groupBoard b JOIN ggroup p  ON b.groupName = p.groupName
          LEFT OUTER JOIN

@@ -157,19 +157,19 @@ public class NoticeController {
 		return model;		
 	}
 
-	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
+/*	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
 	public String updateSubmit(
 			@RequestParam int num, 
 			@RequestParam String page,
 			HttpServletResponse resp, HttpSession session ) throws Exception {
 		
-		/*SessionInfo info=(SessionInfo)session.getAttribute("member");
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
 			return "redirect:/member/login";
 		}
 		
 		if(! info.getUserId().equals("admin"))
-			return "redirect:/notice/list?page="+page;*/
+			return "redirect:/notice/list?page="+page;
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";		
 		
@@ -186,7 +186,59 @@ public class NoticeController {
 		//dto.setUserId(info.getUserId());
 		
 		return "group/notice";
+	}*/
+	@RequestMapping(value="/group/notice/update", method=RequestMethod.GET)
+	public String updateForm(
+			@RequestParam(value="num") int num ,
+			@RequestParam(value="page") String page, 
+			Model model,
+			HttpSession session			
+			) throws Exception{
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info==null){
+			return "redirect:/member/login";
+		}
+		GroupNotice dto = service.readNotice(num);
+		if(dto==null||!dto.getUserId().equals(info.getUserId())){
+			return "redirect:/group/gboard/boardList?page="+page;
+		}
+		List<GroupNotice> listFile=service.listFile(num);
+		
+		model.addAttribute("listFile", listFile);
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
+		return "group/noticeUpdate";
 	}
+
+	@RequestMapping(value="/group/notice/update", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object>  updateSubmit(
+			GroupNotice dto,
+			@RequestParam(value="page") String page,
+			HttpSession session,
+			HttpServletResponse resp, HttpServletRequest req) throws Exception {
+		
+		String cp = req.getContextPath();
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		if(info==null) {
+			resp.sendRedirect(cp+"/member/login");
+		}
+
+		if(! info.getUserId().equals("admin"))
+			resp.sendRedirect(cp+"/group/notice/noticeList?page="+page);
+		String result = "false";
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
+
+		service.updateNotice(dto, pathname);
+		
+		Map <String, Object> model = new HashMap<>();
+		model.put("page", page);
+		model.put("result", result);
+		return model;
+	} 
+
+	
 	
 	@RequestMapping(value="/group/notice/delete")
 	public void delete(

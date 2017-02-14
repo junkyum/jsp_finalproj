@@ -106,83 +106,6 @@ function articleGroupBoard(boardNum,page){
 	});
 }
 
-function updateBoard(boardNum){
-	alert("SDf"+boardNum);
-	$("#myModalGboardUpdate").show();
-	
-	
-} 
-	<%-- var update ; 
-	update = $("#gbMyModalUpdate").dialog({
-		title:"게시물 수정",
-		modal:true,
-		width:500,
-		height:200,
-		show:"clip",
-		hide:"clip",
-		buttons:{
-			"수정":function(){
-				var url="<%=cp%>/group/gboard/update";	
-				var subject=$('#searchKeyK').val();
-				var searchValueK=$('#searchValueK').val();
-				var groupName="${groupName}";
-				$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
-					$(dlg).dialog("close");
-					$("#gallyLayout").html(data);
-					$("#searchValueK").val("");
-					
-				});
-				
-				
-			}, "취소":function() {
-				$(this).dialog("close");
-			}
-			
-			
-		}
-	}); --%>
-	
-	
-
-<%-- function mkmgroupBoardUpdateCheck(){
-	var url="<%=cp%>/group/gboard/update";
-	var page = "${page}";
-	var subject = $("#gbsubjectkm2").val().trim();
-	var content = $("#gbcontentkm2").val().trim();
-	var keyword = $("#gbkeywordkm2").val();
-	var groupName= "${groupName}";
-	if(!subject){
-		$("#gbsubjectkm2").focus();
-		return;
-	}
-	
-	var gbUpdate = document.gBoard2;
-	var gbUpdateformData = new FormData(gbUpdate);
-		$.ajax({
-			type:"post",
-			url :url,
-			processData: false,
-			contentType: false,
-			data : gbUpdateformData,
-			dataType:"json",
-			success:function(data){
-				var result = data.result;
-				if(data.result=="true"){
-					$("#gbsubjectkm").val("");
-					$("#gbcontentkm").val("");
-					$("#gbfilekm").val("");
-					$("#gbkeywordkm").val("");				
-					groupBoardListpage(1);					
-				}else {
-					alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
-				}
-				
-			},error:function(e) {
-		    	  console.log(e.responseText);
-		      }
-		
-	});	
-} --%>
 
 function deleteBoard(boardNum,page,fileNum) {
 	
@@ -493,8 +416,16 @@ $(function(){
 	});
 });
 
+
+function updateBoard(boardNum){
+	alert("SDf"+boardNum);
+	$("#myModalGboardUpdate").show();
+	
+} 
+
 function groupBoardUpdateOk(){
 	var page = "${page}";
+	var boardNum= "${dto.boardNum}";
 	var url = "<%=cp%>/group/gboard/update";
 	var subject = $("#updateSubjectkm").val().trim();
 	var content = $("#updateContentkm").val().trim();
@@ -514,13 +445,14 @@ function groupBoardUpdateOk(){
 			success:function(data){
 				var result = data.result;
 				if(data.result=="true"){
+					alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+				}else {
 					$("#updateSubjectkm").val("");
 					$("#updateContentkm").val("");
 					$("#updateFilekm").val("");
 					$("#updateKeywordkm").val("");				
-					groupBoardListpage(1);					
-				}else {
-					alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+					$("#myModalGboardUpdate").hide();
+					groupBoardListpage(page);	
 				}
 				
 			},error:function(e) {
@@ -575,6 +507,3 @@ function groupBoardUpdateOk(){
 	</div>
 	
 </div>
-
-
-

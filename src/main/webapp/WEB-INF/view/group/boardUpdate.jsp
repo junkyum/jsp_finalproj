@@ -40,7 +40,7 @@
 			<button type="button" class="btn btn-primary" onclick="groupBoardUpdateOk();">수정</button>
 		</p>
 		<input type="hidden" name="page" value="${page}">
-        <%-- <input type="hidden" name="num" value="${dto.boardNum}"> --%>
+        <input type="hidden" name="boardNum" value="${dto.boardNum}">
 	</form>
 
 </body>
