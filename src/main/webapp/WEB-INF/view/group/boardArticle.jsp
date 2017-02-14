@@ -81,8 +81,7 @@ function gboardReplyListpage(page){
 	                		</c:if>
 	                		</td>
 	                		<td align="right">
-	                		    <button type="button" class="btn btn-default btn-sm wbtn" 
-	                		    	onclick="groupBaordListGo(${page});">
+	                		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="groupBaordListGo(${page});">
 	                		    	<span class="glyphicon glyphicon-list"></span>
 	                		     </button>
 	                		</td>
@@ -118,7 +117,7 @@ function gboardReplyListpage(page){
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">       
-		<button type="button" onclick="groupBoardUpdateOk();" data-dismiss="modal">수정</button>
+		<button type="button" onclick="groupBoardUpdateOk(${page});" data-dismiss="modal">수정</button>
 		<button type="button" data-dismiss="modal">취소</button>			                 
 	  </div>
     </div>

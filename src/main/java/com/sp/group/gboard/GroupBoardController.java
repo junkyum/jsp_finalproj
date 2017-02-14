@@ -224,7 +224,7 @@ public class GroupBoardController {
 		}
 		if(! info.getUserId().equals(userId))
 			resp.sendRedirect(cp+"/group/groupBoardList?page="+page+"&groupName="+dto.getGroupName()+"&userId="+userId);
-		String result = "false";
+		String result = "true";
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";	
 		service.updateGroupBoard(dto, pathname);

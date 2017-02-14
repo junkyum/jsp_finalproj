@@ -347,6 +347,7 @@ $(function(){
 	});
 });
 function updateGBoard(boardNum,page) {
+	//alert(page+" updateGBoard+ page");
 	var userId = "${dto.userId}";
     $('#myModalUpdate .modal-body').empty();
 	var url="<%=cp%>/group/gboard/update?boardNum="+boardNum+"&page="+page+"&userId="+userId;
@@ -356,14 +357,14 @@ function updateGBoard(boardNum,page) {
 		$("input[name='name']").focus();
 	});
 }
-function groupBoardUpdateOk(){
-	var page = "${page}";
+function groupBoardUpdateOk(page){
 	var boardNum= "${dto.boardNum}";
-	var url = "<%=cp%>/group/gboard/update";
 	var subject = $("#updateSubjectkm").val().trim();
 	var content = $("#updateContentkm").val().trim();
 	var keyword = $("#updateKeywordkm").val();
 	var groupName= "${groupName}";
+	var url = "<%=cp%>/group/gboard/update";
+	
 	var dialogUpdateForm = document.dialogUpdateForm;
 	var updateForm = new FormData(dialogUpdateForm);
 		$.ajax({
@@ -376,14 +377,14 @@ function groupBoardUpdateOk(){
 			success:function(data){
 				var result = data.result;
 				if(data.result=="true"){
-					alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
-				}else {
-					groupBaordListGo(page);
+					alert(page);
 					$("#updateSubjectkm").val("");
 					$("#updateContentkm").val("");
 					$("#updateFilekm").val("");
 					$("#updateKeywordkm").val("");	
-					$("#myModalUpdate").modal('hide');
+					groupBoardListpage(page);
+				}else {
+					alert("다시 한번 확인하세요.");
 				}
 			},error:function(e) {
 		    	  console.log(e.responseText);
