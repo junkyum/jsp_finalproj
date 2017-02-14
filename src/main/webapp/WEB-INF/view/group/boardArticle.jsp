@@ -16,7 +16,6 @@
 $(function(){
 	gboardReplyListpage(1);
 });
-
 function gboardReplyListpage(page){
 	var url="<%=cp%>/group/gboard/listReply";
 	var boardNum="${dto.boardNum}";
@@ -24,32 +23,9 @@ function gboardReplyListpage(page){
 		$("#groupBoardListReply").html(data);
 	});
 }
-
-function updateGBoard(boardNum,page) {
-	var url="<%=cp%>/group/gboard/update?boardNum="+boardNum+"&page="+page;
-	alert(boardNum);
-	$("#myModalUpdate .modal-body").load(url, function() {
-	    $("#myModalUpdate .modal-title").html('정보 수정');
-		$("#myModalUpdate").modal('show');
-		$("input[name='name']").focus();
-	});
-}
-
-/* function updateCancel() {
-	$('#myModalUpdate').modal('hide');
-}
-
-function updateOk() {
-	alert("ok");
-}
- */
 </script>
-<head>
-</head>
 <body>
-<div class="bodyFrame2">
-    
-    
+<div class="bodyFrame2">   
     <div class="table-responsive" style="clear: both;">
         <div class="bbs-article">
 				<table class="table">
@@ -81,7 +57,6 @@ function updateOk() {
 									<span id="boardLikeCount${dto.boardNum}">${dto.boardLikeCount}</span></button>
 							</td>
 						</tr>
-							
 						<tr>
 	                         <td colspan="2">
 	                              <span class="glyphicon glyphicon-triangle-top"></span>
@@ -118,7 +93,6 @@ function updateOk() {
  <!-- 리플 달기 디쟌  -->
 	
 		<div id="groupBoardListReply" style="width:600px; margin: 0px auto;"></div>
-		
 				<table style="margin: 0px auto; border-spacing: 0px;">
 					<tr height="50">
 						<td align="left">
@@ -143,6 +117,10 @@ function updateOk() {
         <h4 class="modal-title" id="myModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold;">수정</h4>
       </div>
       <div class="modal-body"></div>
+      <div class="modal-footer">       
+		<button type="button" onclick="groupBoardUpdateOk();" data-dismiss="modal">수정</button>
+		<button type="button" data-dismiss="modal">취소</button>			                 
+	  </div>
     </div>
   </div>
 </div>

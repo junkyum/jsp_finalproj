@@ -42,7 +42,6 @@ function groupDelete(){
 	url="<%=cp%>/group/delete?groupName=${dto.groupName}";
 	location.href=url;
 	}
-	
 }
 function check(){
 	var f = document.updateForm;
@@ -68,28 +67,23 @@ function check(){
 	}
 }
 </script>
-
-
 <div style="margin-left: 50px;">
 	<div id="left" style="float: left; width: 200px; height: 700px;">
 		<div id="groupInfo" style="margin-bottom: 20px; height: 200px;">
-			<img class="img-responsive" src="<%=cp%>/uploads/photo/${dto.profile}" style = "margin-bottom: 0px;"><br>
+			<img class="img-circle" alt="Cinque Terre" src="<%=cp%>/uploads/photo/${dto.profile}" style = "margin-bottom: 0px;" width="180" height="180"><br>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoModal">
  			${dto.groupName}
 			</button><br>
-			
 			<c:if test="${res=='notyet' }">
 			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signin?groupName=${dto.groupName}';">
 			가입
 			</button>
 			</c:if>
-			
 			<c:if test="${res=='already' }">
 			<button type="button" onclick="javascript:location.href='<%=cp%>/group/signout?groupName=${dto.groupName}';">
 			탈퇴
 			</button>
 			</c:if>
-			
 			<c:if test="${res=='owner' }">
 			<button type="button" data-toggle="modal" data-target="#updateModal">
  			그룹수정
@@ -98,7 +92,6 @@ function check(){
 			그룹삭제
 			</button>
 			</c:if>
-			
 			<div class="dropdown">
 			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 			    내 그룹 목록
@@ -124,9 +117,7 @@ function check(){
 			  </ul>
 			</div>
 		</div>
-		
 	</div>
-	
 	<div  id="groupTap" style = "float: left; margin-left:2% ; width:77%;">
 	  	<ul >
 		<li ><a href="<%=cp%>/group/notice?userId=${dto.userId}&groupName=${dto.groupName}"><span>공지사항</span></a></li>
@@ -136,11 +127,9 @@ function check(){
 		<li ><a href="<%=cp%>/group/bbs?groupName=${dto.groupName}"><span>답변형게시판</span></a></li>
 		</ul>
 	</div>
-	
 	<div style="clear:both;">
 	</div>
 </div>
-
 <form name = "updateForm" enctype="multipart/form-data">
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -166,7 +155,6 @@ function check(){
   </div>
 </div>
 </form>
-
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

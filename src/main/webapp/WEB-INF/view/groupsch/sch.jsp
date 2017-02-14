@@ -242,7 +242,7 @@ function articleForm(calEvent) {
 		$("#schEndDate").html(eday);
 		$("#schContent").html(content);
 		
-		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='updateForm(\""+num+"\", \""+subject+"\", \""+allDay+"\", \""+startDate+"\",\""+endDate+"\",\""+startTime+"\",\""+endTime+"\",\""+color+"\");'> 수정 <span class='glyphicon glyphicon-ok'></span></button>";
+		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='gsUpdateForm(\""+num+"\", \""+subject+"\", \""+allDay+"\", \""+startDate+"\",\""+endDate+"\",\""+startTime+"\",\""+endTime+"\",\""+color+"\");'> 수정 <span class='glyphicon glyphicon-ok'></span></button>";
 		str+="<button type='button' class='btn btn-danger' style='margin-right: 5px;' onclick='deleteOk(\""+num+"\");'> 삭제 <span class='glyphicon glyphicon-remove'></span></button>";
 		str+="<button type='button' class='btn btn-default' data-dismiss='modal' style='margin-left: 0px;'> 닫기 </button>";
 		$("#schFooter").html(str);
@@ -306,7 +306,7 @@ function insertForm(start, end) {
 
 // 새로운 일정 등록
 function insertOk() {
-	var subject=$.trim($("input[name='subject']").val());
+	var subject=$.trim($("input[name='title']").val());
 	var color=$.trim($("input[name='color']").val());
 	var allDay=$("input[name='allDay']:checked").val();
 	var startDate=$.trim($("input[name='startDate']").val());
@@ -317,7 +317,7 @@ function insertOk() {
 	
 	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
-		$("input[name='subject']").focus();
+		$("input[name='title']").focus();
 		return
 	}
 	
@@ -413,10 +413,10 @@ function insertOk() {
 
 //-------------------------------------------------
 // 수정 폼
-function updateForm(num, subject, allDay, startDate, endDate, startTime, endTime, color) {
-	alert("들어옴");
+function gsUpdateForm(num, subject, allDay, startDate, endDate, startTime, endTime, color) {
+	
 	$('#scheduleModal .modal-body').load("<%=cp%>/group/sch/inputForm", function() {
-		$("input[name='subject']").val(subject);
+		$("input[name='title']").val(subject);
 		classifyChange(color);
 		// $("input[name='color']").val(color);
 		$("input[name='allDay']:checked").val();
@@ -424,7 +424,7 @@ function updateForm(num, subject, allDay, startDate, endDate, startTime, endTime
 		$("input[name='endDate']").val(endDate);
 		$("input[name='startTime']").val(startTime);
 		$("input[name='endTime']").val(endTime);
-		$("textarea[name='content']").val(tempContent);
+		$("textarea[name='calcontent']").val(tempContent);
 		
 		if(allDay=="true") {
 			$("input[name='allDay']").attr('checked', 'true');
@@ -436,27 +436,27 @@ function updateForm(num, subject, allDay, startDate, endDate, startTime, endTime
 			$("#endTime").show();
 		}
 		
-		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='updateOk("+num+");'> 확인 <span class='glyphicon glyphicon-ok'></span></button>";
+		str="<button type='button' class='btn btn-primary' style='margin-right: 5px;' onclick='gsUpdateOk("+num+");'> 확인 <span class='glyphicon glyphicon-ok'></span></button>";
 		str+="<button type='button' class='btn btn-default' data-dismiss='modal' style='margin-left: 0px;'> 닫기 </button>";
 		$("#schFooter").html(str);
 		
 	    $('#scheduleModal .modal-title').html('일정 수정');
 		$('#scheduleModal').modal('show');
 		
-		$("input[name='subject']").focus();
+		$("input[name='title']").focus();
 	});
 }
 
 // 수정 완료
-function updateOk(num) {
-	var title=$.trim($("input[name='subject']").val());
+function gsUpdateOk(num) {
+	var subject=$.trim($("input[name='title']").val());
 	var color=$.trim($("input[name='color']").val());
 	var allDay=$("input[name='allDay']:checked").val();
 	var startDate=$.trim($("input[name='startDate']").val());
 	var endDate=$.trim($("input[name='endDate']").val());
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
-	var content=$.trim($("textarea[name='content']").val());
+	var content=$.trim($("textarea[name='calcontent']").val());
 	
 	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
@@ -509,7 +509,7 @@ function updateOk(num) {
 	    allDay=false;
 	}
 
-	var query="num="+num
+	var query="schNum="+num
 	   +"&subject="+subject
        +"&color="+color
        +"&allDay="+allDay
@@ -589,7 +589,7 @@ function updateDrag(e) {
 	if(!content)
 		content="";
 
-	var query="num="+num
+	var query="schNum="+num
            +"&subject="+subject
            +"&color="+color
            +"&allDay="+allDay

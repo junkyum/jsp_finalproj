@@ -12,12 +12,9 @@
 	border: 1px solid #5D5D5D;
 }
 </style>
-
 <head>
 </head>
 <body>
-
-
 	<form name="dialogUpdateForm" method="post">
 		<p>
 			<input type="text" name="subject" id="updateSubjectkm" value="${dto.subject }">
@@ -25,22 +22,17 @@
 		<p>
 			<textarea rows="5" cols="50" id="updateContentkm" name="content">${dto.content }</textarea>
 		</p>
-	
 			<c:forEach var="vo" items="${listFile}">
 				<p id="f${vo.fileNum}">
 					${vo.originalFilename} &nbsp;
 					<a href="javascript:gboardDeleteFile(${vo.fileNum});">삭제</a>
 				</p>
 			</c:forEach>
-
 		<p>
 			<input type="file" name="upload" id="updateFilekm" class="form-control input-sm" style="height: 35px;">
 		</p>
-		<p>
-			<button type="button" class="btn btn-primary" onclick="groupBoardUpdateOk();">수정</button>
-		</p>
 		<input type="hidden" name="page" value="${page}">
         <input type="hidden" name="boardNum" value="${dto.boardNum}">
+        <input type="hidden" name="userId" value="${dto.userId}">
 	</form>
-
 </body>

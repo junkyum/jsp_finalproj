@@ -153,8 +153,8 @@ public class GroupSchController {
 			Map<String, Object> model = new HashMap<>(); 
 			model.put("isLogin", "false");
 			return model;
+			
 		}
-		
 		String state="false";
 		int result=service.updateSchedule(sch);
 		if(result==1)

@@ -92,7 +92,7 @@ function listPageAnswer(pageNo){
 		
 		<div style="margin-top: 30px; margin-right: 30px;">      
 		      <c:if test="${sessionScope.member.userId==dto.userId}">	 
-				<button type="button" onclick="updateOK(${dto.gallyNum});">수정완료번튼</button>
+				<button type="button" onclick="updateOK(${dto.gallyNum});">수정</button>
 			  </c:if>  	                 
 				<button type="button" onclick="updateCancel()">취소</button>			                 
 		</div>

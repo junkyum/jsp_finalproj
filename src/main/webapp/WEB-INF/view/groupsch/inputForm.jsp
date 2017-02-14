@@ -6,18 +6,80 @@
 	String cp=request.getContextPath();
 %>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD55jYBJEmD1wCJhd7c9CVk5QzaK96v--E&callback=initMap"></script>
 <script type="text/javascript">
 $(function() {
     $("input[name=startDate]").datepicker();
     $("input[name=endDate]").datepicker();
 });
+var map;
+var markers = [];
+function initMap() {
+  var haightAshbury = {lat: 37.498951, lng: 127.032960};
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 18,
+    center: haightAshbury,
+  });
+
+  map.addListener('click', function(event) {
+	deleteMarkers();
+
+    addMarker(event.latLng);
+    converter(event.latLng);
+  });
+
+  // Adds a marker at the center of the map.
+  addMarker(haightAshbury);
+}
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+  markers.push(marker);
+}
+function setMapOnAll(map) {
+	  for (var i = 0; i < markers.length; i++) {
+	    markers[i].setMap(map);
+	  }
+	}
+
+function clearMarkers() {
+	  setMapOnAll(null);
+}
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+function converter(latLng){
+	var str=""+latLng;
+	var aa=str.split('(');
+	var tt=aa[1].split(')');
+	
+	googleapisView(tt[0])
+}
+function googleapisView(ll) {
+    var geocode = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+ll+"&sensor=false";
+    jQuery.ajax({
+        url: geocode,
+        type: 'POST',
+           success: function(myJSONResult){
+                    if(myJSONResult.status == 'OK') {
+                        var tag = "";              
+                          tag +=myJSONResult.results[0].formatted_address;
+                          $("#place").val(tag);
+                    } 
+            }
+    });
+}
 </script>
 
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">제목</label>
                     <div class="col-sm-10" id="schSubject">
-                        <input class="form-control" name="subject" type="text" placeholder="제목">
+                        <input class="form-control" name="title" type="text" placeholder="제목">
                     </div>
                 </div>
                 
@@ -89,7 +151,14 @@ $(function() {
                         <textarea id="calcontent" name="calcontent" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
+                <div class="form-group" id="schPlace"  style="min-height: 75px;">
+                    <label class="col-sm-2 control-label">장소</label>
+                    <div class="col-sm-10">
+                  	    <input class="form-control" id="place" name="place" type="text" placeholder="장소">
+                    </div>
+                </div>
             </form>
+            <div id="map" style="height: 400px;width: 570px;"></div>
       
             <div style="text-align: right;" id="schFooter">
                 <button type="button" class="btn btn-primary" id="btnModalOk" onclick="insertOk();"> 확인 <span class="glyphicon glyphicon-ok"></span></button>

@@ -92,14 +92,6 @@
 }
 
 </style>
-<!-- <script type="text/javascript">
-
-	var cotent = "${dto.content}";
-	var brfive = content.indexOf("\n");
-
-</script> -->
-<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
 
 <c:forEach var="dto" items="${noticeList }">
 	<div class="bigdiv">
@@ -108,9 +100,7 @@
 			<div class="overlay">
 				<div class="overtext">${dto.created }<br>
 					<c:if test="${userId==sessionScope.member.userId}">
-						<button type="button" class="btn btn-default" id="kmUpdatebtn"
-							onclick="updateNoG(${dto.num},${page });" data-num="${dto.num }"
-							data-toggle="modal" data-target="#moon_update">
+						<button type="button" class="btn btn-default" id="kmUpdatebtn">
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					

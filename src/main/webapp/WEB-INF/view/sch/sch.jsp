@@ -424,7 +424,7 @@ function updateForm(num, title, allDay, startDay, endDay, startTime, endTime, co
 		$("input[name='endDay']").val(endDay);
 		$("input[name='startTime']").val(startTime);
 		$("input[name='endTime']").val(endTime);
-		$("textarea[name='content']").val(tempContent);
+		$("textarea[name='calcontent']").val(tempContent);
 		
 		if(allDay=="true") {
 			$("input[name='allDay']").attr('checked', 'true');
@@ -456,7 +456,7 @@ function updateOk(num) {
 	var endDay=$.trim($("input[name='endDay']").val());
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
-	var content=$.trim($("textarea[name='content']").val());
+	var content=$.trim($("textarea[name='calcontent']").val());
 	
 	if(! title) {
 		alert("제목을 입력 하세요 !!!");

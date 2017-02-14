@@ -9,14 +9,9 @@
 .bestbig {
 	margin: 0 auto;
 	width: 900px;
-	/* 	height: 680px; */
 }
 </style>
-<head>
-<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
-</head>
-<div class="table-responsive" style="clear: both;"> <!-- 테이블 반응형 -->
+<div class="table-responsive" style="clear: both;">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -44,18 +39,14 @@
 			</tbody>
 		</table>
 	</div>
-	
-
 <div style="clear: both;">
 	<div class="paging"	style="text-align: center; min-height: 50px; line-height: 50px;">
 		<c:if test="${dataCount==0 }">등록된 게시물이 없습니다.</c:if>
 		<c:if test="${dataCount!=0 }">${paging}</c:if>
 	</div>
-
 	<div style="float: left; width: 20%; min-width: 85px;">
 		<button type="button" class="btn btn-default btn wbtn">
 			<span class="glyphicon glyphicon-repeat"></span>
-			<!-- 새로고침  -->
 		</button>
 	</div>
 	<div style="float: left; width: 60%; text-align: center;">
@@ -80,7 +71,6 @@
 			<span class="glyphicon glyphicon glyphicon-pencil"></span>
 		</button>
 	</div>
-
 </div>
 
 

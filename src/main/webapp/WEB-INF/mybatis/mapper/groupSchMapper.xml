@@ -43,7 +43,7 @@
     <!-- 일정 수정 -->
     <update id="updateSchedule" parameterType="com.sp.group.sch.GroupSch">
        UPDATE GroupSch SET 
-            title=#{subject}
+            subject=#{subject}
             ,color=#{color, jdbcType=VARCHAR}
             ,content=#{content, jdbcType=VARCHAR}
             ,allDay=#{allDay, jdbcType=VARCHAR}
