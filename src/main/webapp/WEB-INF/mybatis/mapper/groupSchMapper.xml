@@ -4,7 +4,7 @@
 <mapper namespace="groupSch">
 
     <insert id="insertSchedule" parameterType="com.sp.group.sch.GroupSch">
-       INSERT INTO GroupSch (schNum, userId, groupName, subject, color, content, allDay, startDate, endDate, startTime, endTime)
+       INSERT INTO GroupSch (schNum, userId, groupName, subject, color, content, allDay, startDate, endDate, startTime, endTime, coord, place)
           VALUES (groupsch_seq.NEXTVAL, #{userId}, #{groupName}, #{subject} 
                 ,#{color, jdbcType=VARCHAR}
                 ,#{content, jdbcType=VARCHAR}
@@ -13,16 +13,17 @@
                 ,#{endDate, jdbcType=VARCHAR}
                 ,#{startTime, jdbcType=VARCHAR}
                 ,#{endTime, jdbcType=VARCHAR}
+                ,#{coord, jdbcType=VARCHAR}
+                ,#{place, jdbcType=VARCHAR}
            )
     </insert>
-
     <!-- 월별 일정 -->
     <select id="listMonthSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="map">
         SELECT schNum, GROUPNAME, s.userId, userName, subject, color, content, allDay, startDate, endDate, startTime, endTime, created 
              FROM GroupSch s JOIN member m ON s.userId =m.userId
      <where>
         s.GROUPNAME = #{groupName}
-		<if test="group !='all' ">
+		<if test="group !='all'">
 		    AND color=#{group}
 		</if>
         <![CDATA[
@@ -32,10 +33,25 @@
    	  </where>
              ORDER BY startDate ASC, schNum DESC
     </select>
-
+    <!-- 개인 스케줄 리스트  -->
+	<select id="listPersonalSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="map">
+	        SELECT schNum, GROUPNAME, s.userId, userName, subject, color, content, allDay, startDate, endDate, startTime, endTime, created 
+	             FROM GroupSch s JOIN member m ON s.userId =m.userId
+	     <where>
+	        m.userId = #{userId}
+			<if test="group !='all'">
+			    AND color=#{group}
+			</if>
+	        <![CDATA[
+	             AND ((startDate>=#{start} AND startDate<=#{end})
+	                OR (endDate>=#{start} AND endDate<=#{end}))
+	        ]]>             
+	   	  </where>
+	             ORDER BY startDate ASC, schNum DESC
+	</select>
     <!-- 일정 상세 정보 -->
     <select id="readSchedule" resultType="com.sp.group.sch.GroupSch" parameterType="Integer">
-        SELECT schNum, s.GROUPNAME, subject, color, content, allDay, startDate, endDate, startTime, endTime, created
+        SELECT schNum, s.GROUPNAME, subject, color, content, allDay, startDate, endDate, startTime, endTime, created, coord, place
             FROM GroupSch s JOIN GROUPmember m ON s.GROUPNAME=m.GROUPNAME
             WHERE schNum=#{schNum}
     </select>
@@ -50,7 +66,7 @@
             ,startDate=#{startDate, jdbcType=VARCHAR}
             ,endDate=#{endDate, jdbcType=VARCHAR}
             ,startTime=#{startTime, jdbcType=VARCHAR}
-            ,endTime=#{endTime, jdbcType=VARCHAR}
+            ,endTime=#{endTime, jdbcType=VARCHAR} 
             WHERE schNum=#{schNum}
     </update>
     

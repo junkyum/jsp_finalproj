@@ -34,23 +34,18 @@ function listPageAnswer(pageNo){
 <form name="dialogForm" method="post" enctype="multipart/form-data" id="dialogForm">
 		
 		<div id="kim_article">	
-			<div style=" margin-top: 10px; width: 50%; margin: auto;"> 올린시간: ${dto.created}</div>
 			<!-- 사진 -->
-			<div style=" width: 550px; height: 340px; margin-top:5px; margin-left: 5px">
-				<img class="img-responsive" src="<%=cp%>/uploadf/photo/${dto.imageFilename}" style="width: 550px; height: 340px;" border="0">
+			<div style=" margin-top: 10px; width: 100%">
+				<img class="img-responsive" src="<%=cp%>/uploadf/photo/${dto.imageFilename}" class="img-responsive" style="margin: auto;">
 			</div>
-				<!-- 작성자Id@ 좋아요수 -->
-			<div style="clear: both; margin-top: 0px;width: 100%; height: 30px; margin-top: 15px;">
-				<div style="float: left; width: 100%;"> 작성자 :${dto.userId} <br><hr></div>
-					
-			</div> 
-			<!-- 그룹이른@ 올린시간  -->
-			<div style="clear: both; margin-top: 0px; height: 30px; margin-top: 15px;">
-				<div style="float: left; margin-left:50px; width: 50%; min-width: 85px; margin-top: 30px; margin: auto;"> 그룹 명:${dto.groupName} </div>
-			</div> 
-		
-				<h3 style="margin:auto; margin-top: 0px;">제 목: ${dto.subject}</h3>
-			<div style="width: 570px; height: 100px; border: 1px solid black;">
+			<h3 style="text-align: center; margin-bottom: 10px;">제목:${dto.subject}</h3>
+			<hr>
+			
+			<div style="float: left;"> 작성자 :${dto.userId}<br></div>
+			<div style="float: right;"> 올린시간:${dto.created}</div>
+			<div style="clear: both;"></div>
+		    <hr>
+			<div style="clear:both; width: 570px; height: 100px;">
 			<!-- 재목@내용 -->
 				<div style=" width: 50%;">
 					<span>
@@ -71,8 +66,7 @@ function listPageAnswer(pageNo){
 				<button type="button"  onclick="deletePhoto(${dto.gallyNum});" class="btn btn-info btn-sm">삭제</button>
 			</c:if>
 			<button type="button" class="btn btn-default btn-sm wbtn" onclick="updateCancel();">리스트가기</button>	
-			<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupGallyLike('${dto.gallyNum}', '1')"><span class="glyphicon glyphicon-hand-up"></span> 좋아요 <span id="gallyLikeCount${dto.gallyNum}">${dto.gallyLikeCount}</span></button>
-                        
+			<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupGallyLike('${dto.gallyNum}', '1')"><span class="glyphicon glyphicon-hand-up"></span> 좋아요 <span id="gallyLikeCount${dto.gallyNum}">${dto.gallyLikeCount}</span></button>            
 		</div>
  		</div>
  
@@ -102,7 +96,7 @@ function listPageAnswer(pageNo){
 		
 		
 		<!--  해당 개시물의 댓글을 적는곳 -->		
-	<div style="width: 570px; height: 200px; border: 1px solid black; margin-top: 10px; clear: both;">
+	<div style="width: 570px; height: 200px; margin-top: 10px; clear: both;">
 	 
 			<div>
 					<h3 style="margin-left:100px; margin:auto; margin-top: 0px;">댓글쓰기 </h3>

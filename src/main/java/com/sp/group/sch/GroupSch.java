@@ -19,9 +19,26 @@ public class GroupSch {
 	private String color;
 	
 	private String created;
+	private String place;
+	private String coord;
+	
+	
+	public String getPlace() {
+		return place;
+	}
 
-	
-	
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
+	public String getCoord() {
+		return coord;
+	}
+
+	public void setCoord(String coord) {
+		this.coord = coord;
+	}
+
 	public String getGroupName() {
 		return groupName;
 	}

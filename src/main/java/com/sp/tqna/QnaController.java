@@ -117,10 +117,8 @@ public class QnaController {
 		if(info==null){
 			return "redirect:/";
 		}
-		
 		dto.setUserId(info.getUserId());
 		service.insertQna(dto, "created");
-		System.out.println(dto.getGroupNum()+"크리에잍트 서브밋");
 		return "redirect:/tqna/list";
 	}
 	@RequestMapping(value="/tqna/article",method=RequestMethod.GET)
@@ -141,8 +139,6 @@ public class QnaController {
 		return "redirect:/tqna/list?page="+page;
 	
 	dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
-	
-	System.out.println(dto.getGroupNum()+"아티클");
 	Map<String, Object> map = new HashMap<String,Object>();
 	map.put("searchKey", searchKey);
 	map.put("searchValue", searchValue);
@@ -178,15 +174,6 @@ public class QnaController {
 		if(info == null)
 			return "redirect:/";
 		
-		Qna dto = service.readQna(qnaNum);
-		
-		if(dto == null)
-			return "redirect:/tqna/list";
-			
-		if(info.getUserId()!= dto.getUserId() && !info.getUserId().equals("admin"))
-			return "redirect:/tqna/list";
-		
-			
 		service.deleteQna(qnaNum);
 		
 		return "redirect:/tqna/list?page="+page;

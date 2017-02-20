@@ -38,7 +38,7 @@
 
 <script type="text/javascript">
 function deleteBoard() {
-<c:if test="${sessionScope.member.userId=='admin' || sessionScope.member.userIdx==dto.userId}">
+<c:if test="${sessionScope.member.userId=='admin' || sessionScope.member.userId==dto.userId}">
     var qnaNum = "${dto.qnaNum}";
     var page = "${page}";
     var params = "qnaNum="+qnaNum+"&page="+page;
@@ -91,7 +91,7 @@ function updateBoard() {
                  <tbody>
                      <tr>
                          <td style="text-align: left;">
-                             이름 : ${dto.userName}
+                                                  이름 : ${dto.userName}
                          </td>
                          <td style="text-align: right;">
                           ${dto.created}<i></i>조회 ${dto.hitCount}
@@ -123,13 +123,15 @@ function updateBoard() {
                 <tfoot>
                 	<tr>
                 		<td>
+                			<c:if test="${sessionScope.member.userId=='admin'}">
                 		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/tqna/reply?qnaNum=${dto.qnaNum}&page=${page}';">답변</button>
-<c:if test="${sessionScope.member.userId==dto.userId}">
+							</c:if>
+							<c:if test="${sessionScope.member.userId==dto.userId}">
                 		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="updateBoard();">수정</button>
-</c:if>
-<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">	                		    
+							</c:if>
+							<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">	                		    
                 		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="deleteBoard();">삭제</button>
-</c:if>                		    
+							</c:if>                		    
                 		</td>
                 		<td align="right">
                 		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/tqna/list?${params}';"> 목록으로 </button>

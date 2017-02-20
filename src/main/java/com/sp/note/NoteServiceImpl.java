@@ -12,7 +12,7 @@ import com.sp.common.dao.CommonDAO;
 public class NoteServiceImpl implements NoteService{
 	@Autowired
 	CommonDAO dao;
-	
+	//11
 	@Override
 	public List<Note> listFriend(String userId) {
 		List<Note> list=null;

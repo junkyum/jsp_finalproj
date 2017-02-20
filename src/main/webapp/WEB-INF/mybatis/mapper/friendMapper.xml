@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="friend">
 
-     <!-- 친구를 추가할 때 회원에서 이름 또는 아이디 검색 -->
+     <!-- 111친구를 추가할 때 회원에서 이름 또는 아이디 검색 -->
      <select id="friendSearchList" parameterType="map"
                resultType="com.sp.friend.Friend">
           SELECT userId friendUserId, 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface FriendService {
 	public int insertFriend(Friend dto);
-	
+	//11
 	public List<Friend> friendSearchList(Map<String, Object> map);
 	public List<Friend> friendList(Map<String, Object> map);
 	public List<Friend> friendAskList(String userId);

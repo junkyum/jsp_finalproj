@@ -19,87 +19,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MemberController {
 	@Autowired
 	private MemberService service;
-	
-	/*// 로그인 및 로그아웃 -----------------------
-	@RequestMapping(value="/member/login", method=RequestMethod.GET)
-	public String loginForm(Model model) throws Exception {
-		return ".member.login";
-	}
-	
-	@RequestMapping(value="/member/login", method=RequestMethod.POST)
-	public String loginSubmit(
-			HttpSession session,
-			@RequestParam("userId") String userId,
-			@RequestParam("userPW") String userPW,
-			Model model
-			) throws Exception {
-		
-		Member dto = service.readMember(userId);
-		
-		
-		if(dto==null || (! dto.getUserPW().equals(userPW))) {
-			
-			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
-			
-			return "/";
-		}
-		
-		// 로그인 날짜 변경
-		service.updateLastLogin(dto.getUserId());
-
-		// 로그인 정보를 세션에 저장
-		SessionInfo info = new SessionInfo();
-		info.setUserId(dto.getUserId());
-		info.setUserName(dto.getUserName());
-		session.setAttribute("member", info);
-		
-		return "/";
-	}	
-
-	@RequestMapping(value="/member/logout")
-	public String logout(HttpSession session) throws Exception {
-		// 로그인 정보를 세션에서 삭제 한다.
-		session.removeAttribute("member");
-		session.invalidate();
-		
-		return "/";
-	}*/
-	
 	// 회원가입 및 회원정보 수정 -----------------------
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
 	public String memberForm(Model model) {
 		model.addAttribute("mode", "created");
 		
-		return "member/member";
+		return ".single.member.member";
 	}
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.POST)
 	public String memberSubmit(Member dto , Model model,HttpSession session) {
-		
-		   ShaPasswordEncoder passwordEncoder=new ShaPasswordEncoder(256);
-		      String hashed=passwordEncoder.encodePassword(dto.getUserPW(), null);
-		      dto.setUserPW(hashed);
-		      
-		
+	   ShaPasswordEncoder passwordEncoder=new ShaPasswordEncoder(256);
+	      String hashed=passwordEncoder.encodePassword(dto.getUserPW(), null);
+	      dto.setUserPW(hashed);
 		int result=service.insertMember(dto);
-		
-		
 		if(result==1) {
 			StringBuffer sb=new StringBuffer();
 			sb.append(dto.getUserName()+ "님의 회원 가입이 정상적으로 처리되었습니다.<br>");
 			sb.append("메인화면으로 이동하여 로그인 하시기 바랍니다.<br>");
-			
 		model.addAttribute("title", "회원 가입")	;
 		model.addAttribute("message", sb.toString());
 			return ".member.complete";
-		
 		} else {
 			
 			model.addAttribute("message", "아이디 / 이메일 중복으로 회원가입이 실패했습니다.");
 			model.addAttribute("mode", "created");
 		
 
-			return "/member/member";
+			return ".single.member.member";
 		}
 	}
 

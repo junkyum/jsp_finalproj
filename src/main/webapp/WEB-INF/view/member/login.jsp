@@ -6,7 +6,11 @@
 	String cp = request.getContextPath();
 %>
 <script type="text/javascript" src="<%=cp%>/res/js/util.js"></script>
-
+<style>
+body{
+background-image: url("<%=cp%>/res/images/bg.png");
+}
+</style>
 <script type="text/javascript">
 function sendMail() {
 
@@ -41,9 +45,6 @@ function sendMail2() {
         	
     f.submit();
 }
-</script>
-<script type="text/javascript">
-
 function bgLabel(ob, id) {
        if(!ob.value) {
           document.getElementById(id).style.display="";
@@ -51,7 +52,6 @@ function bgLabel(ob, id) {
           document.getElementById(id).style.display="none";
        }
 }
-
 function sendLogin() {
         var f = document.loginForm;
 
@@ -70,33 +70,17 @@ function sendLogin() {
         f.action = "<%=cp%>/member/login_check";
 		f.submit();
 	}
-
-	
 </script>
 <head>
-
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap Login Form Template</title>
-
-<!-- CSS -->
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
 <link rel="stylesheet"
 	href="<%=cp%>/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%=cp%>/assets/css/form-elements.css">
 <link rel="stylesheet" href="<%=cp%>/assets/css/style.css">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-<!-- Favicon and touch icons -->
-<%-- <link rel="shortcut icon" href="<%=cp%>/assets/ico/favicon.png"> --%>
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
 	href="<%=cp%>/assets/ico/apple-touch-icon-144-precomposed.png">
 <link rel="apple-touch-icon-precomposed" sizes="114x114"
@@ -120,22 +104,11 @@ function sendLogin() {
 		<div class="inner-bg">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-8 col-sm-offset-2 text"
-						style="text-align: center">
-						<h1>
-							<strong>Schedule 바뀜? </strong>
-						</h1>
-						<div class="description">
-							<p>스케쥴 홈페이지야 ㅎㅎ 언제바꾸ㅕ ㅎㅎ;</p>
-						</div>
-					</div>
-				</div>
-				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3 form-box">
 						<div class="form-top">
 							<div class="form-top-left">
-								<h3>Login to our site</h3>
-								<p>Enter your ID and Password to log on:</p>
+								<h3>어서 오세요</h3>
+								<p>저희 Hello there는 로그인이 필요합니다.</p>
 							</div>
 							<div class="form-top-right">
 								<i class="fa fa-lock"></i>
@@ -191,12 +164,9 @@ function sendLogin() {
 										</h4>
 									</div>
 									<div class="modal-body">
-
-										
 										<label class="col-sm-2 control-label" for="email">이메일</label>
 										<input class="form-control"  name="email"
 											type="text" placeholder="Email...">
-
 						<input type="hidden" name= "mode" value="id"> 
 										<br>
 									</div>
@@ -212,12 +182,6 @@ function sendLogin() {
 									</div>
 								</div>
 							</div>
-
-
-
-
-
-
 						</form>
 					</div>
 					<div class="modal fade" id="PWModal" role="dialog">
@@ -231,15 +195,9 @@ function sendLogin() {
 										</h4>
 									</div>
 									<div class="modal-body">
-
-									<!-- 	<label class="col-sm-2 control-label" for="userId">아이디</label>
-										<input class="form-control" id="userId" name="userId"
-											type="text" placeholder="Id..." >
- -->
 										<label class="col-sm-2 control-label" for="email">이메일</label>
 										<input class="form-control"  name="email"
 											type="text" placeholder="Email..." >
-
 
 						<input type="hidden" name= "mode" value="pw">
 										<br>
@@ -256,50 +214,16 @@ function sendLogin() {
 									</div>
 								</div>
 							</div>
-
-
-
-
-
-
 						</form>
 					</div>
 					<div class="form-group"
 						style="margin-top: 10px; text-align: center;">${message}</div>
 
 				</div>
-
-
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3 social-login">
-						<h3>...or login with:</h3>
-						<div class="social-login-buttons" style="text-align: center">
-							<a class="btn btn-link-2" href="#"> <i class="fa fa-facebook"></i>
-								Facebook
-							</a> <a class="btn btn-link-2" href="#"> <i class="fa fa-twitter"></i>
-								Twitter
-							</a> <a class="btn btn-link-2" href="#"> <i
-								class="fa fa-google-plus"></i> Google Plus
-							</a>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 
 	</div>
-
-
-
-
-
-	<!-- Javascript -->
-	<%--  <script src="<%=cp%>/res/assets/js/jquery-1.11.1.min.js"></script>
-        <script src="<%=cp%>/res/assets/bootstrap/js/bootstrap.min.js"></script>
-        <script src="<%=cp%>/res/assets/js/jquery.backstretch.min.js"></script>
-        <script src="<%=cp%>/res/assets/js/scripts.js"></script>
-         --%>
-
 
 </body>
 

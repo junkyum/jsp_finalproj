@@ -18,8 +18,7 @@
                   <option value="created">등록일</option>
             </select>
             <input type="text" name="searchValueC"  id="searchValueC" class="boxTF" >
-            <input type=image src='<%=cp%>/res/images/find0.png' width="70" height="35" onClick='searchReplyList();return false;'  >
-            <!-- <input type="button" value=" 찾   기   " class="btn" onclick="searchReplyList()"> -->
+            <button type="button" onClick='searchReplyList();return false;'><img src="<%=cp%>/res/images/finder.png" style="width: 25px;"></button>
         </form>
       </td>
       <td align="right">
@@ -46,10 +45,10 @@
 
  <c:if test="${dataCount != 0 }">
  <c:forEach var="dto" items="${leplyLlist}">
-	<table style="width: 1000px; margin: 0px auto; border-spacing: 0px; border: 1px solid;">
+	<table style="width: 1000px; margin: 0px auto; border-spacing: 0px; ">
 	   <tr align="left"  height="30"> 
-	      <td width="60" style="border: 1px solid;" align="center">${dto.listNum} </td>
-	      <td width="350" style="border: 1px solid;">
+	      <td width="60"  align="center">${dto.listNum} </td>
+	      <td width="350" >
   				<c:forEach var="n" begin="1" end="${dto.depth}">
   					&nbsp;&nbsp;
   				</c:forEach>
@@ -58,9 +57,9 @@
                 </c:if>
                <a href="javascript:articleReplyBoard('${dto.replyBoardNum}');">${dto.subject}</a> 
   		  </td>
-	      <td width="100" style="border: 1px solid;" align="center">${dto.userId} </td>
-	      <td width="80" style="border: 1px solid;" align="center">${dto.created}</td>
-	  <td width="60" style="border: 1px solid;" align="center">${dto.hitcount}</td>
+	      <td width="100" align="center">${dto.userId} </td>
+	      <td width="80"  align="center">${dto.created}</td>
+	  <td width="60" align="center">${dto.hitcount}</td>
 	  </tr>
 	</table>
 	</c:forEach>

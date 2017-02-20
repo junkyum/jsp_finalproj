@@ -6,23 +6,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class TBoard {
 
-	// 게시글 관련
+	// 게시글 관련11
 	private int num, listNum;
 	private String userId, userName;
 	private String subject, content, created;
 	private int hitCount;
 	
 	// 게시판 좋아요
-	private int goodCount;
-	
-	// 게시판 리플
-	private int repleNum, answer;
-	private String repleContent;
-	
-	// 게시판 리플 좋아요
-	private int goodCount_Reple;
-	
-	
+	private int tBoardLike;
+	private int tlikeCount;
+	private int tdisLikeCount;
+		
 	// file 관련
 	private int fileNum;
 	private String saveFilename, originalFilename;
@@ -145,47 +139,30 @@ public class TBoard {
 		this.gap = gap;
 	}
 
-	public int getGoodCount() {
-		return goodCount;
+	public int gettBoardLike() {
+		return tBoardLike;
 	}
 
-	public void setGoodCount(int goodCount) {
-		this.goodCount = goodCount;
+	public void settBoardLike(int tBoardLike) {
+		this.tBoardLike = tBoardLike;
 	}
 
-	public int getRepleNum() {
-		return repleNum;
+	public int getTlikeCount() {
+		return tlikeCount;
 	}
 
-	public void setRepleNum(int repleNum) {
-		this.repleNum = repleNum;
+	public void setTlikeCount(int tlikeCount) {
+		this.tlikeCount = tlikeCount;
 	}
 
-	public int getAnswer() {
-		return answer;
+	public int getTdisLikeCount() {
+		return tdisLikeCount;
 	}
 
-	public void setAnswer(int answer) {
-		this.answer = answer;
+	public void setTdisLikeCount(int tdisLikeCount) {
+		this.tdisLikeCount = tdisLikeCount;
 	}
 
-	public String getRepleContent() {
-		return repleContent;
-	}
-
-	public void setRepleContent(String repleContent) {
-		this.repleContent = repleContent;
-	}
-
-	public int getGoodCount_Reple() {
-		return goodCount_Reple;
-	}
-
-	public void setGoodCount_Reple(int goodCount_Reple) {
-		this.goodCount_Reple = goodCount_Reple;
-	}
-	
-	
 	
 	
 }

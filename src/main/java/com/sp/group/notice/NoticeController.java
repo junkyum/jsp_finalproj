@@ -41,7 +41,6 @@ public class NoticeController {
 			@RequestParam String userId,
 			Model model
 			) throws Exception{
-		System.out.println(userId);
 		model.addAttribute("groupName",groupName);
 		model.addAttribute("userId",userId);
 		return "group/notice";
@@ -66,7 +65,7 @@ public class NoticeController {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
 		}
 
-		GroupNotice dto = service.readNotice(num);		
+		GroupNotice dto = service.readNotice(num);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("groupName", groupName);
@@ -98,15 +97,12 @@ public class NoticeController {
 			data.setContent(data.getContent().replaceAll("\n", "<br>"));
 			listNum = dataCount - (start + n - 1);
 			data.setListNum(listNum);
+			if(dto!=null){
 			data.setGroupName(dto.getGroupName());
+			}
 
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date beginDate = formatter.parse(data.getCreated());
-			/*
-			 * // 날짜차이(일) gap=(endDate.getTime() - beginDate.getTime()) / (24 *
-			 * 60 * 60* 1000); data.setGap(gap);
-			 */
-			// 날짜차이(시간)
 			gap = (endDate.getTime() - beginDate.getTime()) / (60 * 60 * 1000);
 			data.setGap(gap);
 
@@ -200,7 +196,7 @@ public class NoticeController {
 		}
 		GroupNotice dto = service.readNotice(num);
 		if(dto==null||!dto.getUserId().equals(info.getUserId())){
-			return "redirect:/group/gboard/boardList?page="+page;
+			return "redirect:/group/noticeList?page="+page;
 		}
 		List<GroupNotice> listFile=service.listFile(num);
 		
@@ -215,6 +211,7 @@ public class NoticeController {
 	public Map<String, Object>  updateSubmit(
 			GroupNotice dto,
 			@RequestParam(value="page") String page,
+			@RequestParam String userId,
 			HttpSession session,
 			HttpServletResponse resp, HttpServletRequest req) throws Exception {
 		
@@ -224,9 +221,9 @@ public class NoticeController {
 			resp.sendRedirect(cp+"/member/login");
 		}
 
-		if(! info.getUserId().equals("admin"))
-			resp.sendRedirect(cp+"/group/notice/noticeList?page="+page);
-		String result = "false";
+		if(! info.getUserId().equals(userId))
+			resp.sendRedirect(cp+"/group/noticeList?page="+page+"&groupName="+dto.getGroupName()+"&userId="+userId);
+		String result = "true";
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "GroupBoard";		
 

@@ -21,9 +21,7 @@ import com.sp.common.MyUtil;
 public class MailSenderController {
 	@Autowired
 	private MailSender mailSender;
-	
-	@Autowired
-	private MyUtil myUtil;
+
 	@Autowired
 	private MemberService service;
 

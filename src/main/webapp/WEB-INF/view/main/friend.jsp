@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
    String cp = request.getContextPath();
+//1
 %>
 
 <style type="text/css">
@@ -31,10 +32,9 @@ $(document).ready(function() {
     $('#tabFriendBlock').load('<%=cp%>/friend/block');
 });
 //탭을 선택 한 경우
- $(function(){
+$(function(){
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		var active=$(this).attr("aria-controls");
-		console.log("되냐?");
 		friend(active);
 	});	
 }); 
@@ -42,10 +42,6 @@ function friend(mode) {
 	var url="<%=cp%>/friend/"+mode;
 	
 	$.get(url,
-		
-		/* {
-			dumi:new Date().getTime()
-		}, */
 		function(data){
 			var s=$.trim(data);
 			if(s=="loginFail") {
@@ -61,9 +57,9 @@ function friend(mode) {
 	});
 }
 </script>
-
-<div>
-    <div role="tabpanel" style="height:500px;float:left;">
+<div style="width: 100%; text-align: center;">
+	<h2>친구관리</h2>
+    <div role="tabpanel" style="height:500px; width:500px; margin: 2% auto 2%;" >
 		<ul class="nav nav-tabs" role="tablist" style="height: 40px;">
 			<li role="presentation"  class="active">
 				<a href="#tabFriendList" aria-controls="friendlist" role="tab" data-toggle="tab">친구 목록</a>

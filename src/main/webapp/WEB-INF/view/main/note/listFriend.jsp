@@ -3,6 +3,7 @@
 
 <%
 	String cp=request.getContextPath();
+//11
 %>
 
 <c:forEach var="dto" items="${listFriend}">

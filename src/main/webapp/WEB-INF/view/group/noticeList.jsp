@@ -100,7 +100,8 @@
 			<div class="overlay">
 				<div class="overtext">${dto.created }<br>
 					<c:if test="${userId==sessionScope.member.userId}">
-						<button type="button" class="btn btn-default" id="kmUpdatebtn">
+						<button type="button" class="btn btn-default" id="kmUpdatebtn" 
+							onclick="updateNoG(${dto.num}, ${page });">
 							<span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					
@@ -178,4 +179,19 @@
 	</div>
 </div>
 
-
+<div class="modal fade" id="myModalUpdateNotice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold;">수정</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">       
+		<button type="button" onclick="groupNoticeUpdateOk(${page});" data-dismiss="modal">수정</button>
+		<button type="button" data-dismiss="modal">취소</button>			                 
+	  </div>
+    </div>
+  </div>
+</div>
+</body>

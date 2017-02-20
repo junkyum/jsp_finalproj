@@ -11,7 +11,7 @@ public class Note {
 	private String sendDay, identifyDay;
 	private String sendDelete, receiveDelete;
 	private int parent;
-	
+	//11
 	private List<String> userIds;
 	private List<Integer> nums;
 	private String mode;

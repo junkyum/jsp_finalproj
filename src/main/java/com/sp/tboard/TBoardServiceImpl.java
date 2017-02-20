@@ -20,7 +20,7 @@ public class TBoardServiceImpl implements TBoardService {
 	@Autowired
 	private FileManager fileManager;
 	
-	
+	//111
 	@Override
 	public int insertTBoard(TBoard dto, String pathname) {
 		int result=0;
@@ -240,27 +240,32 @@ public class TBoardServiceImpl implements TBoardService {
 	}
 
 	@Override
-	public int goodCount(int num) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int goodCount_Reple(int repleNum) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int insertReple(TBoard dto) {
+	public int insertBoardLike(TBoard dto) {
 		int result=0;
 		try {
-			int maxNum=dao.getIntValue("tboard.repleNum", dto);
-			dto.setRepleNum(maxNum+1);
-			
-			dao.insertData("tboard.insertReple", dto);
-			
-			result=1;
+			result = dao.insertData("tboard.insertBoardLike", dto);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> countLike(int num) {
+		Map<String, Object> map = null;
+		try {
+			map = dao.getReadData("tboard.countLike",num);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
+	}
+
+	@Override
+	public int insertReply(Reply dto) {
+		int result = 0;
+		try {
+			result = dao.insertData("tboard.insertReply", dto);
 		} 
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -269,19 +274,91 @@ public class TBoardServiceImpl implements TBoardService {
 	}
 
 	@Override
-	public List<TBoard> listReple(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Reply> listReply(Map<String, Object> map) {
+		List<Reply> list = null;
+		try {
+			list = dao.getListData("tboard.listReply", map);
+		} catch (Exception e) {
+
+			System.out.println(e.toString());
+		}
+		
+		return list;
 	}
 
 	@Override
-	public int deleteReple(int num, String pathname) {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<Reply> listReplyAnswer(int answer) {
+		List<Reply> list = null;
+		try {
+			list= dao.getListData("tboard.listReplyAnswer",answer);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return list;
+	}
+
+	@Override
+	public int deleteReply(Map<String, Object> map) {
+		int result=0;
+		try {
+			result= dao.deleteData("tboard.deleteReply", map);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public int replyCountAnswer(int answer) {
+		int result = 0;
+		try {
+			result = dao.getReadData("tboard.replyCountAnswer",answer);
+		} 
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public int replyDataCount(Map<String, Object> map) {
+		int result = 0;
+		try {
+			result = dao.getIntValue("tboard.replyDataCount",map);
+		} 
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public int insertReplyLike(Reply dto) {
+		int result=0;
+		try {
+			result = dao.insertData("tboard.insertReplyLike", dto);
+		} 
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> replyCountLike(int replyNum) {
+		Map<String, Object> map = null;
+		try {
+			map=dao.getReadData("tboard.replyCountLike",replyNum);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return map;
 	}
 	
 	
 	
 	
-
+	
+	
+	
 }

@@ -90,7 +90,7 @@ public class NoticeServiceImpl implements NoticeService{
 		int result=0;
 		
 		try {
-			result=dao.updateData("notice.updateNotice", dto);
+			result=dao.updateData("groupNotice.updateNotice", dto);
 			
 			if(! dto.getUpload().isEmpty()) {
 				for(MultipartFile mf:dto.getUpload()) {

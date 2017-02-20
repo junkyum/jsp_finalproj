@@ -25,8 +25,11 @@
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.ui.datepicker-ko.js"></script>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/my.jquery.js"></script>
+<script src="<%=cp%>/assets/js/jquery.backstretch.min.js"></script>
+
 </head>
 <body>
+
 
 <div class="layoutMain">
 	<div >

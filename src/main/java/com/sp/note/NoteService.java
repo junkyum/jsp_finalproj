@@ -7,7 +7,7 @@ public interface NoteService {
 	public List<Note> listFriend(String userId);
 	
 	public int insertNode(Note dto);
-
+	//11
 	public int dataCountReceive(Map<String, Object> map);
 	public List<Note> listReceive(Map<String, Object> map);
 	

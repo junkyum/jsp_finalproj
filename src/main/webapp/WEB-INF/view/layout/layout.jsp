@@ -7,10 +7,11 @@
    String cp = request.getContextPath();
    String path = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+cp;
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+</style>
 <meta charset="UTF-8">
 <title>spring</title>
 
@@ -29,9 +30,9 @@
 </head>
 <body>
 
-<div class="layoutMain">
+<div class="layoutMain" >
 	
-	<div class="layoutBody1">
+	<div class="layoutBody1" >
 		<tiles:insertAttribute name="body"/>
 	</div>
 	

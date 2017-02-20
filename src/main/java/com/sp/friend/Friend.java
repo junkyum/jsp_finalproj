@@ -6,7 +6,7 @@ public class Friend {
 	private int num;
 	private String userId, userName, friendUserId, friendUserName;
 	private String state;
-	
+	//11
 	private List<Integer> numList;
 	private List<String> userIdList;
 	private String mode;

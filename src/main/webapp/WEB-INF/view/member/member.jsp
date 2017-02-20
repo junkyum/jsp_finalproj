@@ -4,36 +4,31 @@
 <%
    String cp = request.getContextPath();
 %>
-
  <style type="text/css">
+.body{
+background-image: url("<%=cp%>/res/images/bg.png");
+}
 .member-form {
-  border:2px solid #999;
+  border:1px solid #999;
   background: white;/* 안에 공백색갈*/
   border-radius:10px;
   box-shadow:0px 0px 10px #000;
   
 }
-
 .member-form {
   box-sizing:border-box;
   padding-top:15px;
-  margin:70px auto ;
+  margin-top:30px;
   margin-left:30% ;
   margin-right:30%;
-   overflow: hidden;
+  overflow: hidden;
 }
-
-
-
-
 </style> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/res/js/util.js"></script>
 <script type="text/javascript">
-
-
 function emailCheck() {
 	 var email=$("#email").val();
 	   if(!/^[0-9a-zA-Z_\-]+@[.0-9a-zA-Z_\-]+$/i.test(email)) { 
@@ -171,14 +166,12 @@ function check() {
     return true;
 }
 </script>
-
-<div class="jumbotron" style="text-align: center">
-    <h1><span class="glyphicon glyphicon-user"></span> ${mode=="created"?"회원 가입":"회원 정보 수정"}</h1>
-    <p>안녕</p>
+<div class="body" style = "background-color: #F6F6F6; height: 1080px; opacity:0.9;">
+<br>
+<div style="text-align: center; font-size: 20pt; color: white; opacity:0.9;" >
+    <span class="glyphicon glyphicon-user"></span>회원가입
 </div>
-
-<div class="member-form">
- 
+<div class="member-form" style="opacity:0.9;">
  <form class="form-horizontal" name="memberForm" method="post" onsubmit="return check();"  style="margin-left: 40px; margin-top:10px;margin-right:auto; width: 600px" >
     <div class="form-group" >
         <label class="col-sm-2 control-label" for="userId">아이디</label>
@@ -190,7 +183,6 @@ function check() {
             <p class="help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</p>
         </div>
     </div>
- 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="userPW">패스워드</label>
         <div class="col-sm-7">
@@ -198,7 +190,6 @@ function check() {
             <p class="help-block">패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</p>
         </div>
     </div>
-    
     <div class="form-group">
         <label class="col-sm-2 control-label" for="userPWCheck">패스워드 확인</label>
         <div class="col-sm-7">
@@ -206,7 +197,6 @@ function check() {
             <p class="help-block">패스워드를 한번 더 입력해주세요.</p>
         </div>
     </div>
- 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="userName">이름</label>
         <div class="col-sm-7">
@@ -214,7 +204,6 @@ function check() {
                        value="${dto.userName}" ${mode=="update" ? "readonly='readonly' style='border:none;' ":""}>
         </div>
     </div>
- 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="birth">생년월일</label>
         <div class="col-sm-7">
@@ -222,27 +211,21 @@ function check() {
             <p class="help-block">생년월일은 2000-01-01 형식으로 입력 합니다.</p>
         </div>
     </div>
-    
-    
  <div class="form-group">
         <label class="col-sm-2 control-label" for="gender">성별</label>
-       
             <label style="padding-left: 10px;padding-top: 5px;padding-right: 10px">
                  <input type="radio" name="gender" id="gender" value="남자">남자&nbsp;
                  <input type="radio" name="gender" id="gender" value="여자">여자&nbsp;
             </label>
     </div>
-
     <div class="form-group">
         <label class="col-sm-2 control-label" for="email">이메일</label>
-        
         <div class="col-sm-7">
             <input class="form-control" id="email" name="email" type="email" placeholder="이메일" onchange="emailCheck();" value="${dto.email}"  >
               <p class="help-block">이메일은 aaa@aaa.com 형식으로 입력합니다.</p>
         
         </div>
     </div>
-    
     <div class="form-group">
         <label class="col-sm-2 control-label" for="email">전화번호</label>
         <div class="col-sm-7">
@@ -258,7 +241,6 @@ function check() {
                         <option value="019" ${dto.tel1=="019" ? "selected='selected'" : ""}>019</option>
                     </select>
                   </div>
-
                   <div class="col-sm-1" style="width: 1%; padding-left: 5px; padding-right: 10px;">
                          <p class="form-control-static">-</p>
                   </div>
@@ -274,15 +256,9 @@ function check() {
              </div>
         </div>
     </div>
-  <!--           (userId, userName, userPW, email, tel, birth, gender, keyword, area)  VALUES 
- --> 
-    
   <div class="form-group">
-        
         <label class="col-sm-2 control-label" for="keyword" >관심 사항</label>
-   
             <label style="padding-left: 10px;padding-top: 5px;padding-right: 10px">
-              
                  <input type="checkbox" name="keyword" id="keyword" value="여행">여행&nbsp;
                  <input type="checkbox" name="keyword" id="keyword" value="스터디">스터디&nbsp;
                  <input type="checkbox" name="keyword" id="keyword" value="운동">운동&nbsp;
@@ -290,7 +266,6 @@ function check() {
                  <input type="checkbox" name="keyword" id="keyword" value="식사">식사&nbsp;
                  <input type="checkbox" name="keyword" id="keyword" value="영화">영화&nbsp;    
                  <input type="checkbox" name="keyword" id="keyword" value="노래">노래&nbsp;
-  
               </label>
    
     </div>
@@ -319,22 +294,20 @@ function check() {
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
 <c:if test="${mode=='created'}">
-            <button type="submit" name="sendButton" class="btn btn-default btn-sm wbtn">회원가입 <span class="glyphicon glyphicon-ok"></span></button>
+            <button type="submit" name="sendButton"><img src="<%=cp%>/res/images/btn_submit.gif"></button>
             <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';">가입취소 <span class="glyphicon glyphicon-remove"></span></button>
 </c:if>            
 <c:if test="${mode=='update'}">
             <button type="submit" class="btn btn-default btn-sm wbtn">정보수정 <span class="glyphicon glyphicon-ok"></span></button>
             <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';">수정취소 <span class="glyphicon glyphicon-remove"></span></button>
-</c:if>            
+</c:if>   
         </div>
     </div>
-
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
                 <p class="form-control-static">${message}</p>
         </div>
     </div>
-     
   </form>
- 
+</div>
 </div>

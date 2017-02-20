@@ -12,7 +12,7 @@
 .hbtn {
 	font-family: "Malgun Gothic", "Nanum Gothic", "Dotum";
     background-image:none;
-    color:#fff;
+    color:black;
     line-height: 1.5;
     text-align: center;
     padding: 5px 10px;
@@ -81,18 +81,6 @@
 .btn-black:hover, .btn-black:focus {
     background-color:black; border-color:black;
 }
-.btn-green {
-    background-color:green; border-color:green;
-}
-.btn-green:hover, .btn-green:focus {
-    background-color:green; border-color:green;
-}
-.btn-red {
-    background-color:red; border-color:red;
-}
-.btn-red:hover, .btn-red:focus {
-    background-color:red; border-color:red;
-}
 </style>
 
 <script type="text/javascript" src="<%=cp%>/res/fullcalendar/lib/moment.min.js"></script>
@@ -110,6 +98,7 @@ var tempContent;
 //start:2016-01-01, end:2016-01-02 => 2016-01-01 일정
 //start:2016-01-01, end:2016-01-03 => 2016-01-01 ~ 2016-01-02 일정
 $(function() {
+	    
 		calendar = $('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
@@ -136,8 +125,8 @@ $(function() {
 				// 캘린더가 처음 실행되거나 월이 변경되면
 				var startDate=start.format("YYYY-MM-DD");
 				var endDate=end.format("YYYY-MM-DD");
-		        
-				var url="<%=cp%>/group/sch/month?start="+startDate+"&end="+endDate+"&group="+group+"&dumi="+new Date().getTime();
+				var groupName="${groupName}";
+				var url="<%=cp%>/group/sch/month?start="+startDate+"&end="+endDate+"&group="+group+"&dumi="+new Date().getTime()+"&groupName="+groupName;
 
 				$.ajax({
 				    url: url,
@@ -314,7 +303,9 @@ function insertOk() {
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
 	var content=$.trim($("textarea[name='calcontent']").val());
-	
+	var place=$.trim($("input[name='place']").val());
+	var coord=$.trim($("input[name='coord']").val());
+	var groupName="${groupName}";
 	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
 		$("input[name='title']").focus();
@@ -375,7 +366,10 @@ function insertOk() {
        +"&endDate="+endDate
        +"&startTime="+startTime
        +"&endTime="+endTime
-       +"&content="+content;
+       +"&content="+content
+       +"&place="+place
+       +"&coord="+coord
+       +"&groupName="+groupName;
 	
 	var url="<%=cp%>/group/sch/created";
     
@@ -457,6 +451,7 @@ function gsUpdateOk(num) {
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
 	var content=$.trim($("textarea[name='calcontent']").val());
+	var groupName="${groupName}";
 	
 	if(! subject) {
 		alert("제목을 입력 하세요 !!!");
@@ -517,7 +512,8 @@ function gsUpdateOk(num) {
        +"&endDate="+endDate
        +"&startTime="+startTime
        +"&endTime="+endTime
-       +"&content="+content;
+       +"&content="+content
+       +"&groupName="+groupName;
 	
 	var url="<%=cp%>/group/sch/update";
        
@@ -557,6 +553,7 @@ function updateDrag(e) {
 	var allDay=e.allDay;
 	var startDate="", startTime="";
 	var endDate="", endTime="";
+	var groupName="${groupName}";
 	
 	startDate=e.start.format("YYYY-MM-DD");
 	if(e.start.hasTime()) {
@@ -597,7 +594,10 @@ function updateDrag(e) {
            +"&endDate="+endDate
            +"&startTime="+startTime
            +"&endTime="+endTime
-           +"&content="+content;
+           +"&content="+content
+           +"&place="+place
+           +"&coord="+coord
+           +"&groupName="+groupName;
 	
 	var url="<%=cp%>/sch/update";
  

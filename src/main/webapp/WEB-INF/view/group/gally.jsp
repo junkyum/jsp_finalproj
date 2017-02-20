@@ -17,7 +17,6 @@
 	margin-right: 120px;
 
 }
-
 .subject {
      width:190px;
      height:25px;
@@ -31,7 +30,6 @@
      cursor: pointer;
      text-align: center;
 }
-
 a:hover {
    text-decoration: none;
 }
@@ -40,12 +38,6 @@ h4{
    margin-top: 5px;
 }
 </style>
-
-<!-- a작스로 파일저장시 필요한거, -->
-<script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<!-- 위에있는거 모달 띠워주는것 -->
 <script type="text/javascript">
 $(function(){
 	$(".chk1").click(function() {
@@ -215,7 +207,6 @@ function GReply(gallyNum) {
 				console.log("리플등록 실패");
 			} else{
 				listPageAnswer(1);
-
 			}
 		}
 		,error:function(e) {
@@ -224,43 +215,31 @@ function GReply(gallyNum) {
 	});
 }
 function findGally(){
-	var dlg;
-    dlg=$("#findGroupGally").dialog({
-       title:"그룹찾기",
+    $("#findGroupGally").dialog({
        modal:true,
 		width:500,
 	    height:200,
 	    show:"clip",
 		hide:"clip",
 	    buttons:{
-	    	buttons:{
 				"찾기":function(){
 					var url="<%=cp%>/groupGally/list";
-		
 					var searchKeyK=$('#searchKeyK').val();
 					var searchValueK=$('#searchValueK').val();
 					var groupName="${groupName}";
 					$.post(url, {searchKeyK:searchKeyK, searchValueK:searchValueK, groupName:groupName}, function(data) {
-						$(dlg).dialog("close");
+						$().dialog("close");
 						$("#gallyLayout").html(data);
 						$("#searchValueK").val("");
-						
 					});
-					
-					
 				}, "취소":function() {
 					$(this).dialog("close");
 				}
-				
-				
-			}
+			
 	    }
     	});
-   
 }
 
-</script>
-<script type="text/javascript">
 function listReplyAnswer(replyAnswer){
 	var listReplyAnswerId="#listReplyAnswer"+replyAnswer;	
 	var url="<%=cp%>/group/photo/listReplyAnswer";
@@ -442,32 +421,35 @@ function groupGallyLikeCount(gallyNum) {
 	}, "JSON");
 }
 </script>
-<div style="margin:0px; padding:0px; width: 1200px; height: 600px; ">
-	 	<div>
-			<div style="clear: both; margin-top: 0px; height: 30px;">
-					<div style="float: left; min-width: 85px; text-align: right;">
-						<div class="chk1"><!-- 버튼이 들어가있는  div -->
-							<button type="button">
-								<img src="<%=cp%>/res/images/btn.png" style="width: 50px; height: 50px; position: relative; top: 10pk;">	
-							</button>
-						</div>
-					</div>
-			</div>
-		</div> 
+
+<div style="margin-top: 20px;">
+		<div class="chk1" style="float: left;margin-left: 10%;">
+			<button type="button" style="border: none;background: none;" >
+				<img src="<%=cp%>/res/images/ADD.png" height="30">	
+			</button>
+	    </div>	
+		<div style="float: right; width: 20%;">
+			<button type="button" class="btn btn-default btn-sm wbtn" onclick="listPage(1)">새로고침</button>
+			<button type="button" onclick="findGally();"><img src="<%=cp%>/res/images/finder.png" style="width: 30px; height: 30px;"></button>
+		</div>
 		<div id="gallyLayout"></div>
 </div>
+
+
+
+
 <div class="chk2" id="chk2" style="display: none; padding:0px; margin: 0px; width: 500px; height: 500px;">
     <form method="post" name="photoForm" id="photoForm" enctype="multipart/form-data" >
 		<div style="height: 300px; width: 480px; border: 1px solid black;">
 			<h3 style="margin-top: 10px; margin-left: 150px;" >그룹 명 : ${groupName}</h3>
 			 <input type="hidden" name="groupName" value="${groupName}">
 				<div style="margin-top: 10px;">
-					<h4 style="float: left; margin: 0px;">재 목 :&nbsp;</h4>
+					<h4 style="float: left; margin: 0px;">제 목 :&nbsp;</h4>
 					<input type="text" name="subject" id="subject" value="" placeholder="내용을 입력하세요" style="clear: both;">
-					<span id="span1" style="display: none;" >내용좀 입력하세요</span>
+					<span id="span1" style="display: none;" >내용을 입력하세요</span>
 				</div>
 				<div>
-					<h4>내 용 : <span style="display: none;" id="span2">내용좀 입력하세요</span></h4> 
+					<h4>내 용 : <span style="display: none;" id="span2">내용을 입력하세요</span></h4> 
 					<textarea rows="5" name="content" id="content" required="required" style="width: 300px; height: 100px;"></textarea>
 				</div>		
 		</div>

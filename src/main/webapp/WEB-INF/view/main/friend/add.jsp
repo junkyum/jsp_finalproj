@@ -7,12 +7,12 @@
 %>
 
 <script type="text/javascript">
-// 친구 검색
+// 친구 검색11
 $(function() {
 	$("#friendSearchButton").click(function() {
 		var friendValue=$.trim($("#friendValue").val());
 		if(!friendValue) {
-			alert("검색할 값을 입력 하세요 !!!");
+			alert("검색어를 입력하세요.");
 			$("#friendValue").focus();
 			return;
 		}
@@ -43,7 +43,7 @@ $(function() {
 });
 // 친구 요청
 function friendAdd(friendUserId) {
-	if(!confirm("친구 추가를 요청 하시겠습니까 ? "))
+	if(!confirm(friendUserId+"를 추가하시겠습니까?"))
 		return;
 	
 	var url="<%=cp%>/friend/add";
@@ -73,7 +73,7 @@ function friendAdd(friendUserId) {
 }
 // 친구요청 취소
 function askDelete(num) {
-	if(!confirm("친구 요청을 취소 하시겠습니까 ? "))
+	if(!confirm("취소하시겠습니까 ?"))
 		return;
 	
 	var url="<%=cp%>/friend/askDelete";

@@ -9,8 +9,6 @@
 .bestbig {
    margin: 0 auto;
    width: 900px;
-   /*    height: 680px; */
-   /*    border: 1px solid #5D5D5D; */
 }
 </style>
 
@@ -76,23 +74,22 @@ function mkmmodalCheck(){
 
 function updateNoG(num,page){
 		var userId = "${dto.userId}";
-	    $('#myModalUpdate .modal-body').empty();
-		var url="<%=cp%>/group/gboard/update?boardNum="+boardNum+"&page="+page+"&userId="+userId;
-		$("#myModalUpdate .modal-body").load(url, function() {
-		    $("#myModalUpdate .modal-title").html('정보 수정');
-	   	    $("#myModalUpdate").modal('show');
+	    $('#myModalUpdateNotice .modal-body').empty();
+		var url="<%=cp%>/group/notice/update?num="+num+"&page="+page+"&userId="+userId;
+		$("#myModalUpdateNotice .modal-body").load(url, function() {
+		    $("#myModalUpdateNotice .modal-title").html('공지사항 수정');
+	   	    $("#myModalUpdateNotice").modal('show');
 			$("input[name='name']").focus();
 		});
    
 } 
 
-function groupNoticeUpdateOk(){
-   var page = "${page}";
-   var num= "${dto.num}";
-   var url = "<%=cp%>/group/notice/update";
-   var subject = $("#updateSubjectNotice").val().trim();
-   var content = $("#updateContentNotice").val().trim();
+function groupNoticeUpdateOk(page){
+   var num =$("#updateNumkm").val();
+   var subject = $("#updateSubjectkmNoti").val().trim();
+   var content = $("#updateContentkmNoti").val().trim();
    var groupName= "${groupName}";
+   var url = "<%=cp%>/group/notice/update";
    
    var dialogNoticeUpdateForm = document.dialogNoticeUpdateForm;
    var updateNoticeForm = new FormData(dialogNoticeUpdateForm);
@@ -106,11 +103,11 @@ function groupNoticeUpdateOk(){
          success:function(data){
             var result = data.result;
             if(data.result=="true"){
-               $("#updateSubjectNotice").val("");
-               $("#updateContentNotice").val("");
-               $("#updateFileNotice").val("");      
-               $("#myModalNoticeUpdate").hide();
+            	$(".modal-backdrop").remove();
                noticeListpage(page);   
+               $("#updateSubjectkmNoti").val("");
+               $("#updateContentkmNoti").val("");
+               $("#updateFilekmNoti").val("");      
             }else {
                alert("121231432추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
             }

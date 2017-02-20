@@ -13,7 +13,7 @@ import com.sp.common.dao.CommonDAO;
 public class FriendServiceImpl implements FriendService {
 	@Autowired
 	CommonDAO dao;
-	
+	//11
 	@Override
 	public int insertFriend(Friend dto) {
 		int result=0;

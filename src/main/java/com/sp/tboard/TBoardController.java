@@ -2,6 +2,7 @@ package com.sp.tboard;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,7 @@ public class TBoardController {
 
 	@Autowired
 	private FileManager fileManager;
-
+	//11
 
 	@RequestMapping(value="/tboard/list")
 	public String list(
@@ -348,6 +349,218 @@ public class TBoardController {
 		service.insertTBoard(dto, pathname);
 
 		return "redirect:/tboard/article";
+	}
+	
+	
+
+	///댓글 가자
+	
+	@RequestMapping(value="/tboard/listReply")
+	public String listReply(@RequestParam int num, @RequestParam(value="pageNo",defaultValue="1") int current_page,Model model)throws Exception{
+		
+		int numPerPage = 5;
+		int total_page=0;
+		int dataCount=0;
+		
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("num", num);
+		
+		dataCount = service.dataCount(map);
+		total_page = util.pageCount(numPerPage, dataCount);
+		
+		if(total_page <current_page)
+			current_page= total_page;
+		
+		int start =(current_page-1)*numPerPage +1;
+		int end = current_page * numPerPage;
+		
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<Reply> listReply = service.listReply(map);
+		
+		int listNum, n =0;
+		
+		Iterator<Reply> it=listReply.iterator();
+		
+		
+		while(it.hasNext()){
+			Reply dto = it.next();
+			listNum = dataCount - (start+n-1);
+			dto.setListNum(listNum);
+			
+			n++;
+			
+		}
+		
+		String paging = util.paging(current_page, total_page);
+		
+		model.addAttribute("listReply", listReply);
+		model.addAttribute("pageNo", current_page);
+		model.addAttribute("replyCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
+		
+		
+		
+		return ".single.tboard.listReply";
+	}
+	
+	
+	
+	@RequestMapping(value="/tboard/listReplyAnswer")
+	public String listReplyAnswer(@RequestParam int answer , Model model)throws Exception{
+		
+		List<Reply> listReplyAnswer = service.listReplyAnswer(answer);
+		
+		Iterator<Reply> it= listReplyAnswer.iterator();
+		while(it.hasNext()){
+			 Reply dto = it.next();
+			 dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		
+		model.addAttribute("listReplyAnswer", listReplyAnswer);
+		
+		
+		return ".single.tboard.listReplyAnswer";
+	}
+	
+	@RequestMapping(value="/tboard/replyCountAnswer", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> replyCountAnswer(@RequestParam int answer)throws  Exception{
+		
+		int count = 0;
+		count = service.replyCountAnswer(answer);
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		model.put("count", count);
+		
+		return model;
+	}
+	
+	
+	
+	@RequestMapping(value="/tboard/createdReply" ,method=RequestMethod.POST)
+	@ResponseBody
+    public Map<String, Object> createdReply(Reply dto , HttpSession session)throws  Exception{
+    	
+    	SessionInfo info = (SessionInfo)session.getAttribute("member");
+    	
+    	String state="true";
+    	if(info == null){
+    		state= "loginFail";
+    	}else{
+    		dto.setUserId(info.getUserId());
+    		int result= service.insertReply(dto);
+    		if(result==0)
+    			state ="false";
+    	}
+    	
+    	Map<String, Object> model = new HashMap<>();
+    	model.put("state", state);
+    	
+    	
+    	return model;
+    }
+	@RequestMapping(value="/tboard/deleteReply",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteReply(@RequestParam int repleNum, @RequestParam String mode, HttpSession session)throws Exception{
+		
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String state = "true";
+		if(info==null){
+			state="loginFail";
+		}else{
+			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("mode", mode);
+			map.put("repleNum", repleNum);
+		
+		int result= service.deleteReply(map);
+		if(result==0)
+			state="false";
+		}
+		Map<String, Object> model = new HashMap<>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value="/tboard/tBoardLike",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> boardLike(TBoard dto , HttpSession session)throws Exception{
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String state = "true";
+		if(info==null){
+			state="loginFail";
+		}else{ dto.setUserId(info.getUserId());
+			int result = service.insertBoardLike(dto);
+			if(result==0)
+				state="false";
+		}
+		Map<String, Object> model =new HashMap<>();
+		model.put("state", state);	
+		return model;
+	}
+
+	@RequestMapping(value="/tboard/tlikeCount", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> tcountLike(@RequestParam int num)throws Exception{
+		int tlikeCount=0, tdisLikeCount=0;
+		Map<String, Object> map = service.countLike(num);
+		if(map!=null){
+			tlikeCount=((BigDecimal)map.get("TLIKECOUNT")).intValue();
+			tdisLikeCount=((BigDecimal)map.get("TDISLIKECOUNT")).intValue();
+			}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("tlikeCount", tlikeCount);
+		model.put("tdislikeCount", tdisLikeCount);
+		
+		return model;
+	}
+	
+	@RequestMapping(value="/tboard/repleLike",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> replyLike(Reply dto, HttpSession session)throws Exception{
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String state = "true";
+		if(info==null){
+			state="loginFail";
+		}else{
+			dto.setUserId(info.getUserId());
+			int result= service.insertReplyLike(dto);
+			if(result==0)
+				state="false";
+		}
+		
+		Map<String, Object>model = new HashMap<>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value="/tboard/countLike", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> countLike(@RequestParam int repleNum)throws Exception{
+		int tlikeCount=0, disLikeCount=0;
+		Map<String, Object> map = service.replyCountLike(repleNum);
+		if(map!=null){
+			tlikeCount=((BigDecimal)map.get("LIKECOUNT")).intValue();
+			disLikeCount=((BigDecimal)map.get("DISLIKECOUNT")).intValue();
+			}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("tlikeCount", tlikeCount);
+		model.put("dislikeCount", disLikeCount);
+		
+		return model;
 	}
 }
 

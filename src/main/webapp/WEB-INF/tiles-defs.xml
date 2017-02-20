@@ -6,9 +6,6 @@
 
 <tiles-definitions>
 
-
-
-   <!-- 순서가 바뀌면 안됨(* 많은것이 위에) -->
 	<definition name=".loginLayout" template="/WEB-INF/view/layout/layout.jsp">
 	    <put-attribute name="title" value="hello there" />
 		<put-attribute name="body" value="/WEB-INF/view/member/login.jsp" />

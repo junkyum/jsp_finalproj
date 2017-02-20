@@ -6,7 +6,8 @@
 	String cp=request.getContextPath();
 %>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD55jYBJEmD1wCJhd7c9CVk5QzaK96v--E&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD55jYBJEmD1wCJhd7c9CVk5QzaK96v--E"></script>
+
 <script type="text/javascript">
 $(function() {
     $("input[name=startDate]").datepicker();
@@ -15,22 +16,18 @@ $(function() {
 var map;
 var markers = [];
 function initMap() {
+	$("#map").show();
   var haightAshbury = {lat: 37.498951, lng: 127.032960};
-
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 18,
     center: haightAshbury,
   });
-
   map.addListener('click', function(event) {
-	deleteMarkers();
-
+	if(markers!=null)
+	  deleteMarkers();
     addMarker(event.latLng);
     converter(event.latLng);
   });
-
-  // Adds a marker at the center of the map.
-  addMarker(haightAshbury);
 }
 function addMarker(location) {
   var marker = new google.maps.Marker({
@@ -46,7 +43,7 @@ function setMapOnAll(map) {
 	}
 
 function clearMarkers() {
-	  setMapOnAll(null);
+	setMapOnAll(null);
 }
 function deleteMarkers() {
   clearMarkers();
@@ -57,7 +54,8 @@ function converter(latLng){
 	var aa=str.split('(');
 	var tt=aa[1].split(')');
 	
-	googleapisView(tt[0])
+	googleapisView(tt[0]);
+	$("#coord").val(tt[0]);
 }
 function googleapisView(ll) {
     var geocode = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+ll+"&sensor=false";
@@ -100,9 +98,7 @@ function googleapisView(ll) {
                                 <span class="sr-only"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                            <c:if test="${userId==sessionScope.member.userId}">
                                 <li><a href='javascript:classifyChange("blue");'>그룹일정</a></li>
-                            </c:if>
                                 <li><a href='javascript:classifyChange("black");'>개인일정</a></li>
                             </ul>
                         </div>
@@ -154,11 +150,12 @@ function googleapisView(ll) {
                 <div class="form-group" id="schPlace"  style="min-height: 75px;">
                     <label class="col-sm-2 control-label">장소</label>
                     <div class="col-sm-10">
-                  	    <input class="form-control" id="place" name="place" type="text" placeholder="장소">
+                  	    <input class="form-control" id="place" name="place" type="text" placeholder="클릭하면 지도가 열립니다" readonly="readonly" onclick="initMap();">
                     </div>
                 </div>
+                 <input id="coord" name="coord" type="hidden">
             </form>
-            <div id="map" style="height: 400px;width: 570px;"></div>
+            <div id="map" style="height: 400px;width: 567px; display: none;"></div>
       
             <div style="text-align: right;" id="schFooter">
                 <button type="button" class="btn btn-primary" id="btnModalOk" onclick="insertOk();"> 확인 <span class="glyphicon glyphicon-ok"></span></button>

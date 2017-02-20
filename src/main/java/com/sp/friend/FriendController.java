@@ -20,7 +20,7 @@ import com.sp.member.SessionInfo;
 public class FriendController {
 	@Autowired
 	private FriendService service;
-	
+	//11
 	
 	// -------------------------------------------------------
 	@RequestMapping(value="/friend/friend")
@@ -33,7 +33,7 @@ public class FriendController {
 			return "redirect:/member/login";
 		}
 		
-		return "/main/friend";
+		return ".main.friend";
 	}
 	
 	// -------------------------------------------------------
@@ -294,9 +294,9 @@ public class FriendController {
 			return "main/friend/block";
 			
 		} else if(friend.getMode().equals("asked")) {
-			// 친구목록-수락
+			// 요청목록-수락
 			if(friend.getNumList() != null) {
-				// 요청했던 친구들을 수락으로 변경
+				// 요청 수락시 친구 목록 추가
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("state", "1");
 				map.put("numList", friend.getNumList());

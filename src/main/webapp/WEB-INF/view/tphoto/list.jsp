@@ -83,15 +83,7 @@ $( ".thumb div a" ).click(function() {
    <div class="body-title" style="text-align: center; margin-top: 50px; margin-bottom: 50px">
           <h3><span class=""></span>   PORTFOLIO
 </h3>
-    </div>
-
-    <%-- <div style="max-width:660px; margin: 0px auto;">
-        <div style="clear: both; height: 30px; line-height: 30px;">
-            <div style="float: left;">${dataCount}개(${page}/${total_page} 페이지)</div>
-            <div style="float: right;">&nbsp;</div>
-        </div>
-         --%>
-       
+    </div>   
       <div id="zoom_img" ><img src="http://www.tonilatour.com/wp-content/uploads/2015/02/Hello1.jpg" style="width: 680px; height: 500px"></div>
           <c:forEach var="dto" items="${list}" varStatus="status">
        <div class="thumb">
@@ -99,15 +91,14 @@ $( ".thumb div a" ).click(function() {
       <a href="#"><img src="<%=cp%>/uploads/tphoto/${dto.imageFilename}" ></a> 
           <span class="subject" onclick="javascript:article('${dto.num}');" >
 			                   ${dto.subject}<span class="glyphicon glyphicon-eye-open" style="float: right;    margin:3px 3px ;
- ">${dto.hitCount}</span>    <span class="glyphicon glyphicon-thumbs-up" style="float: right;   margin:3px 3px ; ">${dto.tlikeCount}</span>
+ ">${dto.hitCount}</span><span class="glyphicon glyphicon-thumbs-up" style="float: right;   margin:3px 3px ; ">${dto.tlikeCount}</span>
 	    </span> 
     </div>
-    
    </div>
    </c:forEach>
 
         
-        <div class="paging" style="text-align: center; min-height: 50px; line-height: 50px; margin-bottom: 30px">
+        <div class="paging" style="clear:both; text-align: center; min-height: 50px; line-height: 50px; margin-bottom: 30px">
             <c:if test="${dataCount==0 }">
                   등록된 게시물이 없습니다.
             </c:if>
@@ -118,7 +109,7 @@ $( ".thumb div a" ).click(function() {
         
         <div style="clear: both; margin-bottom:100px ">
         		<div style="float: left; width: 20%; min-width: 85px; ">
-        		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/photo/list';">새로고침</button>
+        		    <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/tphoto/list';">새로고침</button>
         		</div>
         		<div style="float: left; width: 60%; text-align: center;">
         		     <form name="searchForm" method="post" class="form-inline">

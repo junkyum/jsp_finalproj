@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
    String cp = request.getContextPath();
+//11
 %>
 
 <script type="text/javascript">
@@ -116,7 +117,6 @@ function friendDenial() {
              </div>
              
              <div style="clear: both; padding-top: 10px;">
-                 <a class="btn btn-default btn-sm" href="#">쪽지</a>
              </div>
         </div>
         

@@ -4,12 +4,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
    String cp = request.getContextPath();
+//11
 %>
 
 <script type="text/javascript">
 //친구 리스트 - 삭제
 function friendDelete() {
-    var chks = $("#tbFriendList input:checked");
+    var chks = $("#tbFriendList2 input:checked");
 	var cnt = chks.length;
 	
 	if(cnt==0) {
@@ -36,8 +37,13 @@ function friendDelete() {
 				location.href="<%=cp%>/member/login";
 				return;	
 			}
+			var userId;
+        	$.each(chks, function(e, ch) {
+        	   userId=$(ch).attr("data-userId");
+       	        $("#tbFriendList2 tr[data-tid='"+userId+"']").remove();
+       	    });
         	
-        	$("#tbFriendList").html(data);
+        	//$("#tbFriendList2").html(data);
         },
         error: function(e){
             alert(e.responseText);
@@ -47,7 +53,7 @@ function friendDelete() {
 
 // 친구 리스트 - 차단
 function friendBlock() {
-    var chks = $("#tbFriendList input:checked");
+    var chks = $("#tbFriendList2 input:checked");
 	var cnt = chks.length;
 	if(cnt==0) {
 		return;
@@ -73,7 +79,19 @@ function friendBlock() {
 				return;	
 			}
 			
-        	$("#tbFriendList").html(s);
+        	
+        	// 친구 목록 삭제
+	        var userId;
+	        var tr;
+	        
+	        $.each(chks, function(e, ch) {
+				userId=$(ch).attr("data-userId");
+				tr="<tr height='25' data-tid='"+userId+"'>"+$("#tbFriendList2 tr[data-tid='"+userId+"']").html()+"</tr>";
+				$("#tbBlockList").append(tr); 
+	           
+				$("#tbFriendList2 tr[data-tid='"+userId+"']").remove();
+			});
+        	//$("#tbFriendList2").html(s);
         },
         error: function(e){
             alert(e.responseText);
@@ -115,11 +133,18 @@ function friendBlockAccept() {
         	// 차단된 친구 목록 삭제
         	if(state=="true") {
 	        	var userId;
+	        	var tr;
+	        	
 	        	$.each(chks, function(e, ch) {
-	        	   userId=$(ch).attr("data-userId");
+	        	   	userId=$(ch).attr("data-userId");
+	        	   	tr="<tr height='25' data-tid='"+userId+"'>"+$("#tbBlockList tr[data-tid='"+userId+"']").html()+"</tr>";
+	        	   	$("#tbFriendList2").append(tr); 
 	       	        $("#tbBlockList tr[data-tid='"+userId+"']").remove();
 	       	    });
         	}
+        	
+        	
+        	
         },
         error: function(e){
             alert(e.responseText);
@@ -164,8 +189,11 @@ function friendBlockDelete() {
 	        	$.each(chks, function(e, ch) {
 	        	   userId=$(ch).attr("data-userId");
 	       	        $("#tbBlockList tr[data-tid='"+userId+"']").remove();
+	       	        
+	       	        
 	       	    });
         	}
+        	
         },
         error: function(e){
             alert(e.responseText);
@@ -185,7 +213,7 @@ function friendBlockDelete() {
              
              <div class="listFriend">
                  <table style="border-spacing: 0px;">
-              		<tbody id="tbFriendList">
+              		<tbody id="tbFriendList2">
               		    <c:forEach var="dto" items="${friendList}">
 	              		    <tr height='25' data-tid='${dto.friendUserId}' >
 	              		         <td align='center' width='30'>

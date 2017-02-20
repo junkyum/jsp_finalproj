@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +24,13 @@ public class GroupSchController {
 	private GroupSchService service;
 	
 	@RequestMapping(value="/group/sch")
-	public String sch(HttpSession session) throws Exception {
-		
+	public String sch(HttpSession session,
+			Model model,
+			@RequestParam String groupName,
+			@RequestParam String userId
+			) throws Exception {
+		model.addAttribute("chef",userId);
+		model.addAttribute("groupName",groupName);
 		return "/groupsch/sch";
 	}
 
@@ -50,7 +56,6 @@ public class GroupSchController {
 			return model;
 		}
 		sch.setUserId(info.getUserId());
-		sch.setGroupName("디자인이");
 		service.insertSchedule(sch);
 	
 		Map<String, Object> model = new HashMap<>(); 
@@ -65,6 +70,7 @@ public class GroupSchController {
 			@RequestParam(value="start") String start,
 			@RequestParam(value="end") String end,
 			@RequestParam(value="group", defaultValue="all") String group,
+			@RequestParam String groupName,
 			HttpSession session) throws Exception {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		if(info==null) {
@@ -77,7 +83,7 @@ public class GroupSchController {
 		map.put("group", group);
 		map.put("start", start);
 		map.put("end", end);
-		map.put("groupName", "디자인이");
+		map.put("groupName", groupName);
 		
 		List<GroupSch> list=service.listMonthSchedule(map);
 		
@@ -85,9 +91,6 @@ public class GroupSchController {
 	    Iterator<GroupSch> it=list.iterator();
 		while(it.hasNext()) {
 			GroupSch sch=it.next();
-			// if(sch.getContent()!=null)
-			//   sch.setContent(sch.getContent().replaceAll("\n", "<br>"));
-			
 			GroupSchJSON dto=new GroupSchJSON();
 	    	dto.setId(sch.getSchNum());
 	    	dto.setSubject(sch.getSubject());
