@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
    String cp=request.getContextPath();
-//frin0.png
+
 %>
 
 	
@@ -24,8 +24,6 @@
       <td align="right">
     
      <input type="button" value="다시" class="btn" onclick="replyBoardList(pageNo);">
-     	<%-- 	<input type=image src='<%=cp%>/res/images/return.png'  width="70" height="35" onClick='replyBoardList(pageNo);return false;'>
-      		<input type=image src='<%=cp%>/res/images/kim1.png'  width="70" height="35" onClick='submitReply();return false;'> --%>
          <input type="button" value=" 글올리기 " class="btn" onclick="submitReply();">
       </td>
    </tr>

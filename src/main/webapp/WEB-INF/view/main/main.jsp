@@ -223,11 +223,11 @@ div.friendScroll {
  background: none;
 }
 .leftnav {
-    height: 66%;
+    height: 100%;
     width: 0;
     position: fixed;
     z-index: 1;
-    top: 5%;
+    top: 0;
     right: 0;
     background-color: #111;
     overflow-x: hidden;
@@ -237,11 +237,11 @@ div.friendScroll {
     opacity: 0.7;
 }
 .rightnav {
-    height: 66%;
+    height: 100%;
     width: 0;
     position: fixed;
     z-index: 1;
-    top: 5%;
+    top: 0;
     left: 0;
     background-color: #111;
     overflow-x: hidden;

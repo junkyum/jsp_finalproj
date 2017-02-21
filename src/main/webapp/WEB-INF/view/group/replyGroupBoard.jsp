@@ -114,8 +114,4 @@ function deleteReplyBoard(replyBoardNum) {
 
 </script>
 
-
-<body>
   <div id="groupReplyBoard"></div>
-</body>
-	

@@ -88,7 +88,7 @@
 		<!-- 댓글ㅇ 등록 -->
 		<insert id="insertGReply" parameterType="com.sp.group.gally.ReplyGPhoto">
 			INSERT INTO groupGallyReply(replyNum, content, replyAnswer, gallyNum, userId)
-			VALUES(groupGallyReply_seq.NEXTVAL, #{content}, #{replyAnswer} , #{gallyNum} , #{userId})
+			VALUES(GGALLYREPLY_SEQ.NEXTVAL, #{content}, #{replyAnswer} , #{gallyNum} , #{userId})
 		</insert>
 		
 		<!-- 댓글의 카운트 -->

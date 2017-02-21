@@ -33,9 +33,9 @@
 a:hover {
    text-decoration: none;
 }
-h4{
-    margin: 0px; 
-   margin-top: 5px;
+button{
+background: none;
+border: none;
 }
 </style>
 <script type="text/javascript">
@@ -422,7 +422,7 @@ function groupGallyLikeCount(gallyNum) {
 }
 </script>
 
-<div style="margin-top: 20px;">
+<div style="margin-top: 5%;">
 		<div class="chk1" style="float: left;margin-left: 10%;">
 			<button type="button" style="border: none;background: none;" >
 				<img src="<%=cp%>/res/images/ADD.png" height="30">	
@@ -435,30 +435,27 @@ function groupGallyLikeCount(gallyNum) {
 		<div id="gallyLayout"></div>
 </div>
 
-
-
-
-<div class="chk2" id="chk2" style="display: none; padding:0px; margin: 0px; width: 500px; height: 500px;">
-    <form method="post" name="photoForm" id="photoForm" enctype="multipart/form-data" >
-		<div style="height: 300px; width: 480px; border: 1px solid black;">
-			<h3 style="margin-top: 10px; margin-left: 150px;" >그룹 명 : ${groupName}</h3>
-			 <input type="hidden" name="groupName" value="${groupName}">
-				<div style="margin-top: 10px;">
-					<h4 style="float: left; margin: 0px;">제 목 :&nbsp;</h4>
-					<input type="text" name="subject" id="subject" value="" placeholder="내용을 입력하세요" style="clear: both;">
-					<span id="span1" style="display: none;" >내용을 입력하세요</span>
-				</div>
-				<div>
-					<h4>내 용 : <span style="display: none;" id="span2">내용을 입력하세요</span></h4> 
-					<textarea rows="5" name="content" id="content" required="required" style="width: 300px; height: 100px;"></textarea>
-				</div>		
-		</div>
-		<div style="margin: 0px;margin-left : 40px; margin-top: 10px; width: 300px; height: 50px; border: 1px solid black;" >
-			<input type="file" name="upload" id="imageFilename" >
-		</div>
-		<div style="margin-left: 100px; margin-top: 20px; float: right; " >
-			<button type="button" id="btn" name="btn" onclick="send();" >등록하기</button>
-			<button type="button" onclick="finsh();">취소</button>
+<div class="chk2" id="chk2" style="display: none; padding:0px; margin: 0px; width: 500px;">
+<form method="post" name="photoForm" id="photoForm" enctype="multipart/form-data" >
+<div style="height: 300px; width: 480px;">
+<h3 style="margin-top: 10px; margin-left: 150px;">그룹 명:${groupName}</h3>
+ <input type="hidden" name="groupName" value="${groupName}">
+	<div style="margin-top: 10px;">
+		<span style="float: left;">제 목:</span>
+		<input type="text" class="form-control"  name="subject" id="subject" value="" placeholder="내용을 입력하세요" style="clear: both;">
+		<span id="span1" style="display: none;" >내용을 입력하세요</span>
+	</div>
+	<div>
+		<span>내 용 :</span><span style="display: none;" id="span2">내용을 입력하세요</span><br>
+		<textarea rows="5" name="content" id="content" required="required" class="form-control"></textarea>
+		<input type="file"  class="form-control" name="upload" id="imageFilename" >
+		</div>		
+</div>
+	
+		
+		<div style="float: right; " >
+			<button type="button" id="btn" name="btn" onclick="send();" ><img src="<%=cp%>/res/images/SUBMIT.png" style="width: 100px;"></button>
+			<button type="button" onclick="finsh();"><img src="<%=cp%>/res/images/CANCEL.png"  style="width: 100px;"></button>
 		</div>
     </form>	
 </div>
