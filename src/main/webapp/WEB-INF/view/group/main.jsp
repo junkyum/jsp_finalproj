@@ -165,7 +165,7 @@ $(function(){
 	  <div class="dot" onclick=" menu(5);"></div> 
 	</div>
 <div id="yap" style="width:100%; height:100%; left: 5%;margin: auto;"  ></div>
-<ul id="groupInfo" class="bottombar">
+<ul id="groupInfo" class="bottombar" >
 		<li >
 			<img class="img-circle" alt="Cinque Terre" src="<%=cp%>/uploads/photo/${dto.profile}" style = "margin-bottom: 0px;" width="50" height="50">
 		</li>

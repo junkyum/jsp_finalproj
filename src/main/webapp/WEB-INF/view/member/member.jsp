@@ -294,7 +294,7 @@ function check() {
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
 <c:if test="${mode=='created'}">
-            <button type="submit" name="sendButton"><img src="<%=cp%>/res/images/btn_submit.gif"></button>
+            <button type="submit" class="btn btn-default btn-sm wbtn" name="sendButton">가입하기<span class="glyphicon glyphicon-ok"></button>
             <button type="button" class="btn btn-default btn-sm wbtn" onclick="javascript:location.href='<%=cp%>/';">가입취소 <span class="glyphicon glyphicon-remove"></span></button>
 </c:if>            
 <c:if test="${mode=='update'}">

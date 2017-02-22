@@ -67,7 +67,7 @@ function mkmgroupBoardCheck(){
                groupBoardListpage(1);
                $("#myModalGboard").modal('hide');
             }else {
-               alert("추가 안됌 여기 어떻ㄱㅔ 바꿀지 생각해 보기! ");
+               console.log("실패");
             }
             
          },
@@ -308,14 +308,14 @@ function groupBoardLike(boardNum, boardLike) {
    });
 }
 function groupBoardLikeCount(boardNum) {
-   alert("1="+boardNum);
+  
    var url="<%=cp%>/group/gboard/groupBoardLikeCount";
-   alert("1="+boardNum+"asdasdas");
+  
    $.post(url, {boardNum:boardNum}, function(data){
       var boardLikeCountId="#boardLikeCount"+boardNum;
-      alert("2="+boardLikeCountId);
+      
       var boardLikeCount=data.boardLikeCount;
-      alert("3="+boardLikeCount);
+    
       $(boardLikeCountId).html(boardLikeCount);
    }, "JSON");
 }
@@ -347,7 +347,7 @@ $(function(){
    });
 });
 function updateGBoard(boardNum,page) {
-   //alert(page+" updateGBoard+ page");
+
    var userId = "${dto.userId}";
     $('#myModalUpdate .modal-body').empty();
    var url="<%=cp%>/group/gboard/update?boardNum="+boardNum+"&page="+page+"&userId="+userId;

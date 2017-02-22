@@ -109,7 +109,9 @@ function articleView(num) {
 
 function sendReplyModal() {
 	$("#replyContent").val("");
-	$('#noteReplyModal').modal('show');
+	$("#noteReplyModal").dialog({
+        modal:true
+	});
 }
 
 function sendReplyOk() {
@@ -137,11 +139,14 @@ function sendReplyOk() {
 				location.href="<%=cp%>/member/login";
 				return;
 			}
-			
-			// articleView("${dto.num}");
+			mkmodalclose();
     	}
    	});
 }
+function mkmodalclose(){
+	$(noteReplyModal).dialog("close");
+}
+
 </script>
 
 <div style="height: 40px; line-height: 40px;">
@@ -214,22 +219,12 @@ function sendReplyOk() {
 </div>
 
 <c:if test="${mode=='listReceive'}">
-<div class="modal fade" id="noteReplyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content modal-sm"  style="min-width: 400px;">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="replyModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold;">답장 보내기</h4>
-      </div>
-      <div class="modal-body">
-          <div>
-              <textarea id="replyContent"  class="form-control" rows="3"></textarea>
-          </div>
+<div id="noteReplyModal" style="display: none;">
+        <h4 class="modal-title" id="replyModalLabel" style="font-family: 나눔고딕, 맑은 고딕, sans-serif; font-weight: bold; float: left;">답장 보내기</h4>
+        <button type="button" onclick="mkmodalclose();" style="float: right;">닫기</button>
+          <textarea id="replyContent"  class="form-control" rows="3"></textarea>
           <div style="padding-top:5px; text-align: right;">
               <button type="button" class="btn btn-primary" onclick="sendReplyOk();"> 보내기 <span class="glyphicon glyphicon-ok"></span></button>
           </div>
-      </div>
-    </div>
-  </div>
 </div>
 </c:if>

@@ -95,7 +95,12 @@ function note(){
        title:"쪽지",
        modal:true,
        width:550,
-       height:500
+       height:550,
+       buttons:{
+           "닫기":function(){
+               $(this).dialog("close");
+            }
+       }
     });
 }
 function listPage(page) {

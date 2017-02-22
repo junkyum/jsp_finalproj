@@ -24,7 +24,7 @@ function gboardReplyListpage(page){
 	});
 }
 </script>
-<div class="bodyFrame2" style="margin-top: 50px;">   
+<div class="bodyFrame2" style="margin:50px auto 50px;">   
     <div class="table-responsive" style="clear: both;">
         <div class="bbs-article">
 				<table class="table">

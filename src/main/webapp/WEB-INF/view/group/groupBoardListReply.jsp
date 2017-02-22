@@ -7,7 +7,7 @@
 %>
 <c:if test="${ReplydataCount!=0}">
 	<div style="clear: both; padding-top: 20px;">
-	    <div style="float: left;"><span style="color: #3EA9CD; font-weight: bold;">댓글 ${ReplydataCount}개</span> <span>[댓글 목록, ${page}/${total_page} 페이지]</span></div>
+	    <div style="float: left;"><span style="color: #3EA9CD; font-weight: bold;">댓글 ${ReplydataCount}개</span> </div>
 	    <div style="float: right; text-align: right;"></div>
 	</div>
 	<c:forEach var="dto" items="${gboardReplyList}">
@@ -16,7 +16,7 @@
 	            <div style="float: left;"> ${dto.created}</div>
 	            <div style="float: right;  text-align: rigth;">
 					<c:if test="${sessionScope.member.userId==dto.userId }">		   
-		               <a onclick='deleteBoardReply("${dto.replyNum}","${page}");'> 댓삭제</a>
+		               <a onclick='deleteBoardReply("${dto.replyNum}","${page}");'>댓글삭제</a>
 					</c:if>	 
 	            </div>
 	        </div>
@@ -30,10 +30,10 @@
 	            </div>   
 	            <div style="float: right;">
 	            	<button type="button" onclick="kmSendReplyLike('${dto.replyNum}', '1')">
-	            	<span id="kmLikeCount${dto.replyNum}">${dto.likeCount}</span></button>
+	            	<span id="kmLikeCount${dto.replyNum}">좋아요 (${dto.likeCount})</span></button>
 	            	
 	            	<button type="button" onclick="kmSendReplyLike('${dto.replyNum}', '0')">
-	            	<span id="kmDisLikeCount${dto.replyNum}">${dto.disLikeCount}</span></button>
+	            	<span id="kmDisLikeCount${dto.replyNum}">싫어요 (${dto.disLikeCount})</span></button>
 	            </div>                           
 	        </div>
 	       <div class="GroupReplyAnswerkm" style="display: none;">  
@@ -53,7 +53,7 @@
 	    </div>  
 	</c:forEach>
 <tr height='30'>
-    <td colspan='2' align='center'>
+    <td colspan='4' align='center'>
     ${paging}
 </td>
 </tr>
