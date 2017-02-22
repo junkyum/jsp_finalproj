@@ -93,7 +93,7 @@ public class GroupSchController {
 			GroupSch sch=it.next();
 			GroupSchJSON dto=new GroupSchJSON();
 	    	dto.setId(sch.getSchNum());
-	    	dto.setSubject(sch.getSubject());
+	    	dto.setTitle(sch.getSubject());
 	    	dto.setUserName(sch.getUserName());
 	    	dto.setColor(sch.getColor());
 	    	if(sch.getAllDay().equals("true"))
@@ -168,4 +168,27 @@ public class GroupSchController {
 		model.put("state", state);
 		return model;
 	}
+	@RequestMapping(value="/group/sch/map")
+	public String sch(HttpSession session ,Model model) throws Exception {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			List<GroupSch> list=service.listPerSonalSchedule(info.getUserId());
+			List<String> lats = new ArrayList<>();
+			List<String> lngs = new ArrayList<>();
+			List<String> title = new ArrayList<>();
+			Iterator<GroupSch> it=list.iterator();
+			while(it.hasNext()) {
+				GroupSch sch=it.next();
+				if(sch.getCoord()!=null){
+				title.add(sch.getSubject());
+				String [] coord = sch.getCoord().split(",");
+				lats.add(coord[0]);
+				lngs.add(coord[1]);
+				}
+			}
+			model.addAttribute("lats",lats);
+			model.addAttribute("lngs",lngs);
+			model.addAttribute("title",title);
+			return ".map.map";
+		}
+	
 }

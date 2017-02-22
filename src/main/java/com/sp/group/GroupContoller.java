@@ -199,7 +199,6 @@ public class GroupContoller {
 			return ".mainLayout";
 		 }
 	}
-	
 	@RequestMapping(value="/group/signin")
 	public String signinGroup(
 			HttpServletResponse resp,
@@ -217,9 +216,6 @@ public class GroupContoller {
 			
 			return "redirect:/group?groupName="+groupName;
 		}
-			
-		
-
 	@RequestMapping(value="/group/signout")
 	public String signoutGroup(
 			HttpServletResponse resp,

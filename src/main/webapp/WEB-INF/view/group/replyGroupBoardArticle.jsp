@@ -25,30 +25,32 @@ function submitReplyAnswer(replyBoardNum, pageNo) {
 
 </script>	
 
-		<h2 class="text-center" style="margin-top: 100px;">[${dto.groupName}]&nbsp;그룹의&nbsp; 질문&nbsp;&nbsp;과&nbsp;&nbsp;답변<br> 
-		<i class="glyphicon glyphicon-info-sign"></i> 궁금한 점은 이곳에 글을 남겨 주시면 성심껏 답변 해드리겠습니다.</h2>
+		<h2 class="text-center" style="margin-top: 100px;">
+		${dto.groupName}그룹의&nbsp; 질문과&nbsp;&nbsp;답변<br> 
+		</h2>
 
-		<table style="width: 600px; margin: 20px auto 0px; border-spacing: 0px; border: 2px solid; margin-top: 40px;">
-			  <tr><td colspan="2" height="3" bgcolor="#D4F4FA" align="center">
-			  ${dto.created}||&nbsp;리플 번호=[${dto.replyBoardNum}]&nbsp;||&nbsp;&nbsp;방문자수[${dto.hitcount}]</td></tr>
+		<table style="width: 600px; margin: 20px auto 0px; ">
+			  <tr>
+			  <td colspan="2" height="3" bgcolor="#8B8A94" align="center">
+			  ${dto.created}||&nbsp;게시물 번호:${dto.replyBoardNum}&nbsp;||&nbsp;&nbsp;조회수[${dto.hitcount}]</td></tr>
 			
-			  <tr align="left" height="40" style="border: 1px solid;"> 
-			      <td width="100" bgcolor="#EEEEEE" align="center">제 목</td>
+			  <tr align="left" height="40"> 
+			      <td width="100" bgcolor="#A8ACB3" align="center">제 목</td>
 			      <td width="500" style="padding-left:10px;">      
 			      	${dto.subject}
 			      
 			      </td>
 			  </tr>	
 			   <tr align="left" height="40"> 
-			      <td width="100" bgcolor="#EEEEEE" style="text-align: center;">내용  </td>
+			      <td width="100" bgcolor="#A8ACB3" style="text-align: center;">내용  </td>
 			      <td width="500" style="padding-left:10px;">      
 			      	${dto.content}
 			      </td>
 
 			  </tr>
 
-	 		 <tr align="left" height="40" style="border: 1px solid;">
-			    <td width="100" bgcolor="#EEEEEE" style="text-align: center;">이전글</td>
+	 		 <tr align="left" height="40" >
+			    <td width="100" bgcolor="#A8ACB3" style="text-align: center;">이전글</td>
 			    <td width="500" style="padding-left:10px;">  
 			       <c:if test="${not empty beforeReadDto}">
 			              <a href="javascript:articleReplyBoard('${beforeReadDto.replyBoardNum}');">${beforeReadDto.subject}</a>
@@ -58,7 +60,7 @@ function submitReplyAnswer(replyBoardNum, pageNo) {
 	
 			
 			<tr align="left" height="40">
-			    <td width="100" bgcolor="#EEEEEE" style="text-align: center;">다음글</td>
+			    <td width="100" bgcolor="#A8ACB3" style="text-align: center;">다음글</td>
 			    <td width="500" style="padding-left:10px;">  
 			       <c:if test="${not empty afterReadDto}">
 			              <a href="javascript:articleReplyBoard('${afterReadDto.replyBoardNum}');">${afterReadDto.subject}</a>
@@ -70,13 +72,10 @@ function submitReplyAnswer(replyBoardNum, pageNo) {
 		<table style="width: 600px; margin: 0px auto; border-spacing: 0px;">
 			<tr height="35">
 			    <td width="50%" align="left">
-			    <c:if test="${sessionScope.member.userId==dto.userId}">	
-			          <input type="button" value=" 게시판수정 " class="btn" onclick="updateReplyBoard('${dto.replyBoardNum}');">
-			     </c:if> 
 			     <c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">    
-			          <input type="button" value=" 게시판삭제 " class="btn" onclick="deleteReplyBoard('${dto.replyBoardNum}');">
+			      <input type="button" value=" 게시물삭제 " class="btn" onclick="deleteReplyBoard('${dto.replyBoardNum}');">
 			      </c:if>
-			      <input type="button" value="게시물답변" onclick="submitReplyAnswer('${dto.replyBoardNum}','${page}');">
+			      <input type="button" value="게시물답변" class="btn" onclick="submitReplyAnswer('${dto.replyBoardNum}','${page}');">
 			    </td>
 			
 			    <td align="right">

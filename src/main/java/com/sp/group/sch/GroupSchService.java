@@ -6,7 +6,7 @@ import java.util.Map;
 public interface GroupSchService {
 	public int insertSchedule(GroupSch sch);
 	public List<GroupSch> listMonthSchedule(Map<String, Object> map);
-	
+	public List<GroupSch> listPerSonalSchedule(String userId);
 	public GroupSch readSchedule(int num);
 	public int updateSchedule(GroupSch sch);
 	public int deleteSchedule(int num);

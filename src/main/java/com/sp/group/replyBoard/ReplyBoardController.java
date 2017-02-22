@@ -90,8 +90,6 @@ public class ReplyBoardController {
  
         String paging= myUtil.pagingMethod(current_page, total_page, "replyBoardList");
         
-        System.out.println(searchValueC+"                                  1");
-        System.out.println(searchKeyC+"                                  2");
         model.addAttribute("leplyLlist", leplyLlist);
         model.addAttribute("total_page", total_page);
         model.addAttribute("page", current_page);
@@ -131,22 +129,12 @@ public class ReplyBoardController {
 	public String createdAnswerForm(Model model, @RequestParam int replyBoardNum, @RequestParam int pageNo,HttpSession session){
 			
 			SessionInfo info=(SessionInfo)session.getAttribute("member");
-
-		
-		
 			ReplyBoard dto = service.readReplyBoard(replyBoardNum);
-			
 			dto.setUserId(info.getUserId());
-			
-			//String my= "["+dto.getUserId()+"] 님의 답변입니다";
-			//String str ="["+dto.getSubject()+"("+dto.getUserId()+"님에)"+"] 대한 답변입니다. \n";
-			
-			String my= "("+dto.getUserId()+"님의)답변!, \n";
-			String str ="["+dto.getSubject()+"]답변\n";
+			String my= dto.getUserId()+"의 답변\n";
+			String str ="답변할 내용:["+dto.getSubject()+"]\n";
 			dto.setContent(str);
-
 			dto.setSubject(my);
-			
 			model.addAttribute("pageNo", pageNo);
 			model.addAttribute("dto", dto);
 			model.addAttribute("mode", "reply");
@@ -158,10 +146,7 @@ public class ReplyBoardController {
 	@ResponseBody
 	public Map<String, Object> createdAnswer(HttpSession session, ReplyBoard dto){
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
-
-		
 		dto.setUserId(info.getUserId());
-
 		int result=service.insertReplyBoard(dto, "reply");
 			String state="ture";
 			if(result==0)

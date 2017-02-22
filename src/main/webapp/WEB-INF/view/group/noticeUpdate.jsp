@@ -17,10 +17,10 @@
 <body>
 	<form name="dialogNoticeUpdateForm" method="post">
 		<p>
-			<input type="text" name="subject" id="updateSubjectkmNoti" value="${dto.subject }">
+			<input type="text"  class="form-control" name="subject" id="updateSubjectkmNoti" value="${dto.subject }">
 		</p>
 		<p>
-			<textarea rows="5" cols="50" id="updateContentkmNoti" name="content">${dto.content }</textarea>
+			<textarea  class="form-control" rows="5" cols="50" id="updateContentkmNoti" name="content">${dto.content }</textarea>
 		</p>
 			<c:forEach var="vo" items="${listFile}">
 				<p id="f${vo.fileNum}">

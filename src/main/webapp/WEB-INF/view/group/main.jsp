@@ -7,7 +7,19 @@
 %>
 <script type="text/javascript" src="<%=cp%>/res/jquery/js/jquery.form.js"></script>
 <style>
-.button{
+body{
+background: #F4FCFF;
+}
+.ui-dialog-titlebar{
+border: none;
+background: none;
+}
+.ui-dialog-buttonpane{
+border: none;
+background: none;
+font-size: 15pt;
+}
+button{
  background: none;
  border: none;
 }
@@ -16,7 +28,7 @@
   width: 18px;
   margin-bottom:10px;
   border:3px solid #bbb;
-  background-color: white;
+  background-color: #F4FCFF;
   border-radius: 50%;
   transition: background-color 0.6s ease;
 }
@@ -36,24 +48,26 @@ background-color:gray;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color:  #4D535E;
     position: fixed;
     bottom: 0;
     width: 100%;
+    
 }
 
 .bottombar li {
     float: left;
-    
+  
 }
 
 .bottombar li a {
     display: block;
-    color: white;
+    color: gray;
     text-align: center;
     padding: 10px 10px;
     text-decoration: none;
     font-size: 15pt;
+    color:white;
 }
 
 .bottombar li a:hover:not(.active) {
@@ -181,9 +195,6 @@ $(function(){
 		</c:if>
 </ul>
 </div>
-
-
-
 <form name = "updateForm" enctype="multipart/form-data">
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

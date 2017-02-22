@@ -42,10 +42,9 @@ border: none;
 $(function(){
 	$(".chk1").click(function() {
 	      $("#chk2").dialog({
-	         title:"등록하기",
 	         modal:true,
 	         width:500,
-	         height:500
+	         height:400
 	      });
 	   });
 });
@@ -278,6 +277,7 @@ $(function(){
 	});
 });
 function sendGReplyAnswer(replyNum, gallyNum) {
+	console.log("dd");
 	var userId="${sessionScope.member.userId}";
 	var content=$("#answerContent"+replyNum).val().trim();
 	if(! content){

@@ -173,7 +173,7 @@ function articleForm(calEvent) {
 	var str;
 	
 	var num=calEvent.id;
-	var subject=calEvent.subject;
+	var subject=calEvent.title;
 	var userName=calEvent.userName;
 	
 	var color=calEvent.color;
@@ -451,6 +451,8 @@ function gsUpdateOk(num) {
 	var startTime=$.trim($("input[name='startTime']").val());
 	var endTime=$.trim($("input[name='endTime']").val());
 	var content=$.trim($("textarea[name='calcontent']").val());
+	var place=$.trim($("input[name='place']").val());
+	var coord=$.trim($("input[name='coord']").val());
 	var groupName="${groupName}";
 	
 	if(! subject) {
@@ -513,6 +515,8 @@ function gsUpdateOk(num) {
        +"&startTime="+startTime
        +"&endTime="+endTime
        +"&content="+content
+       +"&place="+place
+       +"&coord="+coord
        +"&groupName="+groupName;
 	
 	var url="<%=cp%>/group/sch/update";
@@ -671,7 +675,7 @@ $(function(){
 
 </script>
 
-<div class="bodyFrame">
+<div class="bodyFrame" style="margin-top: 50px">
     <div id="calendarHeader" style="height: 35px; line-height: 35px;">
         <div style="text-align: center;">
              <div class="btn-group" role="group" aria-label="header">
@@ -688,7 +692,6 @@ $(function(){
     <div id="calendar"></div>
 	<div id='schLoading'>loading...</div>
 </div>
-
 
 <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

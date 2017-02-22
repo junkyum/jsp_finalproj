@@ -11,7 +11,7 @@
 	width: 900px;
 }
 </style>
-<div class="table-responsive" style="clear: both;">
+<div class="table-responsive" style="clear: both; margin-top: 50px;">
 		<table class="table table-hover">
 			<thead>
 				<tr>

@@ -75,4 +75,16 @@ public class GroupSchServiceImpl implements GroupSchService{
 		}
 		return result;
 	}
+
+	@Override
+	public List<GroupSch> listPerSonalSchedule(String userId) {
+		List<GroupSch> list=null;
+		
+		try {
+			list=dao.getListData("groupSch.listPersonalSchedule", userId);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return list;
+	}
 }

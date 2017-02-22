@@ -12,7 +12,7 @@ function maker(){
           modal:true,
           width:400,
           height:700,
-         buttons:{
+          buttons:{
             "만들기":function(){
                var f = document.createdForm;
                 var formData = new FormData(f);
@@ -170,6 +170,18 @@ function closeNav() {
    float: left;   
    padding-top:50px;
 }
+
+.ui-dialog-titlebar{
+border: none;
+background: none;
+}
+.ui-dialog-buttonpane{
+border: none;
+background: none;
+font-size: 15pt;
+}
+
+
 div.friendScroll {
    scrollbar-highlight-color:#FFFFFF;
    scrollbar-shadow-color:#FFFFFF;
@@ -189,6 +201,7 @@ div.friendScroll {
 .im {
   display: block;
   width: 100%;
+  height: auto;
   margin: 0;
 }
 
@@ -206,7 +219,7 @@ div.friendScroll {
 }
 
 .cc:hover .ol {
-  opacity: 0.2;
+  opacity: 0.4;
 }
 
 .text {
@@ -218,7 +231,7 @@ div.friendScroll {
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
 }
-.button{
+button{
  border: none;
  background: none;
 }
@@ -309,35 +322,39 @@ div.friendScroll {
 
 <div style = "width: 100%; border:1px solid lightgray; ">
 <div class="cc" style="float: left; width: 25%; padding: 1%;" >
-  <img src="<%=cp%>/res/images/bgcolor.png" class="im"  >
-  <div class="ol"></div>
-     <a href="<%=cp%>/tnotice/list" class="text">
-     <img src="<%=cp%>/res/images/Notice.png" >
-     </a>
+  <img src="<%=cp%>/res/images/Noticebg.jpg" class="im"  >
+  <div class="ol">
+   <a href="<%=cp%>/tnotice/list" class="text">
+   <img src="<%=cp%>/res/images/Notice.png" >
+   </a>
+  </div>
 </div>
 
 <div class="cc" style="float: left; width: 25%; padding: 1%;" >
-  <img src="<%=cp%>/res/images/bgcolor.png"  class="im" >
-  <div class="ol"></div>
+  <img src="<%=cp%>/res/images/QnAbg.jpg"  class="im" >
+  <div class="ol">
    <a href="<%=cp%>/tqna/list" class="text">
    <img src="<%=cp%>/res/images/qna.png" >
    </a>
+  </div>
 
 </div>
 
 <div class="cc" style="float: left; width: 25%; padding: 1%;">
-  <img src="<%=cp%>/res/images/bgcolor.png"  class="im" >
-  <div class="ol"></div>
+  <img src="<%=cp%>/res/images/FnQbg.jpg"  class="im" >
+  <div class="ol">
     <a href="<%=cp%>/tfaq/faq" class="text">
    <img src="<%=cp%>/res/images/FNQ.png" >
    </a>
+  </div>
 </div>
 <div class="cc" style="float: left; width: 25%; padding: 1%;">
-  <img src="<%=cp%>/res/images/bgcolor.png"  class="im" >
-  <div class="ol"></div>
-    <a href="<%=cp%>/tboard/list" class="text">
+  <img src="<%=cp%>/res/images/Boardbg.jpg"  class="im" >
+  <div class="ol">
+   <a href="<%=cp%>/tboard/list" class="text">
    <img src="<%=cp%>/res/images/Board.png" >
    </a>
+  </div>
 </div>
 </div>
 

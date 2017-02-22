@@ -5,11 +5,18 @@
 <%
    String cp = request.getContextPath();
 %>
+<style>
+.navbar-nav > li > a {
+  text-shadow: none;
+  font-size: 10pt;
+  color:white;
+}
+</style>
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap.min.css" type="text/css"/>
 <link rel="stylesheet" href="<%=cp%>/res/bootstrap/css/bootstrap-theme.min.css" type="text/css"/>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<nav class="navbar" style="margin: 0; background-color: #333; height: 5%;" role="navigation">
+<nav class="navbar" style="margin: 0; background-color: #4D535E; color:white;height: 5%;" role="navigation">
  <div class="navbar-header">
  <a href="<%=cp%>/"><img src="<%=cp%>/res/images/home.png" style="width: 50px;"></a>
  </div>
@@ -39,7 +46,7 @@
               <a href="<%=cp%>/tphoto/list">갤러리 </a>
             </li>
             <li>
-              <a href="<%=cp%>/map">지도 </a>
+              <a href="<%=cp%>/group/sch/map">지도 </a>
             </li>
             <c:if test="${myList!=null}">
             <li class="dropdown">

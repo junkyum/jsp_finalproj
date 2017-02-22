@@ -53,7 +53,7 @@ function converter(latLng){
 	var str=""+latLng;
 	var aa=str.split('(');
 	var tt=aa[1].split(')');
-	
+
 	googleapisView(tt[0]);
 	$("#coord").val(tt[0]);
 }

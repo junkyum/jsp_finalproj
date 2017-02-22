@@ -8,9 +8,9 @@
 %>
 
 	
-<table style="width: 1000px; margin: 20px auto 0px; border-spacing: 0px; margin-top: 50px;">
-   <tr height="35">
-      <td align="left" width="50%">
+<div style="width: 1000px; margin: 20px auto 0px; border-spacing: 0px; margin-top: 50px;">
+   <div style="height: 35px;">
+      <div align="left" style="width: 50%; float:left;">
         <form name="groupReplyBoardForm" method="post" style="margin: 0px; padding: 0px;">
             <select name="searchKeyC" id="searchKeyC" class="selectField" >
                   <option value="subject">제목</option>
@@ -20,30 +20,24 @@
             <input type="text" name="searchValueC"  id="searchValueC" class="boxTF" >
             <button type="button" onClick='searchReplyList();return false;'><img src="<%=cp%>/res/images/finder.png" style="width: 25px;"></button>
         </form>
-      </td>
-      <td align="right">
+      </div>
+      <div align="right" >
     
      <input type="button" value="다시" class="btn" onclick="replyBoardList(pageNo);">
          <input type="button" value=" 글올리기 " class="btn" onclick="submitReply();">
-      </td>
-   </tr>
-</table>
-
-
+      </div>
+   </div>
+</div>
 <table style="width: 1000px; margin: 0px auto; border-spacing: 0px; margin-top: 50px;">
-  <tr align="center" bgcolor="#507CD1" height="30"> 
+  <tr align="center" bgcolor="#A8ACB3" height="30"> 
       <td width="60" style="color: #ffffff;">번호 </td>
       <td width="350" style="color: #ffffff;">제목</td>
       <td width="100" style="color: #ffffff;">작성자</td>
       <td width="80" style="color: #ffffff;">작성일</td>
       <td width="60" style="color: #ffffff;">조회수</td>
   </tr>
- 
-</table>
-
  <c:if test="${dataCount != 0 }">
  <c:forEach var="dto" items="${leplyLlist}">
-	<table style="width: 1000px; margin: 0px auto; border-spacing: 0px; ">
 	   <tr align="left"  height="30"> 
 	      <td width="60"  align="center">${dto.listNum} </td>
 	      <td width="350" >
@@ -59,16 +53,14 @@
 	      <td width="80"  align="center">${dto.created}</td>
 	  <td width="60" align="center">${dto.hitcount}</td>
 	  </tr>
-	</table>
 	</c:forEach>
   </c:if>
-
-
-		<div class="paging" style="text-align: center; min-height: 50px; line-height: 50px; margin-top: 20px;">
-            <c:if test="${dataCount==0 }">
-                  등록된 게시물이 없습니다.
-            </c:if>
-            <c:if test="${dataCount!=0 }">
-                ${paging}
-            </c:if>
-        </div> 
+</table>
+<div class="paging" style="text-align: center; min-height: 50px; line-height: 50px; margin-top: 20px;">
+   <c:if test="${dataCount==0 }">
+         등록된 게시물이 없습니다.
+   </c:if>
+   <c:if test="${dataCount!=0 }">
+       ${paging}
+   </c:if>
+</div> 

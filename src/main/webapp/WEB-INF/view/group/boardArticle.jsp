@@ -24,8 +24,7 @@ function gboardReplyListpage(page){
 	});
 }
 </script>
-<body>
-<div class="bodyFrame2">   
+<div class="bodyFrame2" style="margin-top: 50px;">   
     <div class="table-responsive" style="clear: both;">
         <div class="bbs-article">
 				<table class="table">
@@ -44,14 +43,14 @@ function gboardReplyListpage(page){
 							<td colspan="2" style="height: 230px;">${dto.content }</td>
 						</tr>
 						<tr>
-							<td colspan="2">
+							<td >
 								<c:if test="${dto.fileSize > 0 }">
 									<span>첨부</span> : 
 							<a href="<%=cp%>/group/gboard/download?boardNum=${dto.boardNum}">
 									${dto.originalFilename}(<fmt:formatNumber value="${dto.fileSize/1024}" pattern="0.0" /> KB) 
 									<span class="glyphicon glyphicon-save"></span>
 							</a></c:if></td>
-							<td colspan="2">
+							<td colspan="2" align="right">
 								<button type="button" class="btn btn-default btn-sm wbtn" onclick="groupBoardLike('${dto.boardNum}', '1')">
 									<span class="glyphicon glyphicon-hand-up"></span>
 									<span id="boardLikeCount${dto.boardNum}">${dto.boardLikeCount}</span></button>
@@ -123,5 +122,4 @@ function gboardReplyListpage(page){
     </div>
   </div>
 </div>
-</body>
 

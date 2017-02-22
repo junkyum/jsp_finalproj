@@ -23,10 +23,5 @@ public class MainController {
 		else
 			return ".mainLayout";
 	}
-	@RequestMapping(value="/map")
-	public String map(HttpSession session) throws Exception {
-		
-		return ".map.map";
-	}
-	
+
 }

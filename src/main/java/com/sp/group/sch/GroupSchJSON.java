@@ -3,7 +3,7 @@ package com.sp.group.sch;
 public class GroupSchJSON {
 	private int id;
 
-	private String subject;
+	private String title;
 	private String userName;
 	private String color;
 	private boolean allDay;
@@ -12,11 +12,11 @@ public class GroupSchJSON {
 	private String content;
 	private String created;
 	
-	public String getSubject() {
-		return subject;
+	public String getTitle() {
+		return title;
 	}
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public int getId() {
 		return id;

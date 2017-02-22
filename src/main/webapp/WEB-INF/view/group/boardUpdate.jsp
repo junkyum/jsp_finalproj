@@ -15,12 +15,12 @@
 <head>
 </head>
 <body>
-	<form name="dialogUpdateForm" method="post">
+	<form name="dialogUpdateForm" method="post" >
 		<p>
-			<input type="text" name="subject" id="updateSubjectkm" value="${dto.subject }">
+			<span>제목</span><input class="form-control" type="text" name="subject" id="updateSubjectkm" value="${dto.subject }">
 		</p>
 		<p>
-			<textarea rows="5" cols="50" id="updateContentkm" name="content">${dto.content }</textarea>
+			<span>내용</span><textarea class="form-control"  rows="5" cols="50" id="updateContentkm" name="content">${dto.content }</textarea>
 		</p>
 			<c:forEach var="vo" items="${listFile}">
 				<p id="f${vo.fileNum}">
